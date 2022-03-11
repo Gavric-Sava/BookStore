@@ -1,0 +1,17 @@
+table {
+    width: 600px;
+    /*background: teal;*/
+}
+
+td{
+    text-align: center;
+}
+
+.img_link{
+    width: 40px;
+    height: 40px;
+}
+
+.frst_col{
+    padding: 0;
+}
