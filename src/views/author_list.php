@@ -1,9 +1,9 @@
 <table>
-    <th>
-        <td>Author</td>
-        <td>Books</td>
-        <td>Actions</td>
-    </th>
+    <tr>
+        <th>Author</th>
+        <th>Books</th>
+        <th>Actions</th>
+    </tr>
     <?php
         foreach ($_SESSION["authors"] as $author) {
             echo "<tr>";

@@ -1,8 +1,8 @@
 <table>
-    <th>
-        <td>Book</td>
-        <td>Actions</td>
-    </th>
+    <tr>
+        <th>Book</th>
+        <th>Actions</th>
+    </tr>
     <?php
         foreach ($_SESSION["books"] as $book) {
             echo "<tr>";
