@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__."/../models/Book.php";
+require_once __DIR__."/SessionRepositoryInterface.php";
 
-abstract class BookSessionRepository
+abstract class BookSessionRepository implements SessionRepositoryInterface
 {
 
     public const SESSION_TAG = "books";

@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__."/../models/Author.php";
+require_once __DIR__."/SessionRepositoryInterface.php";
 
-abstract class AuthorSessionRepository
+abstract class AuthorSessionRepository implements SessionRepositoryInterface
 {
 
     public const SESSION_TAG = "authors";
