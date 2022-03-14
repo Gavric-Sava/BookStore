@@ -1,18 +1,19 @@
 <?php
-require_once __DIR__."/../models/Author.php";
-require_once __DIR__."/SessionRepositoryInterface.php";
 
-abstract class AuthorSessionRepository implements SessionRepositoryInterface
+require_once __DIR__ . "/../models/Author.php";
+
+abstract class AuthorSessionRepository
 {
 
     public const SESSION_TAG = "authors";
 
-    public static function initializeData(): void {
+    public static function initializeData(): void
+    {
         $_SESSION[AuthorSessionRepository::SESSION_TAG] = [
-            (new Author("Pera", "Peric", [0, 4])),
-            (new Author("Mika", "Mikic", [1])),
-            (new Author("Zika", "Zikic", [2])),
-            (new Author("Nikola", "Nikolic", [3]))
+            0 => (new Author("Pera", "Peric", [0, 4])),
+            1 => (new Author("Mika", "Mikic", [1])),
+            2 => (new Author("Zika", "Zikic", [2])),
+            3 => (new Author("Nikola", "Nikolic", [3]))
         ];
     }
 
@@ -25,4 +26,37 @@ abstract class AuthorSessionRepository implements SessionRepositoryInterface
     {
         return isset($_SESSION[AuthorSessionRepository::SESSION_TAG]);
     }
+
+    public static function fetch(int $id): ?Author
+    {
+        return $_SESSION[AuthorSessionRepository::SESSION_TAG][$id];
+    }
+
+    public static function add(Author $author): void
+    {
+        $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
+        if (!isset($authors_in_session[$author->getId()])) {
+            $authors_in_session[$author->getId()] = $author;
+            $_SESSION[AuthorSessionRepository::SESSION_TAG] = $authors_in_session;
+        }
+    }
+
+    public static function edit(Author $author): void
+    {
+        $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
+        if (isset($authors_in_session[$author->getId()])) {
+            $authors_in_session[$author->getId()] = $author;
+            $_SESSION[AuthorSessionRepository::SESSION_TAG] = $authors_in_session;
+        }
+    }
+
+    public static function delete(int $id): void
+    {
+        $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
+        if (isset($authors_in_session[$id])) {
+            unset($authors_in_session[$id]);
+            $_SESSION[AuthorSessionRepository::SESSION_TAG] = $authors_in_session;
+        }
+    }
+
 }
