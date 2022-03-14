@@ -16,11 +16,13 @@ abstract class AuthorSessionRepository implements SessionRepositoryInterface
         ];
     }
 
-    public static function fetchAll(): array {
+    public static function fetchAll(): array
+    {
         return $_SESSION[AuthorSessionRepository::SESSION_TAG];
     }
 
-    public static function dataInitialized(): bool {
+    public static function dataInitialized(): bool
+    {
         return isset($_SESSION[AuthorSessionRepository::SESSION_TAG]);
     }
 }

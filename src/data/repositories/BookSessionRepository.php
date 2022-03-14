@@ -1,13 +1,15 @@
 <?php
-require_once __DIR__."/../models/Book.php";
-require_once __DIR__."/SessionRepositoryInterface.php";
+
+require_once __DIR__ . "/../models/Book.php";
+require_once __DIR__ . "/SessionRepositoryInterface.php";
 
 abstract class BookSessionRepository implements SessionRepositoryInterface
 {
 
     public const SESSION_TAG = "books";
 
-    public static function initializeData(): void {
+    public static function initializeData(): void
+    {
         $_SESSION[BookSessionRepository::SESSION_TAG] = [
             (new Book("Book Name", 2001)),
             (new Book("Book Name 1", 2002)),
@@ -17,11 +19,13 @@ abstract class BookSessionRepository implements SessionRepositoryInterface
         ];
     }
 
-    public static function fetchAll(): array {
+    public static function fetchAll(): array
+    {
         return $_SESSION[BookSessionRepository::SESSION_TAG];
     }
 
-    public static function dataInitialized(): bool {
+    public static function dataInitialized(): bool
+    {
         return isset($_SESSION[BookSessionRepository::SESSION_TAG]);
     }
 }
