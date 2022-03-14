@@ -6,7 +6,10 @@ require_once $_SERVER['DOCUMENT_ROOT']."/src/data/repositories/AuthorSessionRepo
 require_once $_SERVER['DOCUMENT_ROOT']."/src/data/repositories/BookSessionRepository.php";
 
     function initSessionData() {
-        AuthorSessionRepository::initializeData();
-        BookSessionRepository::initializeData();
-        $_SESSION["data_initialized"] = true;
+        if (!AuthorSessionRepository::dataInitialized()) {
+            AuthorSessionRepository::initializeData();
+        }
+        if (!BookSessionRepository::dataInitialized()) {
+            BookSessionRepository::initializeData();
+        }
     }

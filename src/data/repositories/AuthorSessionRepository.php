@@ -2,8 +2,11 @@
 
 abstract class AuthorSessionRepository
 {
+
+    public const SESSION_TAG = "authors";
+
     public static function initializeData(): void {
-        $_SESSION["authors"] = [
+        $_SESSION[AuthorSessionRepository::SESSION_TAG] = [
             (new Author("Pera", "Peric", [0, 4])),
             (new Author("Mika", "Mikic", [1])),
             (new Author("Zika", "Zikic", [2])),
@@ -12,6 +15,10 @@ abstract class AuthorSessionRepository
     }
 
     public static function fetchAll(): array {
-        return $_SESSION["authors"];
+        return $_SESSION[AuthorSessionRepository::SESSION_TAG];
+    }
+
+    public static function dataInitialized(): bool {
+        return isset($_SESSION[AuthorSessionRepository::SESSION_TAG]);
     }
 }

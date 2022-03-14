@@ -2,8 +2,11 @@
 
 abstract class BookSessionRepository
 {
+
+    public const SESSION_TAG = "books";
+
     public static function initializeData(): void {
-        $_SESSION["books"] = [
+        $_SESSION[BookSessionRepository::SESSION_TAG] = [
             (new Book("Book Name", 2001)),
             (new Book("Book Name 1", 2002)),
             (new Book("Book Name 2", 1997)),
@@ -13,6 +16,10 @@ abstract class BookSessionRepository
     }
 
     public static function fetchAll(): array {
-        return $_SESSION["books"];
+        return $_SESSION[BookSessionRepository::SESSION_TAG];
+    }
+
+    public static function dataInitialized(): bool {
+        return isset($_SESSION[BookSessionRepository::SESSION_TAG]);
     }
 }
