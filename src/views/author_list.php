@@ -26,22 +26,26 @@
                 <?php
                     foreach ($authors as $author) {
                         echo "<tr>";
-                            echo "<td class='first_column'>";
-                                echo $author->getFirstName() . " " . $author->getLastName();
+                            echo "<td>";
+                                echo $author->getFirstName()." ".$author->getLastName();
                             echo "</td>";
                             echo "<td>";
                                 echo $author->getBookCount();
                             echo "</td>";
                             echo "<td>";
-                                echo "<a href=''>"."<img src='../../assets/images/edit.jpg' class='img_link'/>"."</a>";
-                                echo "<a href=''>"."<img src='../../assets/images/delete.png' class='img_link'/>"."</a>";
+                                echo "<a href='".$_SERVER["HTTP_HOST"].'/authors/edit/'.$author->getId()."'>".
+                                    "<img src='../../assets/images/edit.jpg' class='img_link'/>".
+                                "</a>";
+                                echo "<a href='".$_SERVER["HTTP_HOST"].'/authors/delete/'.$author->getId()."'>".
+                                    "<img src='../../assets/images/delete.png' class='img_link'/>".
+                                "</a>";
                             echo "</td>";
                         echo "</tr>";
                     }
                 ?>
             </tbody>
         </table>
-        <a href="">
+        <a href="<?php echo $_SERVER['HTTP_HOST'].'/authors/add'?>">
             <img src="<?php echo "../../assets/images/add.png"; ?>" class='img_link'/>
         </a>
     </div>

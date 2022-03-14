@@ -11,9 +11,6 @@ body{
 table{
     width: 800px;
     border-collapse: collapse;
-    /*align-items: stretch;*/
-    /*background: teal;*/
-    /*table-layout: fixed;*/
 }
 
 .first-column{
