@@ -1,8 +1,5 @@
 <?php
 
-use models\Author;
-use models\Book;
-
 require_once $_SERVER['DOCUMENT_ROOT']."/src/data/models/Author.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/src/data/models/Book.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/src/data/repositories/AuthorSessionRepository.php";
