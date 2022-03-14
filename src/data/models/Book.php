@@ -1,11 +1,14 @@
 <?php
-class Book {
-    private static $s_id = 0;
+
+class Book
+{
+    private static int $s_id = 0;
     private int $id;
     private string $name;
     private int $year;
 
-    function __construct(string $name, int $year) {
+    function __construct(string $name, int $year)
+    {
         $this->name = $name;
         $this->year = $year;
         $this->id = Book::$s_id++;

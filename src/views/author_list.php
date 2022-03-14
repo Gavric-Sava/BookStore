@@ -12,7 +12,6 @@
                 echo "</td>";
                 echo "<td>";
                     echo $author->getBookCount();
-//                    echo $author->getBooks()[0];
                 echo "</td>";
                 echo "<td>";
                     echo "<a href=''>"."<img src='../../assets/images/edit.jpg' class='img_link'/>"."</a>";

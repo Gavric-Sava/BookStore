@@ -1,6 +1,6 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT']."/src/models/Author.php";
-    require_once $_SERVER['DOCUMENT_ROOT']."/src/models/Book.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/src/data/models/Author.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/src/data/models/Book.php";
     require_once $_SERVER['DOCUMENT_ROOT']."/src/init.php";
     session_start();
 
@@ -21,7 +21,7 @@
 <body>
     <h1>Author list</h1>
     <?php
-//        echo parse_url($_SERVER['REQUEST_URI']);
+        echo $_SERVER['REQUEST_URI'];
         if (isset($_SESSION["authors"]) && sizeof($_SESSION["authors"]) > 0) {
             include($_SERVER['DOCUMENT_ROOT']."/src/views/author_list.php");
         }

@@ -1,14 +1,18 @@
 <?php
-class Author {
-    private static $s_id = 0;
+
+class Author
+{
+    private static int $s_id = 0;
     private int $id;
     private string $firstname;
     private string $lastname;
     private array $books;
 
-    function __construct(string $firstname, string $lastname, array $books) {
+    function __construct(string $firstname, string $lastname, array $books)
+    {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+        print_r($books);
         $this->books = $books;
         $this->id = Author::$s_id++;
     }
@@ -53,7 +57,8 @@ class Author {
         $this->books = $books;
     }
 
-    public function getBookCount(): int {
+    public function getBookCount(): int
+    {
         return count($this->books);
     }
 
