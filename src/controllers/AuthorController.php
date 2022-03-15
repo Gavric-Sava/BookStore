@@ -26,41 +26,60 @@ class AuthorController extends BaseController
     private function processAuthorList(): void
     {
         $authors = AuthorSessionRepository::fetchAll();
-        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/author_list.php");
+        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_list.php");
     }
 
     private function processAuthorCreate(): void
     {
+        $first_name_error = "";
+        $last_name_error = "";
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
-            // TODO validate...
 
-            AuthorSessionRepository::add(new Author($first_name, $last_name));
-
-//            header("Location: .");
-            header('Location: http://bookstore.test');
+            // TODO validate
+            if (AuthorController::validateFormInput(
+                $first_name,
+                $first_name_error,
+                $last_name,
+             $last_name_error)) {
+                AuthorSessionRepository::add(new Author($first_name, $last_name));
+                header('Location: http://bookstore.test');
+            } else {
+                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
+            }
         } else {
-            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/author_create.php");
+            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
         }
     }
 
     private function processAuthorEdit($id): void
     {
+        $first_name_error = "";
+        $last_name_error = "";
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
             // TODO validate...
-
-            AuthorSessionRepository::edit($id, $first_name, $last_name);
-
-            header('Location: http://bookstore.test');
+            if (AuthorController::validateFormInput(
+                $first_name,
+                $first_name_error,
+                $last_name,
+             $last_name_error)) {
+                AuthorSessionRepository::edit($id, $first_name, $last_name);
+                header('Location: http://bookstore.test');
+            } else {
+                $author = AuthorSessionRepository::fetch($id);
+                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
+            }
         } else {
             $author = AuthorSessionRepository::fetch($id);
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/author_edit.php");
+                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
             }
         }
     }
@@ -76,9 +95,32 @@ class AuthorController extends BaseController
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/author_delete.php");
+                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_delete.php");
             }
         }
+    }
+
+    private static function validateFormInput($first_name, &$first_name_error, $last_name, &$last_name_error): bool
+    {   // TODO max-length: 100 chars
+        if (!RequestUtil::validateNotEmpty($first_name)) {
+            $first_name_error = "First name is required.";
+        } else {
+            $first_name = RequestUtil::cleanData($first_name);
+            if (!RequestUtil::validateAlphabetical($first_name)) {
+                $first_name_error = "First name is not in a valid format.";
+            }
+        }
+
+        if (!RequestUtil::validateNotEmpty($last_name)) {
+            $last_name_error = "Last name is required.";
+        } else {
+            $last_name = RequestUtil::cleanData($last_name);
+            if (!RequestUtil::validateAlphabetical($last_name)) {
+                $last_name_error = "Last name is not in a valid format.";
+            }
+        }
+
+        return ($first_name_error == "" && $last_name_error == "");
     }
 
 }

@@ -47,3 +47,7 @@ form{
     padding: 0.4em 1em 0.4em 1em;
     cursor: pointer;
 }
+
+.error{
+    color: red;
+}
