@@ -29,10 +29,10 @@
                                 echo $book->getName()." ".$book->getYear();
                             echo "</td>";
                             echo "<td>";
-                                echo "<a href='".$_SERVER["HTTP_HOST"].'/books/edit/'.$book->getId()."'>".
+                                echo "<a href='".'/books/edit/'.$book->getId()."'>".
                                     "<img src='../../assets/images/edit.jpg' class='img_link'/>".
                                 "</a>";
-                                echo "<a href='".$_SERVER["HTTP_HOST"].'/books/delete/'.$book->getId()."'>".
+                                echo "<a href='".'/books/delete/'.$book->getId()."'>".
                                     "<img src='../../assets/images/delete.png' class='img_link'/>".
                                 "</a>";
                             echo "</td>";

@@ -33,10 +33,10 @@
                                 echo $author->getBookCount();
                             echo "</td>";
                             echo "<td>";
-                                echo "<a href='".$_SERVER["HTTP_HOST"].'/authors/edit/'.$author->getId()."'>".
+                                echo "<a href='".'/authors/edit/'.$author->getId()."'>".
                                     "<img src='../../assets/images/edit.jpg' class='img_link'/>".
                                 "</a>";
-                                echo "<a href='".$_SERVER["HTTP_HOST"].'/authors/delete/'.$author->getId()."'>".
+                                echo "<a href='".'/authors/delete/'.$author->getId()."'>".
                                     "<img src='../../assets/images/delete.png' class='img_link'/>".
                                 "</a>";
                             echo "</td>";
