@@ -101,7 +101,7 @@ class AuthorController extends BaseController
     }
 
     private static function validateFormInput($first_name, &$first_name_error, $last_name, &$last_name_error): bool
-    {   // TODO max-length: 100 chars
+    {
         if (!RequestUtil::validateNotEmpty($first_name)) {
             $first_name_error = "First name is required.";
         } else {

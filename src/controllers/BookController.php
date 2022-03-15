@@ -26,12 +26,12 @@ class BookController extends BaseController
     private function renderBookList(): void
     {
         $books = BookSessionRepository::fetchAll();
-        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/book_list.php");
+        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_list.php");
     }
 
     private function renderBookCreate(): void
     {
-        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/book_create.php");
+        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_create.php");
     }
 
     private function renderBookEdit($id): void
@@ -40,7 +40,7 @@ class BookController extends BaseController
         if (!isset($book)) {
             RequestUtil::render404();
         } else {
-            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/book_edit.php");
+            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_edit.php");
         }
     }
 
@@ -50,7 +50,7 @@ class BookController extends BaseController
         if (!isset($book)) {
             RequestUtil::render404();
         } else {
-            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/book_delete.php");
+            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_delete.php");
         }
     }
 }
