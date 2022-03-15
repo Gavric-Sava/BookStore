@@ -42,7 +42,7 @@ class AuthorController extends BaseController
                 $first_name,
                 $first_name_error,
                 $last_name,
-             $last_name_error)) {
+                $last_name_error)) {
                 AuthorSessionRepository::add(new Author($first_name, $last_name));
                 header('Location: http://bookstore.test');
             } else {

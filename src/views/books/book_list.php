@@ -30,10 +30,10 @@
                             echo "</td>";
                             echo "<td>";
                                 echo "<a href='".'/books/edit/'.$book->getId()."'>".
-                                    "<img src='../../../assets/images/edit.jpg' class='img_link'/>" .
+                                    "<img src='../../../assets/images/edit.jpg' class='icon edit'/>" .
                                 "</a>";
                                 echo "<a href='".'/books/delete/'.$book->getId()."'>".
-                                    "<img src='../../../assets/images/delete.png' class='img_link'/>" .
+                                    "<img src='../../../assets/images/delete.png' class='icon'/>" .
                                 "</a>";
                             echo "</td>";
                         echo "</tr>";
@@ -41,8 +41,8 @@
                 ?>
             </tbody>
         </table>
-        <a href="">
-            <img src="<?php echo "../../assets/images/create.png"; ?>" class='img_link'/>
+        <a href="/books/create" class="create_link">
+            <img src="<?php echo "../../assets/images/create.png"; ?>" class='icon'/>
         </a>
     </div>
 </body>

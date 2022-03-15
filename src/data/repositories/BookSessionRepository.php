@@ -34,8 +34,12 @@ abstract class BookSessionRepository
     }
 
     public static function add(Book $book): void {
-        // TODO
-        return;
+        $books_in_session = $_SESSION[BookSessionRepository::SESSION_TAG];
+        if (!isset($books_in_session[$book->getId()])) {
+            $books_in_session[$book->getId()] = $book;
+            $_SESSION[BookSessionRepository::SESSION_TAG] = $books_in_session;
+            var_dump($books_in_session);
+        }
     }
 
     public static function edit(Book $book): void {
