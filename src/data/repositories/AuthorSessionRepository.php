@@ -41,19 +41,19 @@ abstract class AuthorSessionRepository
         }
     }
 
-    public static function edit(Author $author): void
+    public static function edit(int $id, string $first_name, string $last_name): void
     {
         $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
-        if (isset($authors_in_session[$author->getId()])) {
-            $authors_in_session[$author->getId()] = $author;
-            $_SESSION[AuthorSessionRepository::SESSION_TAG] = $authors_in_session;
+        if (isset($authors_in_session[$id])) {
+            $authors_in_session[$id]->setFirstname($first_name);
+            $authors_in_session[$id]->setLastname($last_name);
         }
     }
 
     public static function delete(int $id): void
     {
         $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
-        if (isset($authors_in_session[$id])) {
+        if (isset($_SESSION[AuthorSessionRepository::SESSION_TAG][$id])) {
             unset($authors_in_session[$id]);
             $_SESSION[AuthorSessionRepository::SESSION_TAG] = $authors_in_session;
         }
