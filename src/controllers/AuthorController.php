@@ -37,7 +37,6 @@ class AuthorController extends BaseController
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            // TODO validate
             if (AuthorController::validateFormInput(
                 $first_name,
                 $first_name_error,
@@ -61,7 +60,7 @@ class AuthorController extends BaseController
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
-            // TODO validate...
+
             if (AuthorController::validateFormInput(
                 $first_name,
                 $first_name_error,
@@ -83,7 +82,7 @@ class AuthorController extends BaseController
         }
     }
 
-    private function processAuthorDelete($id)
+    private function processAuthorDelete($id) // TODO delete books...
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             AuthorSessionRepository::delete($id);

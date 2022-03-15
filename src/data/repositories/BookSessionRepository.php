@@ -48,8 +48,4 @@ abstract class BookSessionRepository
         }
     }
 
-    public static function delete(int $id): void {
-        // TODO
-        return;
-    }
 }
