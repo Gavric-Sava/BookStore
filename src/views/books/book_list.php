@@ -14,7 +14,6 @@
         <table>
             <col class="first-column">
             <col class="second-column">
-            <col class="third-column">
             <thead>
                 <tr>
                     <th>Book</th>
@@ -26,7 +25,7 @@
                     foreach ($books as $book) {
                         echo "<tr>";
                             echo "<td>";
-                                echo $book->getName()." ".$book->getYear();
+                                echo $book->getTitle()." ".$book->getYear();
                             echo "</td>";
                             echo "<td>";
                                 echo "<a href='".'/books/edit/'.$book->getId()."'>".

@@ -29,8 +29,7 @@ abstract class BookSessionRepository
     }
 
     public static function fetch(int $id): ?Book {
-        // TODO
-        return null;
+        return $_SESSION[BookSessionRepository::SESSION_TAG][$id];
     }
 
     public static function add(Book $book): void {
@@ -38,13 +37,15 @@ abstract class BookSessionRepository
         if (!isset($books_in_session[$book->getId()])) {
             $books_in_session[$book->getId()] = $book;
             $_SESSION[BookSessionRepository::SESSION_TAG] = $books_in_session;
-            var_dump($books_in_session);
         }
     }
 
-    public static function edit(Book $book): void {
-        // TODO
-        return;
+    public static function edit(int $id, string $title, int $year): void {
+        $books_in_session = $_SESSION[BookSessionRepository::SESSION_TAG];
+        if (isset($books_in_session[$id])) {
+            $books_in_session[$id]->setTitle($title);
+            $books_in_session[$id]->setYear($year);
+        }
     }
 
     public static function delete(int $id): void {

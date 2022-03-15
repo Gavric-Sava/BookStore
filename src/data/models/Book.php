@@ -6,12 +6,12 @@ class Book
     private const ID_TAG = "book_id";
 
     private int $id;
-    private string $name;
+    private string $title;
     private int $year;
 
-    public function __construct(string $name, int $year)
+    public function __construct(string $title, int $year)
     {
-        $this->name = $name;
+        $this->title = $title;
         $this->year = $year;
         $this->id = Book::generateId();
     }
@@ -26,14 +26,14 @@ class Book
         $this->id = $id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): void
+    public function setTitle(string $title): void
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
     public function getYear(): int

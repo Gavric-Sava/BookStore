@@ -55,10 +55,27 @@ class BookController extends BaseController
 
     private function processBookEdit($id): void
     {
-        $book = BookSessionRepository::fetch($id);
-        if (!isset($book)) {
-            RequestUtil::render404();
+        $title_error = "";
+        $year_error = "";
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $title = $_POST["title"];
+            $year = $_POST["year"];
+
+            // TODO validate
+            if (BookController::validateFormInput(
+                $title,
+                $title_error,
+                $year,
+                $year_error)) {
+                BookSessionRepository::edit($id, $title, $year);
+                header('Location: http://bookstore.test/books');
+            } else {
+                $book = BookSessionRepository::fetch($id);
+                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_edit.php");
+            }
         } else {
+            $book = BookSessionRepository::fetch($id);
             require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_edit.php");
         }
     }
