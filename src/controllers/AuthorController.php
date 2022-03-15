@@ -12,7 +12,6 @@ class AuthorController extends BaseController
         if (preg_match('/^\/authors\/create\/?$/', $path)) {
             $this->processAuthorCreate();
         } elseif (preg_match('/^\/authors\/edit\/(\d+)\/?$/', $path, $matches)) {
-//            print_r($matches);
             $this->processAuthorEdit($matches[1]);
         } elseif (preg_match('/^\/authors\/delete\/(\d+)\/?$/', $path, $matches)) {
             $this->processAuthorDelete($matches[1]);

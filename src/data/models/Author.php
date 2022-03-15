@@ -3,9 +3,8 @@
 class Author
 {
 
-    private const AUTHOR_ID_TAG = "author_id";
+    private const ID_TAG = "author_id";
 
-//    private static int $s_id = 0;
     private int $id;
     private string $firstname;
     private string $lastname;
@@ -66,11 +65,11 @@ class Author
 
     private static function generateId(): int
     {
-        if (!isset($_SESSION[Author::AUTHOR_ID_TAG])) {
-            $_SESSION[Author::AUTHOR_ID_TAG] = 1;
+        if (!isset($_SESSION[Author::ID_TAG])) {
+            $_SESSION[Author::ID_TAG] = 1;
             return 0;
         } else {
-            return $_SESSION[Author::AUTHOR_ID_TAG]++;
+            return $_SESSION[Author::ID_TAG]++;
         }
     }
 

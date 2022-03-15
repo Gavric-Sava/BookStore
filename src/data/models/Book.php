@@ -2,16 +2,18 @@
 
 class Book
 {
-    private static int $s_id = 0;
+
+    private const ID_TAG = "book_id";
+
     private int $id;
     private string $name;
     private int $year;
 
-    function __construct(string $name, int $year)
+    public function __construct(string $name, int $year)
     {
         $this->name = $name;
         $this->year = $year;
-        $this->id = Book::$s_id++;
+        $this->id = Book::generateId();
     }
 
     public function getId(): int
@@ -42,6 +44,16 @@ class Book
     public function setYear(int $year): void
     {
         $this->year = $year;
+    }
+
+    private static function generateId(): int
+    {
+        if (!isset($_SESSION[Book::ID_TAG])) {
+            $_SESSION[Book::ID_TAG] = 1;
+            return 0;
+        } else {
+            return $_SESSION[Book::ID_TAG]++;
+        }
     }
 
 }
