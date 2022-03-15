@@ -2,5 +2,5 @@
 
 abstract class BaseController
 {
-    public abstract function process(string $uri);
+    public abstract function process(string $path);
 }

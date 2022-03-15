@@ -12,7 +12,6 @@ class Author
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
-        print_r($books);
         $this->books = $books;
         $this->id = Author::$s_id++;
     }
