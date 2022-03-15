@@ -1,0 +1,57 @@
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.header{
+    align-self: flex-start;
+    margin-left: 4%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.header img{
+    width: 50px;
+    height: 45px;
+}
+
+.text{
+    width: 90%;
+    margin-bottom: 2.5em;
+}
+
+.buttons{
+    align-self: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5em;
+    margin-right: 2em;
+}
+
+.buttons button{
+    border: none;
+    border-radius: 0.25em;
+    padding: 0.75em 1em 0.75em 1em;
+    cursor: pointer;
+}
+
+.delete{
+    background-color: red;
+    color: white;
+}
+
+.cancel{
+    color: grey;
+}

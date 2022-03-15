@@ -1,6 +1,9 @@
 body{
+    height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
 }
 
 .wrapper{
@@ -33,7 +36,17 @@ td{
     padding: 0.5em 0 0.5em 0;
 }
 
-.img_link{
+.icon{
     width: 30px;
     height: 30px;
+}
+
+.edit{
+    width: 28px;
+    height: 27px;
+}
+
+.create_link{
+    width: 0;
+    height: 0;
 }

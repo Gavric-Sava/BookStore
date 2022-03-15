@@ -34,10 +34,10 @@
                             echo "</td>";
                             echo "<td>";
                                 echo "<a href='".'/authors/edit/'.$author->getId()."'>".
-                                    "<img src='../../assets/images/edit.jpg' class='img_link'/>".
+                                    "<img src='../../assets/images/edit.jpg' class='icon edit'/>".
                                 "</a>";
                                 echo "<a href='".'/authors/delete/'.$author->getId()."'>".
-                                    "<img src='../../assets/images/delete.png' class='img_link'/>".
+                                    "<img src='../../assets/images/delete.png' class='icon'/>".
                                 "</a>";
                             echo "</td>";
                         echo "</tr>";
@@ -45,8 +45,8 @@
                 ?>
             </tbody>
         </table>
-        <a href="<?php echo $_SERVER['HTTP_HOST'].'/authors/add'?>">
-            <img src="<?php echo "../../assets/images/add.png"; ?>" class='img_link'/>
+        <a href="/authors/create" class="create_link">
+            <img src="<?php echo "../../assets/images/create.png"; ?>" class="icon"/>
         </a>
     </div>
 </body>
