@@ -1,11 +1,19 @@
 <?php
 
+namespace Bookstore;
+
 require_once './src/init.php';
 require_once './src/controllers/AuthorController.php';
 require_once './src/controllers/BookController.php';
 require_once './src/data/repositories/authors/AuthorRepositorySession.php';
 require_once './src/data/repositories/books/BookRepositorySession.php';
 require_once './src/util/RequestUtil.php';
+
+use Bookstore\Controller\AuthorController;
+use Bookstore\Controller\BookController;
+use Bookstore\Data\Repository\AuthorRepositorySession;
+use Bookstore\Data\Repository\BookRepositorySession;
+use Bookstore\Util\RequestUtil;
 
 session_start();
 initSessionData();

@@ -1,5 +1,9 @@
 <?php
 
+namespace Bookstore\Data\Repository;
+
+use Bookstore\Data\Model\Book;
+
 interface BookRepositoryInterface
 {
     public function fetchAll(): array;

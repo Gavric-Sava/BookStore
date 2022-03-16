@@ -1,5 +1,7 @@
 <?php
 
+namespace Bookstore\Util;
+
 abstract class RequestUtil
 {
     public static function render404(): void

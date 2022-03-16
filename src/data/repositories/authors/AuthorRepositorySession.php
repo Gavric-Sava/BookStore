@@ -1,9 +1,13 @@
 <?php
 
+namespace Bookstore\Data\Repository;
+
 require_once __DIR__ . "/../../models/Author.php";
 require_once __DIR__ . '/AuthorRepositoryInterface.php';
 
-class AuthorRepositorySession implements \AuthorRepositoryInterface
+use Bookstore\Data\Model\Author;
+
+class AuthorRepositorySession implements AuthorRepositoryInterface
 {
 
     public const SESSION_TAG = "authors";

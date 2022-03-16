@@ -1,5 +1,7 @@
 <?php
 
+namespace Bookstore\Data\Model;
+
 class Book
 {
 

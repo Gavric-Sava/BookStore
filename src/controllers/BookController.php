@@ -1,9 +1,15 @@
 <?php
 
+namespace Bookstore\Controller;
+
 require_once __DIR__ . '/BaseController.php';
 require_once __DIR__ . '/../data/repositories/authors/AuthorRepositoryInterface.php';
 require_once __DIR__ . '/../data/repositories/books/BookRepositoryInterface.php';
 require_once './src/util/RequestUtil.php';
+
+use Bookstore\Data\Model\Book;
+use Bookstore\Data\Repository\{AuthorRepositoryInterface, BookRepositoryInterface};
+use Bookstore\Util\RequestUtil;
 
 class BookController extends BaseController
 {
