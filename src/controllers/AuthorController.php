@@ -42,56 +42,53 @@ class AuthorController extends BaseController
 
     private function processAuthorCreate(): void
     {
-        $first_name_error = "";
-        $last_name_error = "";
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            if (AuthorController::validateFormInput(
-                $first_name,
-                $first_name_error,
-                $last_name,
-                $last_name_error
-            )) {
+            $errors = AuthorController::validateFormInput($first_name, $last_name);
+
+            if (empty($errors)) {
                 $this->authorRepository->add(new Author($first_name, $last_name));
                 header('Location: http://bookstore.test');
             } else {
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
+                $first_name_error = $errors["first_name_error"];
+                $last_name_error = $errors["last_name_error"];
+
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
             }
         } else {
-            require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
         }
     }
 
     private function processAuthorEdit($id): void
     {
-        $first_name_error = "";
-        $last_name_error = "";
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            if (AuthorController::validateFormInput(
+            $errors = AuthorController::validateFormInput(
                 $first_name,
-                $first_name_error,
-                $last_name,
-                $last_name_error
-            )) {
+                $last_name
+            );
+
+            if (empty($errors)) {
                 $this->authorRepository->edit($id, $first_name, $last_name);
                 header('Location: http://bookstore.test');
             } else {
+                $first_name_error = $errors["first_name_error"];
+                $last_name_error = $errors["last_name_error"];
+
                 $author = $this->authorRepository->fetch($id);
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
             }
         } else {
             $author = $this->authorRepository->fetch($id);
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
             }
         }
     }
@@ -115,12 +112,15 @@ class AuthorController extends BaseController
         }
     }
 
-    private static function validateFormInput($first_name, &$first_name_error, $last_name, &$last_name_error): bool
+    private function validateFormInput(string $first_name, string $last_name): ?array
     {
+        $first_name_error = "";
+        $last_name_error = "";
+
         if (!RequestUtil::validateNotEmpty($first_name)) {
             $first_name_error = "First name is required.";
         } else {
-            $first_name = RequestUtil::cleanData($first_name);
+            $first_name = RequestUtil::sanitizeData($first_name);
             if (!RequestUtil::validateAlphabetical($first_name)) {
                 $first_name_error = "First name is not in a valid format.";
             }
@@ -129,13 +129,19 @@ class AuthorController extends BaseController
         if (!RequestUtil::validateNotEmpty($last_name)) {
             $last_name_error = "Last name is required.";
         } else {
-            $last_name = RequestUtil::cleanData($last_name);
+            $last_name = RequestUtil::sanitizeData($last_name);
             if (!RequestUtil::validateAlphabetical($last_name)) {
                 $last_name_error = "Last name is not in a valid format.";
             }
         }
 
-        return ($first_name_error == "" && $last_name_error == "");
-    }
+        if (!($first_name_error == "" && $last_name_error == "")) {
+            return [
+                "first_name_error" => $first_name_error,
+                "last_name_error" => $last_name_error
+            ];
+        }
 
+        return null;
+    }
 }
