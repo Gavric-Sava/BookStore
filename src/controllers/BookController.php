@@ -95,12 +95,12 @@ class BookController extends BaseController
     /**
      * Implementation of the 'Book edit' use case.
      *
-     * @param $id Id of the book to be edited.
+     * @param int $id Id of the book to be edited.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processBookEdit($id): void
+    private function processBookEdit(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
@@ -127,30 +127,39 @@ class BookController extends BaseController
     /**
      * Implementation of the 'Book delete' use case.
      *
-     * @param $id Id of the book to be deleted.
+     * @param int $id Id of the book to be deleted.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function processBookDelete($id): void
+    public function processBookDelete(int $id): void
     {
-        if ($this->bookRepository->delete($id)) {
-            $this->authorRepository->deleteBook($id);
-        }
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($this->bookRepository->delete($id)) {
+                $this->authorRepository->deleteBook($id);
+            }
 
-        header('Location: http://bookstore.test/books');
+            header('Location: http://bookstore.test/books');
+        } else {
+            $book = $this->bookRepository->fetch($id);
+            if (!isset($book)) {
+                RequestUtil::render404();
+            } else {
+                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_delete.php");
+            }
+        }
     }
 
     /**
      * Validation of input form data for 'Book create' and 'Book edit' use cases.
      *
-     * @param string $title Title of the book to be created/edited.
-     * @param int $year Year of the book to be created/edited.
+     * @param mixed $title Title of the book to be created/edited.
+     * @param mixed $year Year of the book to be created/edited.
      * @return string[]|null List of errors or null, if no errors occurred.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private static function validateFormInput(string $title, int $year): ?array
+    private static function validateFormInput($title, $year): ?array
     {
         $title_error = "";
         $year_error = "";

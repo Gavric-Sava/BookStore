@@ -112,12 +112,12 @@ class AuthorController extends BaseController
     /**
      * Implementation of the 'Author edit' use case.
      *
-     * @param $id Id of the author to be edited.
+     * @param int $id Id of the author to be edited.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processAuthorEdit($id): void
+    private function processAuthorEdit(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
@@ -151,12 +151,12 @@ class AuthorController extends BaseController
     /**
      * Implementation of the 'Author delete' use case.
      *
-     * @param $id Id of the author to be deleted.
+     * @param int $id Id of the author to be deleted.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processAuthorDelete($id)
+    private function processAuthorDelete(int $id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $books = $this->authorRepository->fetch($id)->getBooks();
@@ -178,13 +178,13 @@ class AuthorController extends BaseController
     /**
      * Validation of input form data for 'Author create' and 'Author edit' use cases.
      *
-     * @param string $first_name First name of the author to be created/edited.
-     * @param string $last_name Last name of the author to be created/edited.
+     * @param mixed $first_name First name of the author to be created/edited.
+     * @param mixed $last_name Last name of the author to be created/edited.
      * @return string[]|null List of errors or null, if no errors occurred.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function validateFormInput(string $first_name, string $last_name): ?array
+    private function validateFormInput($first_name, $last_name): ?array
     {
         $first_name_error = "";
         $last_name_error = "";

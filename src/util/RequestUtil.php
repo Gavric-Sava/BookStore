@@ -19,7 +19,7 @@ abstract class RequestUtil
 
     /**
      * Trim excess white space and escape html elements to prevent HTML injection.
-     * @param $data Data to be sanitized.
+     * @param $data mixed to be sanitized.
      * @return mixed Sanitized data
      */
     public static function sanitizeData($data)
@@ -33,7 +33,7 @@ abstract class RequestUtil
 
     /**
      * Check if input data is empty.
-     * @param $data Data to be checked.
+     * @param $data mixed to be checked.
      * @return bool Result of the check.
      */
     public static function validateNotEmpty($data): bool
@@ -43,7 +43,7 @@ abstract class RequestUtil
 
     /**
      * Check if input data is an alphabetical string.
-     * @param $data Data to be checked.
+     * @param $data mixed to be checked.
      * @return bool Result of the check.
      */
     public static function validateAlphabetical($data): bool
@@ -53,7 +53,7 @@ abstract class RequestUtil
 
     /**
      * Check if input data is an alphanumeric string.
-     * @param $data Data to be checked.
+     * @param $data mixed to be checked.
      * @return bool Result of the check.
      */
     public static function validateAlphanumeric($data): bool
@@ -63,7 +63,7 @@ abstract class RequestUtil
 
     /**
      * Check if input data is a number.
-     * @param $data Data to be checked.
+     * @param $data mixed to be checked.
      * @return bool Result of the check.
      */
     public static function validateNumber($data): bool
