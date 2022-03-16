@@ -12,6 +12,13 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
 
     public const SESSION_TAG = "authors";
 
+    /**
+     * Initialize session with author data.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public static function initializeData(): void
     {
         $_SESSION[AuthorRepositorySession::SESSION_TAG] = [
@@ -22,21 +29,51 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
         ];
     }
 
+    /**
+     * Check if session has been initialized with author data.
+     *
+     * @return bool True if session already initialized. Otherwise, false.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public static function dataInitialized(): bool
     {
         return isset($_SESSION[AuthorRepositorySession::SESSION_TAG]);
     }
 
+    /**
+     * Fetch all authors.
+     *
+     * @return array Array of authors.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function fetchAll(): array
     {
         return $_SESSION[AuthorRepositorySession::SESSION_TAG];
     }
 
+    /**
+     * Fetch an author.
+     *
+     * @param int $id Id of author to be fetched.
+     * @return Author|null Author if found. Null otherwise.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function fetch(int $id): ?Author
     {
         return $_SESSION[AuthorRepositorySession::SESSION_TAG][$id];
     }
 
+    /**
+     * Add an author.
+     *
+     * @param Author $author Author to be added.
+     * @return bool True if adding successful. Otherwise, false.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function add(Author $author): bool
     {
         if (!isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()])) {
@@ -48,6 +85,16 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
         return false;
     }
 
+    /**
+     * Edit an author.
+     *
+     * @param int $id Id of author to be edited.
+     * @param string $first_name New firstname value.
+     * @param string $last_name New lastname value.
+     * @return bool True if editing successful. Otherwise, false.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function edit(int $id, string $first_name, string $last_name): bool
     {
         if (isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id])) {
@@ -60,6 +107,14 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
         return false;
     }
 
+    /**
+     * Delete an author.
+     *
+     * @param int $id Id of author to be deleted.
+     * @return bool True if deletion successful. Otherwise, not.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function delete(int $id): bool
     {
         if (isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id])) {
@@ -71,6 +126,14 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
         return false;
     }
 
+    /**
+     * Remove book from corresponding author.
+     *
+     * @param int $book_id Id of book to be removed.
+     * @return bool True if deletion successful. Otherwise, not.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function deleteBook(int $id): bool
     {
         foreach ($_SESSION[AuthorRepositorySession::SESSION_TAG] as $author) {

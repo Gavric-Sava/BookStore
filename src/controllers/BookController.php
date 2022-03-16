@@ -14,7 +14,17 @@ use Bookstore\Util\RequestUtil;
 class BookController extends BaseController
 {
 
+    /**
+     * @var AuthorRepositoryInterface Interface towards Author repository.
+     *
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private AuthorRepositoryInterface $authorRepository;
+    /**
+     * @var BookRepositoryInterface Interface towards Book repository.
+     *
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private BookRepositoryInterface $bookRepository;
 
     public function __construct(
@@ -25,7 +35,7 @@ class BookController extends BaseController
         $this->bookRepository = $bookRepository;
     }
 
-    public function process(string $path)
+    public function process(string $path): void
     {
         if (preg_match('/^\/books\/create\/?$/', $path)) {
             $this->processBookCreate();
@@ -40,12 +50,26 @@ class BookController extends BaseController
         }
     }
 
+    /**
+     * Implementation of the 'Book list' use case.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processBookList(): void
     {
         $books = $this->bookRepository->fetchAll();
         require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_list.php");
     }
 
+    /**
+     * Implementation of the 'Book create' use case.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processBookCreate(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -68,6 +92,14 @@ class BookController extends BaseController
         }
     }
 
+    /**
+     * Implementation of the 'Book edit' use case.
+     *
+     * @param $id Id of the book to be edited.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processBookEdit($id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -92,6 +124,14 @@ class BookController extends BaseController
         }
     }
 
+    /**
+     * Implementation of the 'Book delete' use case.
+     *
+     * @param $id Id of the book to be deleted.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function processBookDelete($id): void
     {
         if ($this->bookRepository->delete($id)) {
@@ -101,7 +141,16 @@ class BookController extends BaseController
         header('Location: http://bookstore.test/books');
     }
 
-    private static function validateFormInput($title, $year): ?array
+    /**
+     * Validation of input form data for 'Book create' and 'Book edit' use cases.
+     *
+     * @param string $title Title of the book to be created/edited.
+     * @param int $year Year of the book to be created/edited.
+     * @return string[]|null List of errors or null, if no errors occurred.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    private static function validateFormInput(string $title, int $year): ?array
     {
         $title_error = "";
         $year_error = "";

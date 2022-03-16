@@ -14,9 +14,28 @@ use Bookstore\Util\RequestUtil;
 class AuthorController extends BaseController
 {
 
+    /**
+     * @var AuthorRepositoryInterface Interface towards Author repository.
+     *
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private AuthorRepositoryInterface $authorRepository;
+
+    /**
+     * @var BookRepositoryInterface Interface towards Book repository.
+     *
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private BookRepositoryInterface $bookRepository;
 
+    /**
+     * Constructs AuthorController object. Takes data repositories.
+     *
+     * @param AuthorRepositoryInterface $authorRepository Data repository for Author entity.
+     * @param BookRepositoryInterface $bookRepository Data repository for Book entity.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function __construct(
         AuthorRepositoryInterface $authorRepository,
         BookRepositoryInterface $bookRepository
@@ -25,7 +44,15 @@ class AuthorController extends BaseController
         $this->bookRepository = $bookRepository;
     }
 
-    public function process(string $path)
+    /**
+     * Parses path and processes the request.
+     *
+     * @param string $path Path of the request.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function process(string $path): void
     {
         if (preg_match('/^\/authors\/create\/?$/', $path)) {
             $this->processAuthorCreate();
@@ -40,12 +67,26 @@ class AuthorController extends BaseController
         }
     }
 
+    /**
+     * Implementation of the 'Author list' use case.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processAuthorList(): void
     {
         $authors = $this->authorRepository->fetchAll();
         require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_list.php");
     }
 
+    /**
+     * Implementation of the 'Author create' use case.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processAuthorCreate(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -68,6 +109,14 @@ class AuthorController extends BaseController
         }
     }
 
+    /**
+     * Implementation of the 'Author edit' use case.
+     *
+     * @param $id Id of the author to be edited.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processAuthorEdit($id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -99,6 +148,14 @@ class AuthorController extends BaseController
         }
     }
 
+    /**
+     * Implementation of the 'Author delete' use case.
+     *
+     * @param $id Id of the author to be deleted.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function processAuthorDelete($id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -118,6 +175,15 @@ class AuthorController extends BaseController
         }
     }
 
+    /**
+     * Validation of input form data for 'Author create' and 'Author edit' use cases.
+     *
+     * @param string $first_name First name of the author to be created/edited.
+     * @param string $last_name Last name of the author to be created/edited.
+     * @return string[]|null List of errors or null, if no errors occurred.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private function validateFormInput(string $first_name, string $last_name): ?array
     {
         $first_name_error = "";
