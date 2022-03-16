@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../models/Book.php";
+require_once __DIR__ . '/AuthorSessionRepository.php';
 
 abstract class BookSessionRepository
 {
@@ -46,6 +47,25 @@ abstract class BookSessionRepository
             $books_in_session[$id]->setTitle($title);
             $books_in_session[$id]->setYear($year);
         }
+    }
+
+    public static function delete(int $id): void
+    {
+        $books_in_session = $_SESSION[BookSessionRepository::SESSION_TAG];
+        if (isset($books_in_session[$id])) {
+            AuthorSessionRepository::deleteBook($id);
+            unset($books_in_session[$id]);
+        }
+        $_SESSION[BookSessionRepository::SESSION_TAG] = $books_in_session;
+    }
+
+    public static function deleteMultiple(array $ids): void
+    {
+        $books_in_session = $_SESSION[BookSessionRepository::SESSION_TAG];
+        foreach($ids as $book_id) {
+            unset($books_in_session[$book_id]);
+        }
+        $_SESSION[BookSessionRepository::SESSION_TAG] = $books_in_session;
     }
 
 }

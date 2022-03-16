@@ -13,6 +13,8 @@ class BookController extends BaseController
             $this->processBookCreate();
         } elseif (preg_match('/^\/books\/edit\/(\d+)\/?$/', $path, $matches)) {
             $this->processBookEdit($matches[1]);
+        } elseif (preg_match('/^\/books\/delete\/(\d+)\/?$/', $path, $matches)) {
+            $this->processBookDelete($matches[1]);
         } elseif (preg_match('/^\/books\/?$/', $path)) {
             $this->processBookList();
         } else {
@@ -74,6 +76,12 @@ class BookController extends BaseController
             $book = BookSessionRepository::fetch($id);
             require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_edit.php");
         }
+    }
+
+    public function processBookDelete($id): void {
+        BookSessionRepository::delete($id);
+
+        header('Location: http://bookstore.test/books');
     }
 
     private static function validateFormInput($title, &$title_error, $year, &$year_error): bool

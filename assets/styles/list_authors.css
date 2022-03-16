@@ -1,0 +1,11 @@
+.first-column{
+    width: 80%;
+}
+
+.second-column, .third-column{
+    width: 10%;
+}
+
+.books{
+    text-align: center;
+}

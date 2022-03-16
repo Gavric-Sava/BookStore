@@ -16,16 +16,12 @@ table{
     border-collapse: collapse;
 }
 
-.first-column{
-    width: 80%;
-}
-
-.second-column, .third-column{
-    width: 10%;
-}
-
-th{
+.first{
     text-align: left;
+}
+
+.last{
+    text-align: right;
 }
 
 thead tr{
@@ -44,6 +40,11 @@ td{
 .edit{
     width: 28px;
     height: 27px;
+}
+
+.create{
+    width: 35px;
+    height: 35px;
 }
 
 .create_link{

@@ -63,6 +63,20 @@ class Author
         return count($this->books);
     }
 
+    public function deleteBook(int $id): void
+    {
+        if (isset($this->books[$id])) {
+            unset($this->books[$id]);
+        }
+    }
+
+    public function addBook(int $id): void
+    {
+        if (!isset($this->books[$id])) {
+            $this->books[$id] = $id;
+        }
+    }
+
     private static function generateId(): int
     {
         if (!isset($_SESSION[Author::ID_TAG])) {

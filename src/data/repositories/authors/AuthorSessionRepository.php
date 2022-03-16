@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../models/Author.php";
+require_once __DIR__ . "/BookSessionRepository.php";
 
 abstract class AuthorSessionRepository
 {
@@ -10,10 +11,10 @@ abstract class AuthorSessionRepository
     public static function initializeData(): void
     {
         $_SESSION[AuthorSessionRepository::SESSION_TAG] = [
-            0 => (new Author("Pera", "Peric", [0, 4])),
-            1 => (new Author("Mika", "Mikic", [1])),
-            2 => (new Author("Zika", "Zikic", [2])),
-            3 => (new Author("Nikola", "Nikolic", [3]))
+            0 => (new Author("Pera", "Peric", [0 => 0, 4 => 4])),
+            1 => (new Author("Mika", "Mikic", [1 => 1])),
+            2 => (new Author("Zika", "Zikic", [2 => 2])),
+            3 => (new Author("Nikola", "Nikolic", [3 => 3]))
         ];
     }
 
@@ -53,9 +54,19 @@ abstract class AuthorSessionRepository
     public static function delete(int $id): void
     {
         $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
-        if (isset($_SESSION[AuthorSessionRepository::SESSION_TAG][$id])) {
+        if (isset($authors_in_session[$id])) {
+            BookSessionRepository::deleteMultiple($authors_in_session[$id]->getBooks());
             unset($authors_in_session[$id]);
             $_SESSION[AuthorSessionRepository::SESSION_TAG] = $authors_in_session;
+        }
+    }
+
+    public static function deleteBook(int $id) {
+        $authors_in_session = $_SESSION[AuthorSessionRepository::SESSION_TAG];
+        foreach($authors_in_session as $author) {
+            if (in_array($id, $author->getBooks())) {
+                $author->deleteBook($id);
+            }
         }
     }
 
