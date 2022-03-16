@@ -1,11 +1,23 @@
 <?php
 
 require_once __DIR__ . '/BaseController.php';
-require_once __DIR__ . '/../data/repositories/AuthorSessionRepository.php';
+require_once __DIR__ . '/../data/repositories/authors/AuthorRepositoryInterface.php';
+require_once __DIR__ . '/../data/repositories/books/BookRepositoryInterface.php';
 require_once './src/util/RequestUtil.php';
 
 class AuthorController extends BaseController
 {
+
+    private AuthorRepositoryInterface $authorRepository;
+    private BookRepositoryInterface $bookRepository;
+
+    public function __construct(
+        AuthorRepositoryInterface $authorRepository,
+        BookRepositoryInterface $bookRepository
+    ) {
+        $this->authorRepository = $authorRepository;
+        $this->bookRepository = $bookRepository;
+    }
 
     public function process(string $path)
     {
@@ -24,7 +36,7 @@ class AuthorController extends BaseController
 
     private function processAuthorList(): void
     {
-        $authors = AuthorSessionRepository::fetchAll();
+        $authors = $this->authorRepository->fetchAll();
         require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_list.php");
     }
 
@@ -41,8 +53,9 @@ class AuthorController extends BaseController
                 $first_name,
                 $first_name_error,
                 $last_name,
-                $last_name_error)) {
-                AuthorSessionRepository::add(new Author($first_name, $last_name));
+                $last_name_error
+            )) {
+                $this->authorRepository->add(new Author($first_name, $last_name));
                 header('Location: http://bookstore.test');
             } else {
                 require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_create.php");
@@ -65,15 +78,16 @@ class AuthorController extends BaseController
                 $first_name,
                 $first_name_error,
                 $last_name,
-             $last_name_error)) {
-                AuthorSessionRepository::edit($id, $first_name, $last_name);
+                $last_name_error
+            )) {
+                $this->authorRepository->edit($id, $first_name, $last_name);
                 header('Location: http://bookstore.test');
             } else {
-                $author = AuthorSessionRepository::fetch($id);
+                $author = $this->authorRepository->fetch($id);
                 require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_edit.php");
             }
         } else {
-            $author = AuthorSessionRepository::fetch($id);
+            $author = $this->authorRepository->fetch($id);
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
@@ -82,14 +96,17 @@ class AuthorController extends BaseController
         }
     }
 
-    private function processAuthorDelete($id) // TODO delete books...
+    private function processAuthorDelete($id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            AuthorSessionRepository::delete($id);
+            $books = $this->authorRepository->fetch($id)->getBooks();
+            if ($this->authorRepository->delete($id)) {
+                $this->bookRepository->deleteMultiple($books);
+            }
 
             header('Location: http://bookstore.test');
         } else {
-            $author = AuthorSessionRepository::fetch($id);
+            $author = $this->authorRepository->fetch($id);
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {

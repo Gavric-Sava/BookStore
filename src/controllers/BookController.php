@@ -1,11 +1,23 @@
 <?php
 
 require_once __DIR__ . '/BaseController.php';
-require_once __DIR__ . '/../data/repositories/BookSessionRepository.php';
+require_once __DIR__ . '/../data/repositories/authors/AuthorRepositoryInterface.php';
+require_once __DIR__ . '/../data/repositories/books/BookRepositoryInterface.php';
 require_once './src/util/RequestUtil.php';
 
 class BookController extends BaseController
 {
+
+    private AuthorRepositoryInterface $authorRepository;
+    private BookRepositoryInterface $bookRepository;
+
+    public function __construct(
+        AuthorRepositoryInterface $authorRepository,
+        BookRepositoryInterface $bookRepository
+    ) {
+        $this->authorRepository = $authorRepository;
+        $this->bookRepository = $bookRepository;
+    }
 
     public function process(string $path)
     {
@@ -24,7 +36,7 @@ class BookController extends BaseController
 
     private function processBookList(): void
     {
-        $books = BookSessionRepository::fetchAll();
+        $books = $this->bookRepository->fetchAll();
         require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_list.php");
     }
 
@@ -42,7 +54,7 @@ class BookController extends BaseController
                 $title_error,
                 $year,
                 $year_error)) {
-                BookSessionRepository::add(new Book($title, $year));
+                $this->bookRepository->add(new Book($title, $year));
                 header('Location: http://bookstore.test/books');
             } else {
                 require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_create.php");
@@ -66,20 +78,22 @@ class BookController extends BaseController
                 $title_error,
                 $year,
                 $year_error)) {
-                BookSessionRepository::edit($id, $title, $year);
+                $this->bookRepository->edit($id, $title, $year);
                 header('Location: http://bookstore.test/books');
             } else {
-                $book = BookSessionRepository::fetch($id);
+                $book = $this->bookRepository->fetch($id);
                 require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_edit.php");
             }
         } else {
-            $book = BookSessionRepository::fetch($id);
+            $book = $this->bookRepository->fetch($id);
             require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_edit.php");
         }
     }
 
     public function processBookDelete($id): void {
-        BookSessionRepository::delete($id);
+        if ($this->bookRepository->delete($id)) {
+            $this->authorRepository->deleteBook($id);
+        }
 
         header('Location: http://bookstore.test/books');
     }

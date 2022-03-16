@@ -1,14 +1,14 @@
 <?php
 
-require_once __DIR__ . "/data/repositories/AuthorSessionRepository.php";
-require_once __DIR__ . "/data/repositories/BookSessionRepository.php";
+require_once __DIR__ . "/data/repositories/authors/AuthorRepositorySession.php";
+require_once __DIR__ . "/data/repositories/books/BookRepositorySession.php";
 
 function initSessionData()
 {
-    if (!AuthorSessionRepository::dataInitialized()) {
-        AuthorSessionRepository::initializeData();
+    if (!AuthorRepositorySession::dataInitialized()) {
+        AuthorRepositorySession::initializeData();
     }
-    if (!BookSessionRepository::dataInitialized()) {
-        BookSessionRepository::initializeData();
+    if (!BookRepositorySession::dataInitialized()) {
+        BookRepositorySession::initializeData();
     }
 }
