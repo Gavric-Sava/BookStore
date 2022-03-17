@@ -10,7 +10,8 @@ use Bookstore\Data\Model\Book;
 class BookRepositorySession implements BookRepositoryInterface
 {
 
-    public const SESSION_TAG = "books";
+    private const SESSION_TAG = "books";
+    private const ID_TAG = "book_id";
 
     /**
      * Initialize session with book data.
@@ -21,13 +22,12 @@ class BookRepositorySession implements BookRepositoryInterface
      */
     public static function initializeData(): void
     {
-        $_SESSION[BookRepositorySession::SESSION_TAG] = [
-            0 => (new Book("Book Name", 2001)),
-            1 => (new Book("Book Name 1", 2002)),
-            2 => (new Book("Book Name 2", 1997)),
-            3 => (new Book("Book Name 3", 2005)),
-            4 => (new Book("Book Name 4", 2006))
-        ];
+        $book_repository_session = new BookRepositorySession();
+        $book_repository_session->add(new Book("Book Name", 2001));
+        $book_repository_session->add(new Book("Book Name 1", 2002));
+        $book_repository_session->add(new Book("Book Name 2", 1997));
+        $book_repository_session->add(new Book("Book Name 3", 2005));
+        $book_repository_session->add(new Book("Book Name 4", 2006));
     }
 
     /**
@@ -77,11 +77,13 @@ class BookRepositorySession implements BookRepositoryInterface
      */
     public function add(Book $book): bool
     {
-        if (!isset($_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()])) {
-            $_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()] = $book;
-
-            return true;
-        }
+//        if (!isset($_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()])) {
+//            $_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()] = $book;
+//
+//            return true;
+//        }
+        $book->setId(BookRepositorySession::generateId());
+        $_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()] = $book;
 
         return false;
     }
@@ -151,6 +153,23 @@ class BookRepositorySession implements BookRepositoryInterface
         }
 
         return false;
+    }
+
+    /**
+     * Generates next unique id for Book.
+     *
+     * @return int Newly generated unique Book id.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    private static function generateId(): int
+    {
+        if (!isset($_SESSION[BookRepositorySession::ID_TAG])) {
+            $_SESSION[BookRepositorySession::ID_TAG] = 1;
+            return 0;
+        } else {
+            return $_SESSION[BookRepositorySession::ID_TAG]++;
+        }
     }
 
 }

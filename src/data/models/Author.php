@@ -7,7 +7,7 @@ class Author
 
     private const ID_TAG = "author_id";
 
-    private int $id;
+    private ?int $id;
     private string $firstname;
     private string $lastname;
     private array $books;
@@ -27,7 +27,8 @@ class Author
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->books = $books;
-        $this->id = Author::generateId();
+//        $this->id = Author::generateId();
+        $this->id = null;
     }
 
     /**
@@ -37,9 +38,22 @@ class Author
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * Sets Id of the author.
+     *
+     * @param id $id New id of the author.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -156,23 +170,6 @@ class Author
     {
         if (!isset($this->books[$id])) {
             $this->books[$id] = $id;
-        }
-    }
-
-    /**
-     * Generates next unique id for Author object being constructed.
-     *
-     * @return int Newly generated unique Author id.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    private static function generateId(): int
-    {
-        if (!isset($_SESSION[Author::ID_TAG])) {
-            $_SESSION[Author::ID_TAG] = 1;
-            return 0;
-        } else {
-            return $_SESSION[Author::ID_TAG]++;
         }
     }
 

@@ -60,7 +60,7 @@ class BookController extends BaseController
     private function processBookList(): void
     {
         $books = $this->bookRepository->fetchAll();
-        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_list.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_list.php");
     }
 
     /**
@@ -145,7 +145,7 @@ class BookController extends BaseController
             if (!isset($book)) {
                 RequestUtil::render404();
             } else {
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_delete.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/views/books/book_delete.php");
             }
         }
     }

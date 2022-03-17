@@ -10,7 +10,8 @@ use Bookstore\Data\Model\Author;
 class AuthorRepositorySession implements AuthorRepositoryInterface
 {
 
-    public const SESSION_TAG = "authors";
+    private const SESSION_TAG = "authors";
+    private const ID_TAG = "author_id";
 
     /**
      * Initialize session with author data.
@@ -21,12 +22,11 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
      */
     public static function initializeData(): void
     {
-        $_SESSION[AuthorRepositorySession::SESSION_TAG] = [
-            0 => (new Author("Pera", "Peric", [0 => 0, 4 => 4])),
-            1 => (new Author("Mika", "Mikic", [1 => 1])),
-            2 => (new Author("Zika", "Zikic", [2 => 2])),
-            3 => (new Author("Nikola", "Nikolic", [3 => 3]))
-        ];
+        $author_repository_session = new AuthorRepositorySession();
+        $author_repository_session->add(new Author("Pera", "Peric", [0 => 0, 4 => 4]));
+        $author_repository_session->add(new Author("Mika", "Mikic", [1 => 1]));
+        $author_repository_session->add(new Author("Zika", "Zikic", [2 => 2]));
+        $author_repository_session->add(new Author("Nikola", "Nikolic", [3 => 3]));
     }
 
     /**
@@ -76,11 +76,13 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
      */
     public function add(Author $author): bool
     {
-        if (!isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()])) {
-            $_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()] = $author;
-
-            return true;
-        }
+//        if (!isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()])) {
+//            $_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()] = $author;
+//
+//            return true;
+//        }
+        $author->setId(AuthorRepositorySession::generateId());
+        $_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()] = $author;
 
         return false;
     }
@@ -129,7 +131,7 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     /**
      * Remove book from corresponding author.
      *
-     * @param int $book_id Id of book to be removed.
+     * @param int $id Id of book to be removed.
      * @return bool True if deletion successful. Otherwise, not.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
@@ -145,6 +147,23 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
         }
 
         return false;
+    }
+
+    /**
+     * Generates next unique id for Author.
+     *
+     * @return int Newly generated unique Author id.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    private static function generateId(): int
+    {
+        if (!isset($_SESSION[AuthorRepositorySession::ID_TAG])) {
+            $_SESSION[AuthorRepositorySession::ID_TAG] = 1;
+            return 0;
+        } else {
+            return $_SESSION[AuthorRepositorySession::ID_TAG]++;
+        }
     }
 
 }

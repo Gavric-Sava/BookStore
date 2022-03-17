@@ -77,7 +77,7 @@ class AuthorController extends BaseController
     private function processAuthorList(): void
     {
         $authors = $this->authorRepository->fetchAll();
-        require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_list.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_list.php");
     }
 
     /**
@@ -170,7 +170,7 @@ class AuthorController extends BaseController
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
-                require($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_delete.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_delete.php");
             }
         }
     }

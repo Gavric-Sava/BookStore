@@ -7,7 +7,7 @@ class Book
 
     private const ID_TAG = "book_id";
 
-    private int $id;
+    private ?int $id;
     private string $title;
     private int $year;
 
@@ -23,7 +23,7 @@ class Book
     {
         $this->title = $title;
         $this->year = $year;
-        $this->id = Book::generateId();
+        $this->id = null;
     }
 
     /**
@@ -36,6 +36,19 @@ class Book
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Sets id of the book.
+     *
+     * @param int $id New id of the book.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -86,23 +99,6 @@ class Book
     public function setYear(int $year): void
     {
         $this->year = $year;
-    }
-
-    /**
-     * Generates next unique id for Book object being constructed.
-     *
-     * @return int Newly generated unique Book id.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    private static function generateId(): int
-    {
-        if (!isset($_SESSION[Book::ID_TAG])) {
-            $_SESSION[Book::ID_TAG] = 1;
-            return 0;
-        } else {
-            return $_SESSION[Book::ID_TAG]++;
-        }
     }
 
 }
