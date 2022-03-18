@@ -17,15 +17,16 @@ class Book
      *
      * @param string $title Title of the book.
      * @param int $year Year published of the book.
+     * @param ?int $id Nullable Id of the book.
      * @param ?int $author_id Nullable Id of the author of the book.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function __construct(string $title, int $year, int $author_id = null)
+    public function __construct(string $title, int $year, ?int $id = null, int $author_id = null)
     {
         $this->title = $title;
         $this->year = $year;
-        $this->id = null;
+        $this->id = $id;
         $this->author_id = $author_id;
     }
 

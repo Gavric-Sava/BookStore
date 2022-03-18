@@ -17,14 +17,15 @@ class Author
      *
      * @param string $firstname First name of the author.
      * @param string $lastname Last name of the author.
+     * @param ?int $id Id of the author.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function __construct(string $firstname, string $lastname)
+    public function __construct(string $firstname, string $lastname, ?int $id = null)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
-        $this->id = null;
+        $this->id = $id;
     }
 
     /**
