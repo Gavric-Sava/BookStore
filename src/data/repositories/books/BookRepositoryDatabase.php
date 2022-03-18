@@ -12,7 +12,6 @@ class BookRepositoryDatabase implements BookRepositoryInterface
 {
 
     private const TABLE_NAME = "books";
-    private const MODEL_CLASS_NAME = "Book";
 
     private PDO $PDO;
 

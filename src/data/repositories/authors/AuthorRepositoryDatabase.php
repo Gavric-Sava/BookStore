@@ -9,7 +9,6 @@ class AuthorRepositoryDatabase implements AuthorRepositoryInterface
 {
 
     private const TABLE_NAME = "authors";
-    private const MODEL_CLASS_NAME = "Author";
 
     private PDO $PDO;
 
