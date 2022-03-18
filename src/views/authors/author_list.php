@@ -25,19 +25,20 @@
             </thead>
             <tbody>
                 <?php
-                    foreach ($authors as $author) {
+                    foreach ($authors_with_book_count as $author_with_book_count) {
                         echo "<tr>";
                             echo "<td class='first'>";
-                                echo $author->getFirstName()." ".$author->getLastName();
+                                echo $author_with_book_count["author"]->getFirstName()." ".
+                                    $author_with_book_count["author"]->getLastName();
                             echo "</td>";
                             echo "<td class='books'>";
-                                echo $author->getBookCount();
+                                echo $author_with_book_count["book_count"];
                             echo "</td>";
                             echo "<td class='last'>";
-                                echo "<a href='".'/authors/edit/'.$author->getId()."'>".
+                                echo "<a href='".'/authors/edit/'.$author_with_book_count["author"]->getId()."'>".
                                     "<img src='../../../assets/images/edit.jpg' class='icon edit'/>" .
                                 "</a>";
-                                echo "<a href='".'/authors/delete/'.$author->getId()."'>".
+                                echo "<a href='".'/authors/delete/'.$author_with_book_count["author"]->getId()."'>".
                                     "<img src='../../../assets/images/delete.png' class='icon'/>" .
                                 "</a>";
                             echo "</td>";

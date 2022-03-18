@@ -10,43 +10,46 @@ class Book
     private ?int $id;
     private string $title;
     private int $year;
+    private ?int $author_id;
 
     /**
      * Constructs Book object. Takes title of book and year of publishing.
      *
-     * @param string $title
-     * @param int $year
+     * @param string $title Title of the book.
+     * @param int $year Year published of the book.
+     * @param ?int $author_id Nullable Id of the author of the book.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function __construct(string $title, int $year)
+    public function __construct(string $title, int $year, int $author_id = null)
     {
         $this->title = $title;
         $this->year = $year;
         $this->id = null;
+        $this->author_id = $author_id;
     }
 
     /**
-     * Gets id value of the book.
+     * Gets Id value of the book.
      *
-     * @return int Id of the book.
+     * @return ?int Nullable Id of the book.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Sets id of the book.
+     * Sets Id of the book.
      *
-     * @param int $id New id of the book.
+     * @param ?int $id New nullable Id of the book.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function setId(int $id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -100,5 +103,31 @@ class Book
     {
         $this->year = $year;
     }
+
+    /**
+     * Gets Id of the author of the book.
+     *
+     * @return ?int Nullable Id of the author.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function getAuthorId(): ?int
+    {
+        return $this->author_id;
+    }
+
+    /**
+     * Sets Id of the author of the book.
+     *
+     * @param ?int $author_id New nullable Id of the author.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function setAuthorId(?int $author_id): void
+    {
+        $this->author_id = $author_id;
+    }
+
 
 }

@@ -4,11 +4,10 @@ namespace Bookstore\Controller;
 
 require_once __DIR__ . '/BaseController.php';
 require_once __DIR__ . '/../data/repositories/authors/AuthorRepositoryInterface.php';
-require_once __DIR__ . '/../data/repositories/books/BookRepositoryInterface.php';
 require_once './src/util/RequestUtil.php';
 
 use Bookstore\Data\Model\Author;
-use Bookstore\Data\Repository\{AuthorRepositoryInterface, BookRepositoryInterface};
+use Bookstore\Data\Repository\{AuthorRepositoryInterface};
 use Bookstore\Util\RequestUtil;
 
 class AuthorController extends BaseController
@@ -22,26 +21,16 @@ class AuthorController extends BaseController
     private AuthorRepositoryInterface $authorRepository;
 
     /**
-     * @var BookRepositoryInterface Interface towards Book repository.
-     *
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     */
-    private BookRepositoryInterface $bookRepository;
-
-    /**
      * Constructs AuthorController object. Takes data repositories.
      *
      * @param AuthorRepositoryInterface $authorRepository Data repository for Author entity.
-     * @param BookRepositoryInterface $bookRepository Data repository for Book entity.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
     public function __construct(
-        AuthorRepositoryInterface $authorRepository,
-        BookRepositoryInterface $bookRepository
+        AuthorRepositoryInterface $authorRepository
     ) {
         $this->authorRepository = $authorRepository;
-        $this->bookRepository = $bookRepository;
     }
 
     /**
@@ -76,7 +65,8 @@ class AuthorController extends BaseController
      */
     private function processAuthorList(): void
     {
-        $authors = $this->authorRepository->fetchAll();
+        $authors_with_book_count = $this->authorRepository->fetchAllWithBookCount();
+
         include($_SERVER['DOCUMENT_ROOT'] . "/src/views/authors/author_list.php");
     }
 
@@ -159,10 +149,7 @@ class AuthorController extends BaseController
     private function processAuthorDelete(int $id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $books = $this->authorRepository->fetch($id)->getBooks();
-            if ($this->authorRepository->delete($id)) {
-                $this->bookRepository->deleteMultiple($books);
-            }
+            $this->authorRepository->delete($id);
 
             header('Location: http://bookstore.test');
         } else {

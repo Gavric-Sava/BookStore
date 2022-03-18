@@ -10,31 +10,27 @@ class Author
     private ?int $id;
     private string $firstname;
     private string $lastname;
-    private array $books;
 
     /**
-     * Constructs Author object. Takes first and last name of author and list of ids
+     * Constructs Author object. Takes first and last name of author and list of Ids
      * of published books.
      *
-     * @param string $firstname
-     * @param string $lastname
-     * @param array $books
+     * @param string $firstname First name of the author.
+     * @param string $lastname Last name of the author.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function __construct(string $firstname, string $lastname, array $books = [])
+    public function __construct(string $firstname, string $lastname)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
-        $this->books = $books;
-//        $this->id = Author::generateId();
         $this->id = null;
     }
 
     /**
-     * Gets id of the author.
+     * Gets nullable Id of the author.
      *
-     * @return int Id of the author.
+     * @return int Nullable Id of the author.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
@@ -46,12 +42,12 @@ class Author
     /**
      * Sets Id of the author.
      *
-     * @param id $id New id of the author.
+     * @param ?int $id New nullable Id of the author.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function setId(int $id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -104,73 +100,6 @@ class Author
     public function setLastname(string $lastname): void
     {
         $this->lastname = $lastname;
-    }
-
-    /**
-     * Gets array of ids of books published by the author.
-     *
-     * @return array - Array of ids of books published by the author.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function getBooks(): array
-    {
-        return $this->books;
-    }
-
-    /**
-     * Sets array of ids of books published by the author.
-     *
-     * @param array $books New array of ids of books published by the author.
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function setBooks(array $books): void
-    {
-        $this->books = $books;
-    }
-
-    /**
-     * Gets number of books published by the author.
-     *
-     * @return int Number of books published by the author.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function getBookCount(): int
-    {
-        return count($this->books);
-    }
-
-    /**
-     * Removes passed id of book from array of ids of books published by the author.
-     *
-     * @param int $id Id of book to be removed.
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function deleteBook(int $id): void
-    {
-        if (isset($this->books[$id])) {
-            unset($this->books[$id]);
-        }
-    }
-
-    /**
-     * Adds passed id of book to array of ids of books published by the author.
-     *
-     * @param int $id - Id of book to be added.
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function addBook(int $id): void
-    {
-        if (!isset($this->books[$id])) {
-            $this->books[$id] = $id;
-        }
     }
 
 }

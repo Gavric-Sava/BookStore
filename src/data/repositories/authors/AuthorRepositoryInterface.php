@@ -39,13 +39,13 @@ interface AuthorRepositoryInterface
      * Edit an author.
      *
      * @param int $id Id of author to be edited.
-     * @param string $first_name New firstname value.
-     * @param string $last_name New lastname value.
+     * @param string $firstname New firstname value.
+     * @param string $lastname New lastname value.
      * @return bool True if editing successful. Otherwise, false.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function edit(int $id, string $first_name, string $last_name): bool;
+    public function edit(int $id, string $firstname, string $lastname): bool;
 
     /**
      * Delete an author.
@@ -58,12 +58,11 @@ interface AuthorRepositoryInterface
     public function delete(int $id): bool;
 
     /**
-     * Remove book from corresponding author.
+     * Fetches all authors and their respective book counts.
      *
-     * @param int $book_id Id of book to be removed.
-     * @return bool True if deletion successful. Otherwise, not.
+     * @return array Array of author-book count pairs accessible with "author" and "book_count" keys.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function deleteBook(int $book_id): bool;
+    public function fetchAllWithBookCount(): array;
 }

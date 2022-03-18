@@ -4,8 +4,10 @@ namespace Bookstore\Data\Repository;
 
 require_once __DIR__ . "/../../models/Author.php";
 require_once __DIR__ . '/AuthorRepositoryInterface.php';
+require_once __DIR__ . '/../books/BookRepositorySession.php';
 
 use Bookstore\Data\Model\Author;
+use BookStore\Data\Repository\BookRepositorySession;
 
 class AuthorRepositorySession implements AuthorRepositoryInterface
 {
@@ -23,10 +25,10 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     public static function initializeData(): void
     {
         $author_repository_session = new AuthorRepositorySession();
-        $author_repository_session->add(new Author("Pera", "Peric", [0 => 0, 4 => 4]));
-        $author_repository_session->add(new Author("Mika", "Mikic", [1 => 1]));
-        $author_repository_session->add(new Author("Zika", "Zikic", [2 => 2]));
-        $author_repository_session->add(new Author("Nikola", "Nikolic", [3 => 3]));
+        $author_repository_session->add(new Author("Pera", "Peric", 2));
+        $author_repository_session->add(new Author("Mika", "Mikic", 1));
+        $author_repository_session->add(new Author("Zika", "Zikic", 1));
+        $author_repository_session->add(new Author("Nikola", "Nikolic", 1));
     }
 
     /**
@@ -42,11 +44,7 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     }
 
     /**
-     * Fetch all authors.
-     *
-     * @return array Array of authors.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function fetchAll(): array
     {
@@ -54,12 +52,7 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     }
 
     /**
-     * Fetch an author.
-     *
-     * @param int $id Id of author to be fetched.
-     * @return Author|null Author if found. Null otherwise.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function fetch(int $id): ?Author
     {
@@ -67,20 +60,10 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     }
 
     /**
-     * Add an author.
-     *
-     * @param Author $author Author to be added.
-     * @return bool True if adding successful. Otherwise, false.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function add(Author $author): bool
     {
-//        if (!isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()])) {
-//            $_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()] = $author;
-//
-//            return true;
-//        }
         $author->setId(AuthorRepositorySession::generateId());
         $_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()] = $author;
 
@@ -88,20 +71,13 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     }
 
     /**
-     * Edit an author.
-     *
-     * @param int $id Id of author to be edited.
-     * @param string $first_name New firstname value.
-     * @param string $last_name New lastname value.
-     * @return bool True if editing successful. Otherwise, false.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
-    public function edit(int $id, string $first_name, string $last_name): bool
+    public function edit(int $id, string $firstname, string $lastname): bool
     {
         if (isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id])) {
-            $_SESSION[AuthorRepositorySession::SESSION_TAG][$id]->setFirstname($first_name);
-            $_SESSION[AuthorRepositorySession::SESSION_TAG][$id]->setLastname($last_name);
+            $_SESSION[AuthorRepositorySession::SESSION_TAG][$id]->setFirstname($firstname);
+            $_SESSION[AuthorRepositorySession::SESSION_TAG][$id]->setLastname($lastname);
 
             return true;
         }
@@ -110,38 +86,13 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     }
 
     /**
-     * Delete an author.
-     *
-     * @param int $id Id of author to be deleted.
-     * @return bool True if deletion successful. Otherwise, not.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function delete(int $id): bool
     {
         if (isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id])) {
-            unset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id]);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Remove book from corresponding author.
-     *
-     * @param int $id Id of book to be removed.
-     * @return bool True if deletion successful. Otherwise, not.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function deleteBook(int $id): bool
-    {
-        foreach ($_SESSION[AuthorRepositorySession::SESSION_TAG] as $author) {
-            if (in_array($id, $author->getBooks())) {
-                $author->deleteBook($id);
-
+            if ((new BookRepositorySession())->deleteAllFromAuthor($id)) {
+                unset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id]);
                 return true;
             }
         }
@@ -165,5 +116,25 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
             return $_SESSION[AuthorRepositorySession::ID_TAG]++;
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAllWithBookCount(): array
+    {
+        $authors_with_book_counts = [];
+        $book_repository_session = new BookRepositorySession();
+
+        $authors = $this->fetchAll();
+        foreach ($authors as $author) {
+            array_push($authors_with_book_counts, [
+                "author" => $author,
+                "book_count" => $book_repository_session->countFromAuthor($author->getId())
+            ]);
+        }
+
+        return $authors_with_book_counts;
+    }
+
 
 }

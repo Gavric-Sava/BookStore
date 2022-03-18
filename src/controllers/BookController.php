@@ -3,23 +3,16 @@
 namespace Bookstore\Controller;
 
 require_once __DIR__ . '/BaseController.php';
-require_once __DIR__ . '/../data/repositories/authors/AuthorRepositoryInterface.php';
 require_once __DIR__ . '/../data/repositories/books/BookRepositoryInterface.php';
 require_once './src/util/RequestUtil.php';
 
 use Bookstore\Data\Model\Book;
-use Bookstore\Data\Repository\{AuthorRepositoryInterface, BookRepositoryInterface};
+use Bookstore\Data\Repository\{BookRepositoryInterface};
 use Bookstore\Util\RequestUtil;
 
 class BookController extends BaseController
 {
 
-    /**
-     * @var AuthorRepositoryInterface Interface towards Author repository.
-     *
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     */
-    private AuthorRepositoryInterface $authorRepository;
     /**
      * @var BookRepositoryInterface Interface towards Book repository.
      *
@@ -28,10 +21,8 @@ class BookController extends BaseController
     private BookRepositoryInterface $bookRepository;
 
     public function __construct(
-        AuthorRepositoryInterface $authorRepository,
         BookRepositoryInterface $bookRepository
     ) {
-        $this->authorRepository = $authorRepository;
         $this->bookRepository = $bookRepository;
     }
 
@@ -109,7 +100,8 @@ class BookController extends BaseController
             $errors = BookController::validateFormInput($title, $year);
 
             if (empty($errors)) {
-                $this->bookRepository->edit($id, $title, $year);
+                $book = $this->bookRepository->fetch($id);
+                $this->bookRepository->edit($id, $title, $year, $book->getAuthorId());
                 header('Location: http://bookstore.test/books');
             } else {
                 $title_error = $errors["title_error"];
@@ -135,9 +127,7 @@ class BookController extends BaseController
     public function processBookDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if ($this->bookRepository->delete($id)) {
-                $this->authorRepository->deleteBook($id);
-            }
+            $this->bookRepository->delete($id);
 
             header('Location: http://bookstore.test/books');
         } else {

@@ -23,11 +23,11 @@ class BookRepositorySession implements BookRepositoryInterface
     public static function initializeData(): void
     {
         $book_repository_session = new BookRepositorySession();
-        $book_repository_session->add(new Book("Book Name", 2001));
-        $book_repository_session->add(new Book("Book Name 1", 2002));
-        $book_repository_session->add(new Book("Book Name 2", 1997));
-        $book_repository_session->add(new Book("Book Name 3", 2005));
-        $book_repository_session->add(new Book("Book Name 4", 2006));
+        $book_repository_session->add(new Book("Book Name", 2001, 0));
+        $book_repository_session->add(new Book("Book Name 1", 2002, 1));
+        $book_repository_session->add(new Book("Book Name 2", 1997, 2));
+        $book_repository_session->add(new Book("Book Name 3", 2005, 3));
+        $book_repository_session->add(new Book("Book Name 4", 2006, 0));
     }
 
     /**
@@ -43,11 +43,7 @@ class BookRepositorySession implements BookRepositoryInterface
     }
 
     /**
-     * Fetch all books.
-     *
-     * @return array Array of books.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function fetchAll(): array
     {
@@ -55,12 +51,7 @@ class BookRepositorySession implements BookRepositoryInterface
     }
 
     /**
-     * Fetch a book.
-     *
-     * @param int $id Id of book to be fetched.
-     * @return Book|null Book if found. Null otherwise.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function fetch(int $id): ?Book
     {
@@ -68,20 +59,10 @@ class BookRepositorySession implements BookRepositoryInterface
     }
 
     /**
-     * Add a book.
-     *
-     * @param Book $author Book to be added.
-     * @return bool True if adding successful. Otherwise, false.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function add(Book $book): bool
     {
-//        if (!isset($_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()])) {
-//            $_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()] = $book;
-//
-//            return true;
-//        }
         $book->setId(BookRepositorySession::generateId());
         $_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()] = $book;
 
@@ -89,20 +70,14 @@ class BookRepositorySession implements BookRepositoryInterface
     }
 
     /**
-     * Edit a book.
-     *
-     * @param int $id Id of book to be edited.
-     * @param string $title New title value.
-     * @param int $year New year value.
-     * @return bool True if editing successful. Otherwise, false.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
-    public function edit(int $id, string $title, int $year): bool
+    public function edit(int $id, string $title, int $year, ?int $author_id): bool
     {
         if (isset($_SESSION[BookRepositorySession::SESSION_TAG][$id])) {
             $_SESSION[BookRepositorySession::SESSION_TAG][$id]->setTitle($title);
             $_SESSION[BookRepositorySession::SESSION_TAG][$id]->setYear($year);
+            $_SESSION[BookRepositorySession::SESSION_TAG][$id]->setAuthorId($author_id);
 
             return true;
         }
@@ -111,12 +86,7 @@ class BookRepositorySession implements BookRepositoryInterface
     }
 
     /**
-     * Delete a book.
-     *
-     * @param int $id Id of book to be deleted.
-     * @return bool True if deletion successful. Otherwise, not.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function delete(int $id): bool
     {
@@ -130,29 +100,36 @@ class BookRepositorySession implements BookRepositoryInterface
     }
 
     /**
-     * Remove multiple books.
-     *
-     * @param array $ids Ids of books to be removed.
-     * @return bool True if deletion successful. Otherwise, not.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * Deletes all books from given author.
+     * @param int $author_id Id of author.
+     * @return bool Returns true if all books successfully deleted. Otherwise, returns false.
      */
-    public function deleteMultiple(array $ids): bool
+    public function deleteAllFromAuthor(int $author_id): bool
     {
-        $deleted_count = 0;
-
-        foreach ($ids as $book_id) {
-            if (isset($_SESSION[BookRepositorySession::SESSION_TAG][$book_id])) {
-                unset($_SESSION[BookRepositorySession::SESSION_TAG][$book_id]);
-                $deleted_count++;
+        foreach ($_SESSION[BookRepositorySession::SESSION_TAG] as $key => $value) {
+            if ($_SESSION[BookRepositorySession::SESSION_TAG][$key]->getAuthorId() === $author_id) {
+                unset($_SESSION[BookRepositorySession::SESSION_TAG][$key]);
             }
         }
 
-        if ($deleted_count == count($ids)) {
-            return true;
+        return true;
+    }
+
+    /**
+     * Returns number of books written by the author.
+     * @param int $id Id of the author.
+     * @return int Number of books.
+     */
+    public function countFromAuthor(int $id): int
+    {
+        $count = 0;
+        foreach ($_SESSION[BookRepositorySession::SESSION_TAG] as $book) {
+            if ($book->getAuthorId() === $id) {
+                $count++;
+            }
         }
 
-        return false;
+        return $count;
     }
 
     /**

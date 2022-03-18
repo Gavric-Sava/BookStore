@@ -41,11 +41,12 @@ interface BookRepositoryInterface
      * @param int $id Id of book to be edited.
      * @param string $title New title value.
      * @param int $year New year value.
+     * @param ?int $author_id New author Id value.
      * @return bool True if editing successful. Otherwise, false.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function edit(int $id, string $title, int $year): bool;
+    public function edit(int $id, string $title, int $year, ?int $author_id): bool;
 
     /**
      * Delete a book.
@@ -57,13 +58,4 @@ interface BookRepositoryInterface
      */
     public function delete(int $id): bool;
 
-    /**
-     * Remove multiple books.
-     *
-     * @param array $ids Ids of books to be removed.
-     * @return bool True if deletion successful. Otherwise, not.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    public function deleteMultiple(array $ids): bool;
 }
