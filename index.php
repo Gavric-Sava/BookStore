@@ -29,13 +29,11 @@ $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if (preg_match('/^\/(?:authors(?:\/.*)*)?$/', $request_path)) {
     (new AuthorController(
         new AuthorRepositoryDatabase($PDO)
-    )
-    )->process($request_path);
+    ))->process($request_path);
 } elseif (preg_match('/^\/books(?:\/.*)*$/', $request_path)) {
     (new BookController(
         new BookRepositoryDatabase($PDO)
-    )
-    )->process($request_path);
+    ))->process($request_path);
 } else {
     RequestUtil::render404();
 }
