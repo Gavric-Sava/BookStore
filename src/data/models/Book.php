@@ -5,8 +5,6 @@ namespace Bookstore\Data\Model;
 class Book
 {
 
-    private const ID_TAG = "book_id";
-
     private ?int $id;
     private string $title;
     private int $year;

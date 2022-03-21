@@ -115,18 +115,4 @@ class BookRepositoryDatabase implements BookRepositoryInterface
         return $pdo_statement->execute();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function deleteMultiple(array $ids): bool
-    {
-        $pdo_statement = $this->PDO->prepare(
-            "DELETE FROM " . BookRepositoryDatabase::TABLE_NAME . " WHERE id in :ids"
-        );
-
-        $pdo_statement->bindParam(':ids', $ids);
-
-        return $pdo_statement->execute();
-    }
-
 }

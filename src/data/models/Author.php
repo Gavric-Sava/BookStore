@@ -5,8 +5,6 @@ namespace Bookstore\Data\Model;
 class Author
 {
 
-    private const ID_TAG = "author_id";
-
     private ?int $id;
     private string $firstname;
     private string $lastname;
