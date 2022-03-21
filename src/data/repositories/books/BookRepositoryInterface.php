@@ -28,7 +28,6 @@ interface BookRepositoryInterface
     /**
      * Add a book.
      *
-     * @param Book $author Book to be added.
      * @return bool True if adding successful. Otherwise, false.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../models/Book.php';
 require_once __DIR__ . '/BookRepositoryInterface.php';
 
 use Bookstore\Data\Model\Book;
-use \PDO;
+use PDO;
 
 class BookRepositoryDatabase implements BookRepositoryInterface
 {

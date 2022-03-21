@@ -3,7 +3,7 @@
 namespace Bookstore\Data\Repository;
 
 use Bookstore\Data\Model\Author;
-use \PDO;
+use PDO;
 
 class AuthorRepositoryDatabase implements AuthorRepositoryInterface
 {
