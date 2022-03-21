@@ -1,6 +1,6 @@
 <?php
 
-namespace Bookstore\Controller;
+namespace Logeecom\Bookstore\controllers;
 
 abstract class BaseController
 {

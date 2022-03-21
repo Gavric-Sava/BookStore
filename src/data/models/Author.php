@@ -1,6 +1,6 @@
 <?php
 
-namespace Bookstore\Data\Model;
+namespace Logeecom\Bookstore\data\models;
 
 class Author
 {

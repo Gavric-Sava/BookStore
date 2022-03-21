@@ -1,11 +1,8 @@
 <?php
 
-namespace Bookstore\Data\Repository;
+namespace Logeecom\Bookstore\data\repositories\books;
 
-require_once __DIR__ . '/../../models/Book.php';
-require_once __DIR__ . '/BookRepositoryInterface.php';
-
-use Bookstore\Data\Model\Book;
+use Logeecom\Bookstore\data\models\Book;
 use PDO;
 
 class BookRepositoryDatabase implements BookRepositoryInterface

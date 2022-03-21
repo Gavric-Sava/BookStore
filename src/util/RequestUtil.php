@@ -1,6 +1,6 @@
 <?php
 
-namespace Bookstore\Util;
+namespace Logeecom\Bookstore\util;
 
 abstract class RequestUtil
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bookstore\Data\Repository;
+namespace Logeecom\Bookstore\data\repositories\authors;
 
-use Bookstore\Data\Model\Author;
+use Logeecom\Bookstore\data\models\Author;
 use PDO;
 
 class AuthorRepositoryDatabase implements AuthorRepositoryInterface

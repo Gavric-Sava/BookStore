@@ -1,13 +1,9 @@
 <?php
 
-namespace Bookstore\Data\Repository;
+namespace Logeecom\Bookstore\data\repositories\authors;
 
-require_once __DIR__ . "/../../models/Author.php";
-require_once __DIR__ . '/AuthorRepositoryInterface.php';
-require_once __DIR__ . '/../books/BookRepositorySession.php';
-
-use Bookstore\Data\Model\Author;
-use BookStore\Data\Repository\BookRepositorySession;
+use Logeecom\Bookstore\data\models\Author;
+use Logeecom\Bookstore\data\repositories\books\BookRepositorySession;
 
 class AuthorRepositorySession implements AuthorRepositoryInterface
 {

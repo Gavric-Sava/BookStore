@@ -1,10 +1,7 @@
 <?php
 
-require_once __DIR__ . "/data/repositories/authors/AuthorRepositorySession.php";
-require_once __DIR__ . "/data/repositories/books/BookRepositorySession.php";
-
-use Bookstore\Data\Repository\AuthorRepositorySession;
-use Bookstore\Data\Repository\BookRepositorySession;
+use Logeecom\Bookstore\data\repositories\authors\AuthorRepositorySession;
+use Logeecom\Bookstore\data\repositories\books\BookRepositorySession;
 
 function initSessionData()
 {

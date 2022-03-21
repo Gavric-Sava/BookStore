@@ -1,8 +1,8 @@
 <?php
 
-namespace Bookstore\Data\Repository;
+namespace Logeecom\Bookstore\data\repositories\books;
 
-use Bookstore\Data\Model\Book;
+use Logeecom\Bookstore\data\models\Book;
 
 interface BookRepositoryInterface
 {

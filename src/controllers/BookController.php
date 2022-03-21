@@ -1,14 +1,10 @@
 <?php
 
-namespace Bookstore\Controller;
+namespace Logeecom\Bookstore\controllers;
 
-require_once __DIR__ . '/BaseController.php';
-require_once __DIR__ . '/../data/repositories/books/BookRepositoryInterface.php';
-require_once './src/util/RequestUtil.php';
-
-use Bookstore\Data\Model\Book;
-use Bookstore\Data\Repository\{BookRepositoryInterface};
-use Bookstore\Util\RequestUtil;
+use Logeecom\Bookstore\data\models\Book;
+use Logeecom\Bookstore\data\repositories\books\BookRepositoryInterface;
+use Logeecom\Bookstore\util\RequestUtil;
 
 class BookController extends BaseController
 {
