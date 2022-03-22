@@ -2,3 +2,4 @@
 assets/images
 
 /vendor/
+db.sql
