@@ -2,7 +2,6 @@
     "name": "logeecom/bookstore",
     "description": "Simple bookstore CRUD web application.",
     "type": "library",
-    "license": "proprietary",
     "autoload": {
         "psr-4": {
             "Logeecom\\Bookstore\\": "src/"
@@ -15,5 +14,8 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "php": "7.4.*",
+        "ext-pdo": "*"
+    }
 }

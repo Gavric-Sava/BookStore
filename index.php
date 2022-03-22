@@ -1,7 +1,5 @@
 <?php
 
-namespace Logeecom\Bookstore;
-
 require 'vendor/autoload.php';
 
 use Logeecom\Bookstore\controllers\AuthorController;
@@ -11,7 +9,6 @@ use Logeecom\Bookstore\data\repositories\authors\AuthorRepositoryDatabase;
 use Logeecom\Bookstore\data\repositories\books\BookRepositorySession;
 use Logeecom\Bookstore\data\repositories\books\BookRepositoryDatabase;
 use Logeecom\Bookstore\util\RequestUtil;
-use PDO;
 
 session_start();
 //initSessionData();
