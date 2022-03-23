@@ -6,8 +6,8 @@ use Logeecom\Bookstore\business\logic\AuthorLogic;
 use Logeecom\Bookstore\business\logic\BookLogic;
 use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
 use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
-use Logeecom\Bookstore\presentation\single_page\controllers\SinglePageAuthorController;
-use Logeecom\Bookstore\presentation\single_page\controllers\SinglePageBookController;
+use Logeecom\Bookstore\presentation\single_page\backend\controllers\SinglePageAuthorController;
+use Logeecom\Bookstore\presentation\single_page\backend\controllers\SinglePageBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 use PDO;
 

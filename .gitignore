@@ -2,4 +2,4 @@
 assets/images
 
 /vendor/
-db.sql
+bookstore_initial.sql

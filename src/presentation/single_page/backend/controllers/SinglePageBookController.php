@@ -1,6 +1,6 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\single_page\controllers;
+namespace Logeecom\Bookstore\presentation\single_page\backend\controllers;
 
 use Logeecom\Bookstore\business\logic\BookLogic;
 use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;

@@ -1,19 +1,20 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\single_page\controllers;
+namespace Logeecom\Bookstore\presentation\single_page\backend\controllers;
 
 use Logeecom\Bookstore\business\logic\AuthorLogic;
-use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageAuthorController;
+use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 use Logeecom\Bookstore\presentation\util\Validator;
 
-class SinglePageAuthorController implements \Logeecom\Bookstore\presentation\interfaces\ControllerInterface
+class SinglePageAuthorController implements ControllerInterface
 {
 
     private const REQUEST_CREATE = '/^\/spa\/authors\/create\/?$/';
     private const REQUEST_EDIT = '/^\/spa\/authors\/edit\/(\d+)\/?$/';
     private const REQUEST_DELETE = '/^\/spa\/authors\/delete\/(\d+)\/?$/';
-    private const REQUEST_LIST = '/^\/spa(?:\/authors\/?)?$/';
+    private const REQUEST_LIST = '/^\/spa\/authors\/?$/';
+    private const REQUEST_INDEX = '/^\/spa\/?$/';
 
     private AuthorLogic $authorLogic;
 
@@ -33,17 +34,27 @@ class SinglePageAuthorController implements \Logeecom\Bookstore\presentation\int
             $this->processAuthorDelete($matches[1]);
         } elseif (preg_match(SinglePageAuthorController::REQUEST_LIST, $path)) {
             $this->processAuthorList();
+        } elseif (preg_match(SinglePageAuthorController::REQUEST_INDEX, $path)) {
+            $this->processIndex();
         } else {
             RequestUtil::render404();
         }
     }
 
+    private function processIndex()
+    {
+//        $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
+//
+//        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
+        include($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index.html";
+
+    }
+
     private function processAuthorList()
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
-
-
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($authors_with_book_count);
     }
 
     private function processAuthorCreate()
