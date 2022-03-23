@@ -5,8 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../../../../assets/styles/list.css">
-    <link rel="stylesheet" href="../../../../assets/styles/list_authors.css">
+    <link rel="stylesheet" href="../../../../../assets/styles/list.css">
+    <link rel="stylesheet" href="../../../../../assets/styles/list_authors.css">
     <title>BookStore</title>
 </head>
 <body>
@@ -36,10 +36,10 @@
                             echo "</td>";
                             echo "<td class='last'>";
                                 echo "<a href='".'/authors/edit/'.$author_with_book_count["author"]->getId()."'>".
-                                    "<img src='../../../../assets/images/edit.jpg' class='icon edit'/>" .
+                                    "<img src='../../../../../assets/images/edit.jpg' class='icon edit'/>" .
                                 "</a>";
                                 echo "<a href='".'/authors/delete/'.$author_with_book_count["author"]->getId()."'>".
-                                    "<img src='../../../../assets/images/delete.png' class='icon'/>" .
+                                    "<img src='../../../../../assets/images/delete.png' class='icon'/>" .
                                 "</a>";
                             echo "</td>";
                         echo "</tr>";

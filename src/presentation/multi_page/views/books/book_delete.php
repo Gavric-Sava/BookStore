@@ -5,13 +5,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../../../../assets/styles/dialog.css">
+    <link rel="stylesheet" href="../../../../../assets/styles/dialog.css">
     <title>Delete book</title>
 </head>
 <body>
 <div class="wrapper">
     <div class="header">
-        <img src="../../../../assets/images/alert.png"/>
+        <img src="../../../../../assets/images/alert.png"/>
         <h2>Delete Book</h2>
     </div>
     <div class="text">

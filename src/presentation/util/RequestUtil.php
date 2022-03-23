@@ -14,7 +14,7 @@ abstract class RequestUtil
     public static function render404(): void
     {
         http_response_code(404);
-        require($_SERVER['DOCUMENT_ROOT'] . '/src/presentation/views/common/404.php');
+        require($_SERVER['DOCUMENT_ROOT'] . '/src/presentation/common/404.php');
     }
 
 }

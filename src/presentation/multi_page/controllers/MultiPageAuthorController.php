@@ -1,12 +1,13 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\controllers;
+namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
+use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 use Logeecom\Bookstore\presentation\util\Validator;
 use Logeecom\Bookstore\business\logic\AuthorLogic;
 
-class AuthorController extends BaseController
+class MultiPageAuthorController implements ControllerInterface
 {
 
     private const REQUEST_CREATE = '/^\/authors\/create\/?$/';
@@ -32,13 +33,13 @@ class AuthorController extends BaseController
      */
     public function process(string $path): void
     {
-        if (preg_match(AuthorController::REQUEST_CREATE, $path)) {
+        if (preg_match(MultiPageAuthorController::REQUEST_CREATE, $path)) {
             $this->processAuthorCreate();
-        } elseif (preg_match(AuthorController::REQUEST_EDIT, $path, $matches)) {
+        } elseif (preg_match(MultiPageAuthorController::REQUEST_EDIT, $path, $matches)) {
             $this->processAuthorEdit($matches[1]);
-        } elseif (preg_match(AuthorController::REQUEST_DELETE, $path, $matches)) {
+        } elseif (preg_match(MultiPageAuthorController::REQUEST_DELETE, $path, $matches)) {
             $this->processAuthorDelete($matches[1]);
-        } elseif (preg_match(AuthorController::REQUEST_LIST, $path)) {
+        } elseif (preg_match(MultiPageAuthorController::REQUEST_LIST, $path)) {
             $this->processAuthorList();
         } else {
             RequestUtil::render404();
@@ -56,7 +57,7 @@ class AuthorController extends BaseController
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/authors/author_list.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
     }
 
     /**
@@ -72,7 +73,7 @@ class AuthorController extends BaseController
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            $errors = AuthorController::validateFormInput($first_name, $last_name);
+            $errors = MultiPageAuthorController::validateFormInput($first_name, $last_name);
 
             if (empty($errors)) {
                 $this->authorLogic->createAuthor($first_name, $last_name);
@@ -81,10 +82,10 @@ class AuthorController extends BaseController
                 $first_name_error = $errors["first_name_error"];
                 $last_name_error = $errors["last_name_error"];
 
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/presentationviews/authors/author_create.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
             }
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/authors/author_create.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
         }
     }
 
@@ -102,7 +103,7 @@ class AuthorController extends BaseController
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            $errors = AuthorController::validateFormInput(
+            $errors = MultiPageAuthorController::validateFormInput(
                 $first_name,
                 $last_name
             );
@@ -115,14 +116,14 @@ class AuthorController extends BaseController
                 $last_name_error = $errors["last_name_error"];
 
                 $author = $this->authorLogic->fetchAuthor($id);
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/authors/author_edit.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
             }
         } else {
             $author = $this->authorLogic->fetchAuthor($id);
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/authors/author_edit.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
             }
         }
     }
@@ -146,7 +147,7 @@ class AuthorController extends BaseController
             if (!isset($author)) {
                 RequestUtil::render404();
             } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/authors/author_delete.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_delete.php");
             }
         }
     }

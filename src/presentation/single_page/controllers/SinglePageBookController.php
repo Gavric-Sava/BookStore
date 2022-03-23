@@ -1,18 +1,20 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\controllers;
+namespace Logeecom\Bookstore\presentation\single_page\controllers;
 
 use Logeecom\Bookstore\business\logic\BookLogic;
+use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
+use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 use Logeecom\Bookstore\presentation\util\Validator;
 
-class BookController extends BaseController
+class SinglePageBookController implements ControllerInterface
 {
 
-    private const REQUEST_CREATE = '/^\/books\/create\/?$/';
-    private const REQUEST_EDIT = '/^\/books\/edit\/(\d+)\/?$/';
-    private const REQUEST_DELETE = '/^\/books\/delete\/(\d+)\/?$/';
-    private const REQUEST_LIST = '/^\/books\/?$/';
+    private const REQUEST_CREATE = '/^\/spa\/books\/create\/?$/';
+    private const REQUEST_EDIT = '/^\/spa\/books\/edit\/(\d+)\/?$/';
+    private const REQUEST_DELETE = '/^\/spa\/books\/delete\/(\d+)\/?$/';
+    private const REQUEST_LIST = '/^\/spa\/books\/?$/';
 
     private BookLogic $bookLogic;
 
@@ -24,46 +26,32 @@ class BookController extends BaseController
 
     public function process(string $path): void
     {
-        if (preg_match(BookController::REQUEST_CREATE, $path)) {
+        if (preg_match(SinglePageBookController::REQUEST_CREATE, $path)) {
             $this->processBookCreate();
-        } elseif (preg_match(BookController::REQUEST_EDIT, $path, $matches)) {
+        } elseif (preg_match(SinglePageBookController::REQUEST_EDIT, $path, $matches)) {
             $this->processBookEdit($matches[1]);
-        } elseif (preg_match(BookController::REQUEST_DELETE, $path, $matches)) {
+        } elseif (preg_match(SinglePageBookController::REQUEST_DELETE, $path, $matches)) {
             $this->processBookDelete($matches[1]);
-        } elseif (preg_match(BookController::REQUEST_LIST, $path)) {
+        } elseif (preg_match(SinglePageBookController::REQUEST_LIST, $path)) {
             $this->processBookList();
         } else {
             RequestUtil::render404();
         }
     }
 
-    /**
-     * Implementation of the 'Book list' use case.
-     *
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
     private function processBookList(): void
     {
         $books = $this->bookLogic->fetchAllBooks();
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/books/book_list.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_list.php");
     }
 
-    /**
-     * Implementation of the 'Book create' use case.
-     *
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
     private function processBookCreate(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
             $year = $_POST["year"];
 
-            $errors = BookController::validateFormInput($title, $year);
+            $errors = SinglePageBookController::validateFormInput($title, $year);
 
             if (empty($errors)) {
                 $this->bookLogic->createBook($title, $year);
@@ -72,28 +60,20 @@ class BookController extends BaseController
                 $title_error = $errors["title_error"];
                 $year_error = $errors["year_error"];
 
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/books/book_create.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_create.php");
             }
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/books/book_create.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_create.php");
         }
     }
 
-    /**
-     * Implementation of the 'Book edit' use case.
-     *
-     * @param int $id Id of the book to be edited.
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
     private function processBookEdit(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
             $year = $_POST["year"];
 
-            $errors = BookController::validateFormInput($title, $year);
+            $errors = SinglePageBookController::validateFormInput($title, $year);
 
             if (empty($errors)) {
                 $this->bookLogic->editBook($id, $title, $year);
@@ -103,26 +83,18 @@ class BookController extends BaseController
                 $year_error = $errors["year_error"];
 
                 $book = $this->bookLogic->fetchBook($id);
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/books/book_edit.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_edit.php");
             }
         } else {
             $book = $this->bookLogic->fetchBook($id);
             if (!isset($book)) {
                 RequestUtil::render404();
             } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/books/book_edit.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_edit.php");
             }
         }
     }
 
-    /**
-     * Implementation of the 'Book delete' use case.
-     *
-     * @param int $id Id of the book to be deleted.
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
     public function processBookDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -134,20 +106,11 @@ class BookController extends BaseController
             if (!isset($book)) {
                 RequestUtil::render404();
             } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/views/books/book_delete.php");
+                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_delete.php");
             }
         }
     }
 
-    /**
-     * Validation of input form data_access for 'Book create' and 'Book edit' use cases.
-     *
-     * @param mixed $title Title of the book to be created/edited.
-     * @param mixed $year Year of the book to be created/edited.
-     * @return string[]|null List of errors or null, if no errors occurred.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
     private static function validateFormInput($title, $year): ?array
     {
         $title_error = "";
@@ -180,4 +143,5 @@ class BookController extends BaseController
 
         return null;
     }
+
 }

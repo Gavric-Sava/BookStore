@@ -2,18 +2,16 @@
 
 namespace Logeecom\Bookstore\presentation\router;
 
-use Logeecom\Bookstore\presentation\controllers\AuthorController;
-use Logeecom\Bookstore\presentation\controllers\BookController;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositorySession;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositorySession;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
-use Logeecom\Bookstore\presentation\util\RequestUtil;
 use Logeecom\Bookstore\business\logic\AuthorLogic;
 use Logeecom\Bookstore\business\logic\BookLogic;
-use \PDO;
+use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
+use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
+use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageAuthorController;
+use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageBookController;
+use Logeecom\Bookstore\presentation\util\RequestUtil;
+use PDO;
 
-class Router
+class MultiPageRouter extends BaseRouter
 {
 
     private const REQUEST_AUTHOR = '/^\/(?:authors(?:\/.*)*)?$/';
@@ -23,16 +21,16 @@ class Router
         // TODO move PDO into database repository constructors?
         $PDO = new PDO('mysql:host=localhost;dbname=bookstore_db', "bookstore_user", "password");
 
-        if (preg_match(Router::REQUEST_AUTHOR, $request_path)) {
+        if (preg_match(MultiPageRouter::REQUEST_AUTHOR, $request_path)) {
             // TODO dependency waterfall
-            (new AuthorController(
+            (new MultiPageAuthorController(
                 new AuthorLogic(
                     new AuthorRepositoryDatabase($PDO)
                 )
             ))->process($request_path);
-        } elseif (preg_match(Router::REQUEST_BOOK, $request_path)) {
+        } elseif (preg_match(MultiPageRouter::REQUEST_BOOK, $request_path)) {
             // TODO dependency waterfall
-            (new BookController(
+            (new MultiPageBookController(
                 new BookLogic(
                     new BookRepositoryDatabase($PDO)
                 )
