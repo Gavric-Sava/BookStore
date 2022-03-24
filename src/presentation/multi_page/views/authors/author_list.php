@@ -28,19 +28,22 @@
                 <tbody>
                 <?php
                     foreach ($authors_with_book_count as $author_with_book_count) {
+                        $author = $author_with_book_count["author"];
+                        $book_count = $author_with_book_count["book_count"];
                         echo "<tr>";
                             echo "<td class='first'>";
-                                echo $author_with_book_count["author"]->getFirstName()." ".
-                                    $author_with_book_count["author"]->getLastName();
+                                echo "<a href='".'/authors/'.$author->getId()."/books'>".
+                                    $author->getFirstName()." ".$author->getLastName().
+                                "</a>";
                             echo "</td>";
                             echo "<td class='books'>";
-                                echo $author_with_book_count["book_count"];
+                                echo $book_count;
                             echo "</td>";
                             echo "<td class='last'>";
-                                echo "<a href='".'/authors/edit/'.$author_with_book_count["author"]->getId()."'>".
+                                echo "<a href='".'/authors/edit/'.$author->getId()."'>".
                                     "<img src='../../../../../assets/images/edit.jpg' class='icon edit'/>" .
                                 "</a>";
-                                echo "<a href='".'/authors/delete/'.$author_with_book_count["author"]->getId()."'>".
+                                echo "<a href='".'/authors/delete/'.$author->getId()."'>".
                                     "<img src='../../../../../assets/images/delete.png' class='icon'/>" .
                                     "</a>";
                             echo "</td>";

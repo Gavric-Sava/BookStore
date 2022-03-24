@@ -8,7 +8,7 @@ class Book
     private ?int $id;
     private string $title;
     private int $year;
-    private ?int $author_id;
+    private int $author_id;
 
     /**
      * Constructs Book object. Takes title of book and year of publishing.
@@ -20,7 +20,7 @@ class Book
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function __construct(string $title, int $year, ?int $id = null, int $author_id = null)
+    public function __construct(string $title, int $year, int $author_id, ?int $id = null)
     {
         $this->title = $title;
         $this->year = $year;

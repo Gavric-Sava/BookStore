@@ -31,10 +31,10 @@
                                 echo $book->getTitle()." ".$book->getYear();
                             echo "</td>";
                             echo "<td class='last'>";
-                                echo "<a href='".'/books/edit/'.$book->getId()."'>".
+                                echo "<a href='".'/authors/'.$author_id.'/books/edit/'.$book->getId()."'>".
                                     "<img src='../../../../../assets/images/edit.jpg' class='icon edit'/>" .
                                 "</a>";
-                                echo "<a href='".'/books/delete/'.$book->getId()."'>".
+                                echo "<a href='".'/authors/'.$author_id.'/books/delete/'.$book->getId()."'>".
                                     "<img src='../../../../../assets/images/delete.png' class='icon'/>" .
                                 "</a>";
                             echo "</td>";
@@ -43,7 +43,7 @@
                 ?>
                 </tbody>
             </table>
-            <a href="/books/create" class="create_link">
+            <a href="/authors/<?php echo $author_id; ?>/books/create" class="create_link">
                 <img src="<?php echo "../../assets/images/create.png"; ?>" class='icon create'/>
             </a>
         </div>

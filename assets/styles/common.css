@@ -29,3 +29,8 @@ body{
     align-items: center;
     overflow-y: hidden;
 }
+
+a{
+    text-decoration: none;
+    color: black;
+}

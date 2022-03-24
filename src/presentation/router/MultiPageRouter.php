@@ -15,24 +15,24 @@ class MultiPageRouter extends BaseRouter
 {
 
     private const REQUEST_AUTHOR = '/^\/(?:authors(?:\/.*)*)?$/';
-    private const REQUEST_BOOK = '/^\/books(?:\/.*)*$/';
+    private const REQUEST_BOOK = '/^\/authors\/(?:\d+)\/?(books(?:\/.*)*)*$/';
 
     public function route(string $request_path): void {
         // TODO move PDO into database repository constructors?
         $PDO = new PDO('mysql:host=localhost;dbname=bookstore_db', "bookstore_user", "password");
 
-        if (preg_match(MultiPageRouter::REQUEST_AUTHOR, $request_path)) {
-            // TODO dependency waterfall
-            (new MultiPageAuthorController(
-                new AuthorLogic(
-                    new AuthorRepositoryDatabase($PDO)
-                )
-            ))->process($request_path);
-        } elseif (preg_match(MultiPageRouter::REQUEST_BOOK, $request_path)) {
+        if (preg_match(MultiPageRouter::REQUEST_BOOK, $request_path)) {
             // TODO dependency waterfall
             (new MultiPageBookController(
                 new BookLogic(
                     new BookRepositoryDatabase($PDO)
+                )
+            ))->process($request_path);
+        } elseif (preg_match(MultiPageRouter::REQUEST_AUTHOR, $request_path)) {
+            // TODO dependency waterfall
+            (new MultiPageAuthorController(
+                new AuthorLogic(
+                    new AuthorRepositoryDatabase($PDO)
                 )
             ))->process($request_path);
         } else {

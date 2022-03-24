@@ -21,14 +21,18 @@ class BookLogic
         return $this->bookRepository->fetchAll();
     }
 
+    public function fetchAllBooksFromAuthor(int $author_id): array {
+        return $this->bookRepository->fetchAllFromAuthor($author_id);
+    }
+
     public function fetchBook(int $id): ?Book
     {
         return $this->bookRepository->fetch($id);
     }
 
-    public function createBook(string $title, int $year): bool
+    public function createBook(string $title, int $year, int $author_id): bool
     {
-        return $this->bookRepository->add(new Book($title, $year));
+        return $this->bookRepository->add(new Book($title, $year, $author_id));
     }
 
     public function editBook(int $id, string $title, int $year): bool

@@ -24,7 +24,7 @@ class BookRepositorySession implements BookRepositoryInterface
         $book_repository_session->add(new Book("Book Name 1", 2002, 1, 1));
         $book_repository_session->add(new Book("Book Name 2", 1997, 2, 2));
         $book_repository_session->add(new Book("Book Name 3", 2005, 3, 3));
-        $book_repository_session->add(new Book("Book Name 4", 2006, 0, 0));
+        $book_repository_session->add(new Book("Book Name 4", 2006, 0, 4));
     }
 
     /**
@@ -45,6 +45,18 @@ class BookRepositorySession implements BookRepositoryInterface
     public function fetchAll(): array
     {
         return $_SESSION[BookRepositorySession::SESSION_TAG];
+    }
+
+    public function fetchAllFromAuthor(int $author_id): array {
+        $books = [];
+
+        foreach ($_SESSION[BookRepositorySession::SESSION_TAG] as $book) {
+            if ($book->getAuthorId() === $author_id) {
+                $books[] = $book;
+            }
+        }
+
+        return $books;
     }
 
     /**

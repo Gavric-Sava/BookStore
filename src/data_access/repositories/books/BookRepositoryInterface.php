@@ -15,6 +15,8 @@ interface BookRepositoryInterface
      */
     public function fetchAll(): array;
 
+    public function fetchAllFromAuthor(int $author_id): array;
+
     /**
      * Fetch a book.
      *

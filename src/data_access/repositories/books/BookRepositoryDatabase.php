@@ -25,8 +25,32 @@ class BookRepositoryDatabase implements BookRepositoryInterface
         $pdo_statement = $this->PDO->query("SELECT * FROM " . BookRepositoryDatabase::TABLE_NAME);
 
         if ($pdo_statement) {
-            return $pdo_statement->fetchAll(PDO::FETCH_FUNC, function (int $id, string $title, int $year) {
-                return new Book($title, $year, $id);
+            return $pdo_statement->fetchAll(PDO::FETCH_FUNC, function (
+                int $id,
+                string $title,
+                int $year,
+                int $author_id) {
+                return new Book($title, $year, $author_id, $id);
+            });
+        }
+
+        return [];
+    }
+
+    public function fetchAllFromAuthor(int $author_id): array
+    {
+        $pdo_statement = $this->PDO->query("SELECT *".
+            " FROM " . BookRepositoryDatabase::TABLE_NAME .
+            " WHERE " . "author_id = " . $author_id
+        );
+
+        if ($pdo_statement) {
+            return $pdo_statement->fetchAll(PDO::FETCH_FUNC, function (
+                int $id,
+                string $title,
+                int $year,
+                int $author_id) {
+                return new Book($title, $year, $author_id, $id);
             });
         }
 
@@ -49,7 +73,7 @@ class BookRepositoryDatabase implements BookRepositoryInterface
             if ($fetch === false) {
                 return null;
             } else {
-                return new Book($fetch["title"], $fetch["year"], $fetch["id"], $fetch["author_id"]);
+                return new Book($fetch["title"], $fetch["year"], $fetch["author_id"], $fetch["id"]);
             }
         }
 
