@@ -1,11 +1,11 @@
-table{
+.book-list table{
     width: 700px;
 }
 
-.first-column{
+.book-list .first-column{
     width: 80%;
 }
 
-.second-column{
+.book-list .second-column{
     width: 20%;
 }

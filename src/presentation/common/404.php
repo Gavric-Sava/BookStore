@@ -5,10 +5,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../../../assets/styles/404.css">
+    <link rel="stylesheet" href="../../../assets/styles/common.css">
     <title>404</title>
 </head>
 <body>
-    <h1>Error 404 - Page not found!</h1>
+    <div class="container">
+        <h1>Error 404 - Page not found!</h1>
+    </div>
 </body>
 </html>

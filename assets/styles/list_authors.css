@@ -1,11 +1,11 @@
-.first-column{
+.author-list .first-column{
     width: 80%;
 }
 
-.second-column, .third-column{
+.author-list .second-column, .third-column{
     width: 10%;
 }
 
-.books{
+.author-list .books{
     text-align: center;
 }

@@ -1,53 +1,40 @@
-body{
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-y: hidden;
+.wrapper-form{
+    border: 1px solid black;
+    padding: 0.5em;
 }
 
-.wrapper{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    border: 2px solid black;
-}
-
-.wrapper * {
-    margin: 0.25em 0 0.25em 0;
-}
-
-form{
-    width: 90%;
+.wrapper-form form{
+    width: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
 }
 
-.form-item{
+.wrapper-form form .form-item{
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin: 0.5em 0 0.5em 0;
 }
 
-.form-item input{
+.wrapper-form form .form-item input{
     width: 95%;
     height: 1.5em;
     align-self: center;
     margin: 0;
 }
 
-.button{
+.wrapper-form form .button{
     align-self: flex-end;
 }
 
-.button input{
+.wrapper-form form .button input{
     padding: 0.4em 1em 0.4em 1em;
     cursor: pointer;
 }
 
-.error{
+.wrapper-form .error{
     color: red;
 }

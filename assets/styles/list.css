@@ -1,53 +1,44 @@
-body{
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-y: hidden;
-}
-
-.wrapper{
-    display: flex;
-    flex-direction: column;
-}
-
-table{
+.wrapper-list table{
     width: 800px;
     border-collapse: collapse;
 }
 
-.first{
+.wrapper-list .first{
     text-align: left;
 }
 
-.last{
+.wrapper-list .last{
     text-align: right;
 }
 
-thead tr{
+.wrapper-list thead tr{
     border-bottom: 2px solid black;
 }
 
-td{
+.wrapper-list td{
     padding: 0.5em 0 0.5em 0;
 }
 
-.icon{
+.wrapper-list .icon{
     width: 30px;
     height: 30px;
 }
 
-.edit{
+.wrapper-list .edit{
     width: 28px;
     height: 27px;
 }
 
-.create{
+.wrapper-list .create{
     width: 35px;
     height: 35px;
 }
 
-.create_link{
+.wrapper-list .create_link{
     width: 0;
     height: 0;
+}
+
+.wrapper-list img{
+    cursor: pointer;
 }

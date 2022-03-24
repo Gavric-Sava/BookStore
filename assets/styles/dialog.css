@@ -1,20 +1,8 @@
-body{
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-y: hidden;
-}
-
-.wrapper{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+.wrapper-dialog{
     border: 1px solid black;
 }
 
-.header{
+.wrapper-dialog .header{
     align-self: flex-start;
     margin-left: 4%;
     display: flex;
@@ -22,17 +10,18 @@ body{
     align-items: center;
 }
 
-.header img{
+.wrapper-dialog .header img{
     width: 50px;
     height: 45px;
 }
 
-.text{
+.wrapper-dialog .text{
     width: 90%;
+    margin-left: 4%;
     margin-bottom: 2.5em;
 }
 
-.buttons{
+.wrapper-dialog .buttons{
     align-self: flex-end;
     display: flex;
     justify-content: flex-end;
@@ -40,18 +29,19 @@ body{
     margin-right: 2em;
 }
 
-.buttons button{
+.wrapper-dialog .buttons button{
     border: none;
     border-radius: 0.25em;
     padding: 0.75em 1em 0.75em 1em;
     cursor: pointer;
 }
 
-.delete{
+.wrapper-dialog .delete{
     background-color: red;
     color: white;
+    margin-right: 0.5em;
 }
 
-.cancel{
+.wrapper-dialog .cancel{
     color: grey;
 }

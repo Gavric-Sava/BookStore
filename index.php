@@ -10,6 +10,8 @@ use Logeecom\Bookstore\presentation\router\BaseRouter;
 // TODO refactor absolute path of view require to something better;
 // TODO comments;
 // TODO refactor links to assets
+// TODO interface should go in the upper layer relative to it's implementations
+// TODO refactor validation code - like SinglePageAuthorController
 
 $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 (new BaseRouter())->route($request_path);
