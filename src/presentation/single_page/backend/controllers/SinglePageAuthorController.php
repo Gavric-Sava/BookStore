@@ -46,7 +46,7 @@ class SinglePageAuthorController implements ControllerInterface
 //        $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 //
 //        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
-        include($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index.html";
+        include ($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index_authors.html";
 
     }
 
@@ -67,15 +67,17 @@ class SinglePageAuthorController implements ControllerInterface
 
             if (empty($errors)) {
                 $this->authorLogic->createAuthor($first_name, $last_name);
-                header('Location: http://bookstore.test');
+                http_response_code(200);
+                // TODO echo $author;
             } else {
-                $first_name_error = $errors["first_name_error"];
-                $last_name_error = $errors["last_name_error"];
+                $response = $errors;
+                $response['first_name'] = $first_name;
+                $response['last_name'] = $last_name;
 
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
+                // TODO return 400 and errors;
+                http_response_code(400);
+                echo json_encode($response);
             }
-        } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
         }
     }
 
@@ -92,13 +94,18 @@ class SinglePageAuthorController implements ControllerInterface
 
             if (empty($errors)) {
                 $this->authorLogic->editAuthor($id, $first_name, $last_name);
-                header('Location: http://bookstore.test');
+                http_response_code(200);
+                // TODO echo $author;
             } else {
-                $first_name_error = $errors["first_name_error"];
-                $last_name_error = $errors["last_name_error"];
+                $response = $errors;
 
                 $author = $this->authorLogic->fetchAuthor($id);
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
+                $response['first_name'] = $author->getFirstname();
+                $response['last_name'] = $author->getLastname();
+
+                // TODO return 400 and errors;
+                http_response_code(400);
+                echo json_encode($response);
             }
         } else {
             $author = $this->authorLogic->fetchAuthor($id);
@@ -113,15 +120,12 @@ class SinglePageAuthorController implements ControllerInterface
     private function processAuthorDelete(int $id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $this->authorLogic->deleteAuthor($id);
-
-            header('Location: http://bookstore.test');
-        } else {
-            $author = $this->authorLogic->fetchAuthor($id);
-            if (!isset($author)) {
-                RequestUtil::render404();
+            if ($this->authorLogic->deleteAuthor($id)) {
+                http_response_code(200);
+                echo json_encode("Deletion successful!");
             } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_delete.php");
+                http_response_code(400);
+                echo json_encode("Deletion failed!");
             }
         }
     }
@@ -149,11 +153,16 @@ class SinglePageAuthorController implements ControllerInterface
             }
         }
 
-        if (!($first_name_error == "" && $last_name_error == "")) {
-            return [
-                "first_name_error" => $first_name_error,
-                "last_name_error" => $last_name_error
-            ];
+        $errors = [];
+        if ($first_name_error !== "") {
+            $errors["first_name_error"] = $first_name_error;
+        }
+        if ($last_name_error !== "") {
+            $errors["last_name_error"] = $last_name_error;
+        }
+
+        if (count($errors) > 0) {
+            return $errors;
         }
 
         return null;
