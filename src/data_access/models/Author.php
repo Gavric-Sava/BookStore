@@ -101,7 +101,7 @@ class Author implements \JsonSerializable
         $this->lastname = $lastname;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,

@@ -154,36 +154,28 @@ class MultiPageBookController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private static function validateFormInput($title, $year): ?array
+    private static function validateFormInput($title, $year): array
     {
-        $title_error = "";
-        $year_error = "";
+        $errors = [];
 
         if (!Validator::validateNotEmpty($title)) {
-            $title_error = "Title is required.";
+            $errors['title_error'] = 'Title is required.';
         } else {
             $title = Validator::sanitizeData($title);
             if (!Validator::validateAlphanumeric($title)) {
-                $title_error = "Title is not in a valid format.";
+                $errors['title_error'] = 'Title is not in a valid format.';
             }
         }
 
         if (!Validator::validateNotEmpty($year)) {
-            $year_error = "Year is required.";
+            $errors['year_error'] = 'Year is required.';
         } else {
             $year = Validator::sanitizeData($year);
             if (!Validator::validateNumber($year)) {
-                $year_error = "Year is not in a valid format.";
+                $errors['year_error'] = 'Year is not in a valid format.';
             }
         }
 
-        if (!($title_error == "" && $year_error == "")) {
-            return [
-                "title_error" => $title_error,
-                "year_error" => $year_error
-            ];
-        }
-
-        return null;
+        return $errors;
     }
 }

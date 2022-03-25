@@ -11,10 +11,10 @@ use Logeecom\Bookstore\presentation\util\Validator;
 class SinglePageBookController implements ControllerInterface
 {
 
-    private const REQUEST_CREATE = '/^\/spa\/books\/create\/?$/';
-    private const REQUEST_EDIT = '/^\/spa\/books\/edit\/(\d+)\/?$/';
-    private const REQUEST_DELETE = '/^\/spa\/books\/delete\/(\d+)\/?$/';
-    private const REQUEST_LIST = '/^\/spa\/books\/?$/';
+    private const REQUEST_CREATE = '/^\/spa\/authors\/(\d*)\/books\/create\/?$/';
+    private const REQUEST_EDIT = '/^\/spa\/authors\/(\d*)\/books\/edit\/(\d+)\/?$/';
+    private const REQUEST_DELETE = '/^\/spa\/authors\/(\d*)\/books\/delete\/(\d+)\/?$/';
+    private const REQUEST_LIST = '/^\/spa\/authors\/(\d*)\/(?:books)?\/?$/';
 
     private BookLogic $bookLogic;
 
@@ -26,26 +26,27 @@ class SinglePageBookController implements ControllerInterface
 
     public function process(string $path): void
     {
-        if (preg_match(SinglePageBookController::REQUEST_CREATE, $path)) {
-            $this->processBookCreate();
+        if (preg_match(SinglePageBookController::REQUEST_CREATE, $path, $matches)) {
+            $this->processBookCreate($matches[1]);
         } elseif (preg_match(SinglePageBookController::REQUEST_EDIT, $path, $matches)) {
-            $this->processBookEdit($matches[1]);
+            $this->processBookEdit($matches[2]);
         } elseif (preg_match(SinglePageBookController::REQUEST_DELETE, $path, $matches)) {
-            $this->processBookDelete($matches[1]);
-        } elseif (preg_match(SinglePageBookController::REQUEST_LIST, $path)) {
-            $this->processBookList();
+            $this->processBookDelete($matches[2]);
+        } elseif (preg_match(SinglePageBookController::REQUEST_LIST, $path, $matches)) {
+            $this->processBookList($matches[1]);
         } else {
             RequestUtil::render404();
         }
     }
 
-    private function processBookList(): void
+    private function processBookList(int $author_id): void
     {
-        $books = $this->bookLogic->fetchAllBooks();
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_list.php");
+        $books = $this->bookLogic->fetchAllBooksFromAuthor($author_id);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($books);
     }
 
-    private function processBookCreate(): void
+    private function processBookCreate(int $author_id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
@@ -54,16 +55,18 @@ class SinglePageBookController implements ControllerInterface
             $errors = SinglePageBookController::validateFormInput($title, $year);
 
             if (empty($errors)) {
-                $this->bookLogic->createBook($title, $year);
-                header('Location: http://bookstore.test/books');
+                $this->bookLogic->createBook($title, $year, $author_id);
+                http_response_code(200);
+                // TODO echo $book;
             } else {
-                $title_error = $errors["title_error"];
-                $year_error = $errors["year_error"];
+                $response = $errors;
+                $response['title'] = $title;
+                $response['year'] = $year;
 
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_create.php");
+                // TODO return 400 and errors;
+                http_response_code(400);
+                echo json_encode($response);
             }
-        } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_create.php");
         }
     }
 
@@ -77,20 +80,18 @@ class SinglePageBookController implements ControllerInterface
 
             if (empty($errors)) {
                 $this->bookLogic->editBook($id, $title, $year);
-                header('Location: http://bookstore.test/books');
+                http_response_code(200);
+                // TODO echo $author;
             } else {
-                $title_error = $errors["title_error"];
-                $year_error = $errors["year_error"];
-
+                $response = $errors;
                 $book = $this->bookLogic->fetchBook($id);
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_edit.php");
-            }
-        } else {
-            $book = $this->bookLogic->fetchBook($id);
-            if (!isset($book)) {
-                RequestUtil::render404();
-            } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_edit.php");
+                $response['title'] = $book->getTitle();
+                $response['year'] = $book->getYear();
+
+
+                // TODO return 400 and errors;
+                http_response_code(400);
+                echo json_encode($response);
             }
         }
     }
@@ -98,50 +99,39 @@ class SinglePageBookController implements ControllerInterface
     public function processBookDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $this->bookLogic->deleteBook($id);
-
-            header('Location: http://bookstore.test/books');
-        } else {
-            $book = $this->bookLogic->fetchBook($id);
-            if (!isset($book)) {
-                RequestUtil::render404();
+            if ($this->bookLogic->deleteBook($id)) {
+                http_response_code(200);
+                echo json_encode("Deletion successful!");
             } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_delete.php");
+                http_response_code(400);
+                echo json_encode("Deletion failed!");
             }
         }
     }
 
-    private static function validateFormInput($title, $year): ?array
+    private static function validateFormInput($title, $year): array
     {
-        $title_error = "";
-        $year_error = "";
+        $errors = [];
 
         if (!Validator::validateNotEmpty($title)) {
-            $title_error = "Title is required.";
+            $errors['title_error'] = 'Title is required.';
         } else {
             $title = Validator::sanitizeData($title);
             if (!Validator::validateAlphanumeric($title)) {
-                $title_error = "Title is not in a valid format.";
+                $errors['title_error'] = 'Title is not in a valid format.';
             }
         }
 
         if (!Validator::validateNotEmpty($year)) {
-            $year_error = "Year is required.";
+            $errors['year_error'] = 'Year is required.';
         } else {
             $year = Validator::sanitizeData($year);
             if (!Validator::validateNumber($year)) {
-                $year_error = "Year is not in a valid format.";
+                $errors['year_error'] = 'Year is not in a valid format.';
             }
         }
 
-        if (!($title_error == "" && $year_error == "")) {
-            return [
-                "title_error" => $title_error,
-                "year_error" => $year_error
-            ];
-        }
-
-        return null;
+        return $errors;
     }
 
 }

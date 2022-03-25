@@ -2,7 +2,7 @@
 
 namespace Logeecom\Bookstore\data_access\models;
 
-class Book
+class Book implements \JsonSerializable
 {
 
     private ?int $id;
@@ -126,6 +126,16 @@ class Book
     public function setAuthorId(?int $author_id): void
     {
         $this->author_id = $author_id;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'year' => $this->year,
+            'author_id' => $this->author_id
+        ];
     }
 
 

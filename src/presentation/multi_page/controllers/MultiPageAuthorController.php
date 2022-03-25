@@ -161,36 +161,28 @@ class MultiPageAuthorController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function validateFormInput($first_name, $last_name): ?array
+    private function validateFormInput($first_name, $last_name): array
     {
-        $first_name_error = "";
-        $last_name_error = "";
+        $errors = [];
 
         if (!Validator::validateNotEmpty($first_name)) {
-            $first_name_error = "First name is required.";
+            $errors["first_name_error"] = 'First name is required.';
         } else {
             $first_name = Validator::sanitizeData($first_name);
             if (!Validator::validateAlphabetical($first_name)) {
-                $first_name_error = "First name is not in a valid format.";
+                $errors["first_name_error"] = 'First name is not in a valid format.';
             }
         }
 
         if (!Validator::validateNotEmpty($last_name)) {
-            $last_name_error = "Last name is required.";
+            $errors["last_name_error"] = 'Last name is required.';
         } else {
             $last_name = Validator::sanitizeData($last_name);
             if (!Validator::validateAlphabetical($last_name)) {
-                $last_name_error = "Last name is not in a valid format.";
+                $errors["last_name_error"] = 'Last name is not in a valid format.';
             }
         }
 
-        if (!($first_name_error == "" && $last_name_error == "")) {
-            return [
-                "first_name_error" => $first_name_error,
-                "last_name_error" => $last_name_error
-            ];
-        }
-
-        return null;
+        return $errors;
     }
 }

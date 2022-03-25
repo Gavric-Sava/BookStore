@@ -46,7 +46,7 @@ class SinglePageAuthorController implements ControllerInterface
 //        $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 //
 //        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
-        include ($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index_authors.html";
+        include ($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index.html";
 
     }
 
@@ -87,10 +87,7 @@ class SinglePageAuthorController implements ControllerInterface
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            $errors = SinglePageAuthorController::validateFormInput(
-                $first_name,
-                $last_name
-            );
+            $errors = SinglePageAuthorController::validateFormInput($first_name, $last_name);
 
             if (empty($errors)) {
                 $this->authorLogic->editAuthor($id, $first_name, $last_name);
@@ -106,13 +103,6 @@ class SinglePageAuthorController implements ControllerInterface
                 // TODO return 400 and errors;
                 http_response_code(400);
                 echo json_encode($response);
-            }
-        } else {
-            $author = $this->authorLogic->fetchAuthor($id);
-            if (!isset($author)) {
-                RequestUtil::render404();
-            } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
             }
         }
     }
@@ -130,42 +120,29 @@ class SinglePageAuthorController implements ControllerInterface
         }
     }
 
-    private function validateFormInput($first_name, $last_name): ?array
+    private function validateFormInput($first_name, $last_name): array
     {
-        $first_name_error = "";
-        $last_name_error = "";
+        $errors = [];
 
         if (!Validator::validateNotEmpty($first_name)) {
-            $first_name_error = "First name is required.";
+            $errors["first_name_error"] = 'First name is required.';
         } else {
             $first_name = Validator::sanitizeData($first_name);
             if (!Validator::validateAlphabetical($first_name)) {
-                $first_name_error = "First name is not in a valid format.";
+                $errors["first_name_error"] = 'First name is not in a valid format.';
             }
         }
 
         if (!Validator::validateNotEmpty($last_name)) {
-            $last_name_error = "Last name is required.";
+            $errors["last_name_error"] = 'Last name is required.';
         } else {
             $last_name = Validator::sanitizeData($last_name);
             if (!Validator::validateAlphabetical($last_name)) {
-                $last_name_error = "Last name is not in a valid format.";
+                $errors["last_name_error"] = 'Last name is not in a valid format.';
             }
         }
 
-        $errors = [];
-        if ($first_name_error !== "") {
-            $errors["first_name_error"] = $first_name_error;
-        }
-        if ($last_name_error !== "") {
-            $errors["last_name_error"] = $last_name_error;
-        }
-
-        if (count($errors) > 0) {
-            return $errors;
-        }
-
-        return null;
+        return $errors;
     }
 
 }
