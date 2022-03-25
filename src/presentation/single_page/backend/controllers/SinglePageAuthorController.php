@@ -43,11 +43,7 @@ class SinglePageAuthorController implements ControllerInterface
 
     private function processIndex()
     {
-//        $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
-//
-//        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
-        include ($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index.html";
-
+        include ($_SERVER['DOCUMENT_ROOT']) . "/src/presentation/single_page/frontend/index.php";
     }
 
     private function processAuthorList()
