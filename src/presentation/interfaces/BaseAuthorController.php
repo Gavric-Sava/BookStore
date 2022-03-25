@@ -6,15 +6,35 @@ use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
 abstract class BaseAuthorController implements ControllerInterface
 {
-
+    /**
+     * @inheritDoc
+     */
     abstract public function process(string $path): void;
 
+    /**
+     * Processes author list request.
+     * @return void
+     */
     abstract protected function processAuthorList(): void;
 
+    /**
+     * Processes author create request.
+     * @return void
+     */
     abstract protected function processAuthorCreate(): void;
 
+    /**
+     * Processes author edit request.
+     * @param int $id - Id of author.
+     * @return void
+     */
     abstract protected function processAuthorEdit(int $id): void;
 
+    /**
+     * Processes author delete request.
+     * @param int $id - Id of author.
+     * @return void
+     */
     abstract protected function processAuthorDelete(int $id): void;
 
     /**

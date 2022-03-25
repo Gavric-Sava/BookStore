@@ -5,7 +5,7 @@ namespace Logeecom\Bookstore\presentation\util;
 abstract class RequestUtil
 {
     /**
-     * Render 404 - Page not found view.
+     * Render 404 page.
      *
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>

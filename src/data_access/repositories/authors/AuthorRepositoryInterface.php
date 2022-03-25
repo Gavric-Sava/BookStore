@@ -29,9 +29,8 @@ interface AuthorRepositoryInterface
      * Add an author.
      *
      * @param Author $author Author to be added.
-     * @return bool True if adding successful. Otherwise, false.
+     * @return Author|null Author object if adding successful. Otherwise, null.
      * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
      */
     public function add(Author $author): ?Author;
 
@@ -41,9 +40,8 @@ interface AuthorRepositoryInterface
      * @param int $id Id of author to be edited.
      * @param string $firstname New firstname value.
      * @param string $lastname New lastname value.
-     * @return bool True if editing successful. Otherwise, false.
+     * @return Author|null Author object if editing successful. Otherwise, null.
      * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
      */
     public function edit(int $id, string $firstname, string $lastname): ?Author;
 
@@ -51,7 +49,7 @@ interface AuthorRepositoryInterface
      * Delete an author.
      *
      * @param int $id Id of author to be deleted.
-     * @return bool True if deletion successful. Otherwise, not.
+     * @return bool True if deletion successful. Otherwise, false.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */

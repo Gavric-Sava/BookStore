@@ -4,10 +4,29 @@ namespace Logeecom\Bookstore\data_access\models;
 
 class Book implements \JsonSerializable
 {
-
+    /**
+     * @var int|null - Id of the book. Null while object not persisted.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private ?int $id;
+    /**
+     * @var string - Title of the book.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private string $title;
+    /**
+     * @var int - Year of publishing of the book.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private int $year;
+    /**
+     * @var int - Id of author of the book.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private int $author_id;
 
     /**
@@ -128,6 +147,10 @@ class Book implements \JsonSerializable
         $this->author_id = $author_id;
     }
 
+    /**
+     * Serializes Book object as JSON.
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         return [

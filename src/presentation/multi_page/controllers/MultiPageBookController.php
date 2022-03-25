@@ -9,12 +9,31 @@ use Logeecom\Bookstore\presentation\util\RequestUtil;
 
 class MultiPageBookController extends BaseBookController
 {
-
+    /**
+     * Regex for create request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_CREATE = '/^\/authors\/(\d*)\/books\/create\/?$/';
+    /**
+     * Regex for edit request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_EDIT = '/^\/authors\/(\d*)\/books\/edit\/(\d+)\/?$/';
+    /**
+     * Regex for delete request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_DELETE = '/^\/authors\/(\d*)\/books\/delete\/(\d+)\/?$/';
+    /**
+     * Regex for list request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_LIST = '/^\/authors\/(\d*)\/(?:books)?\/?$/';
 
+    /**
+     * @var BookLogic - Book business logic.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private BookLogic $bookLogic;
 
     public function __construct(
@@ -23,6 +42,9 @@ class MultiPageBookController extends BaseBookController
         $this->bookLogic = $bookLogic;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function process(string $path): void
     {
         if (preg_match(MultiPageBookController::REQUEST_CREATE, $path, $matches)) {
@@ -39,11 +61,11 @@ class MultiPageBookController extends BaseBookController
     }
 
     /**
-     * Implementation of the 'Book list' use case.
+     * Fetches list of books and returns corresponding view.
      *
+     * @param int $author_id - Author id.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
      */
     protected function processBookList(int $author_id): void
     {
@@ -52,11 +74,12 @@ class MultiPageBookController extends BaseBookController
     }
 
     /**
-     * Implementation of the 'Book create' use case.
+     * On get returns book create form view. On post tries to create new book.
+     * On error returns form view with errors.
      *
+     * @param int $author_id Author id.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
      */
     protected function processBookCreate(int $author_id): void
     {
@@ -81,7 +104,8 @@ class MultiPageBookController extends BaseBookController
     }
 
     /**
-     * Implementation of the 'Book edit' use case.
+     * On get returns book edit form view. On post tries to edit book.
+     * On error returns form view with errors.
      *
      * @param int $id Id of the book to be edited.
      * @return void
@@ -97,7 +121,6 @@ class MultiPageBookController extends BaseBookController
             $errors = $this->validateFormInput($title, $year);
 
             if (empty($errors)) {
-                // TODO return book
                 $this->bookLogic->editBook($id, $title, $year);
                 $book = $this->bookLogic->fetchBook($id);
 
@@ -120,7 +143,8 @@ class MultiPageBookController extends BaseBookController
     }
 
     /**
-     * Implementation of the 'Book delete' use case.
+     * On get returns book delete dialog view. On post tries to delete book.
+     * On error returns 404 view.
      *
      * @param int $id Id of the book to be deleted.
      * @return void
@@ -130,7 +154,6 @@ class MultiPageBookController extends BaseBookController
     protected function processBookDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // TODO check success...
             $book = $this->bookLogic->fetchBook($id);
             $this->bookLogic->deleteBook($id);
 

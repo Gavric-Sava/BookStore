@@ -7,9 +7,18 @@ use PDO;
 
 class AuthorRepositoryDatabase implements AuthorRepositoryInterface
 {
-
+    /**
+     * Name of table in DB.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private const TABLE_NAME = "authors";
 
+    /**
+     * @var PDO - Connection to DB.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private PDO $PDO;
 
     public function __construct(PDO $PDO)

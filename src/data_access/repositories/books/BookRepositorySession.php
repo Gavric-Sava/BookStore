@@ -8,10 +8,14 @@ class BookRepositorySession implements BookRepositoryInterface
 {
     /**
      * Session key for list of books.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
      */
     private const SESSION_TAG = "books";
     /**
      * Session key for auto-generated book key.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
      */
     private const ID_TAG = "book_id";
 
@@ -116,8 +120,11 @@ class BookRepositorySession implements BookRepositoryInterface
 
     /**
      * Deletes all books from given author.
+     *
      * @param int $author_id Id of author.
      * @return bool Returns true if all books successfully deleted. Otherwise, returns false.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
      */
     public function deleteAllFromAuthor(int $author_id): bool
     {
@@ -132,8 +139,11 @@ class BookRepositorySession implements BookRepositoryInterface
 
     /**
      * Returns number of books written by the author.
+     *
      * @param int $id Id of the author.
      * @return int Number of books.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
      */
     public function countFromAuthor(int $id): int
     {

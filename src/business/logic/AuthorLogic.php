@@ -7,7 +7,11 @@ use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryInterfac
 
 class AuthorLogic
 {
-
+    /**
+     * @var AuthorRepositoryInterface - Repository of author data.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private AuthorRepositoryInterface $authorRepository;
 
     public function __construct(AuthorRepositoryInterface $authorRepository)

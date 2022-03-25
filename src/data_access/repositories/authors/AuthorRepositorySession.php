@@ -9,10 +9,14 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
 {
     /**
      * Session key for list of authors.
+     *
+     * @author Sava Gavric <sava.gavric@logeecom.com>
      */
     private const SESSION_TAG = "authors";
     /**
      * Session key for auto-generated author key.
+     *
+     * @author Sava Gavric <sava.gavric@logeecom.com>
      */
     private const ID_TAG = "author_id";
 

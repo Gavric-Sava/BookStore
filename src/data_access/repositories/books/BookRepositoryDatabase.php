@@ -7,9 +7,18 @@ use PDO;
 
 class BookRepositoryDatabase implements BookRepositoryInterface
 {
-
+    /**
+     * Name of table in DB.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private const TABLE_NAME = "books";
 
+    /**
+     * @var PDO - Connection to DB.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private PDO $PDO;
 
     public function __construct(PDO $PDO)

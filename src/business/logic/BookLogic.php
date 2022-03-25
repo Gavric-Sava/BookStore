@@ -7,7 +7,11 @@ use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryInterface;
 
 class BookLogic
 {
-
+    /**
+     * @var BookRepositoryInterface - Repository of book data.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private BookRepositoryInterface $bookRepository;
 
     public function __construct(

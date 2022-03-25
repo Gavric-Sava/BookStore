@@ -15,6 +15,14 @@ interface BookRepositoryInterface
      */
     public function fetchAll(): array;
 
+    /**
+     * Fetch all books from the given author.
+     *
+     * @param int $author_id - Id of the author.
+     * @return array Array of books.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function fetchAllFromAuthor(int $author_id): array;
 
     /**
@@ -30,9 +38,9 @@ interface BookRepositoryInterface
     /**
      * Add a book.
      *
-     * @return bool True if adding successful. Otherwise, false.
+     * @param Book $book
+     * @return Book|null Book object if adding successful. Otherwise, null.
      * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
      */
     public function add(Book $book): ?Book;
 
@@ -43,7 +51,7 @@ interface BookRepositoryInterface
      * @param string $title New title value.
      * @param int $year New year value.
      * @param ?int $author_id New author Id value.
-     * @return bool True if editing successful. Otherwise, false.
+     * @return Book|null Book object if editing successful. Otherwise, null.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
@@ -53,7 +61,7 @@ interface BookRepositoryInterface
      * Delete a book.
      *
      * @param int $id Id of book to be deleted.
-     * @return bool True if deletion successful. Otherwise, not.
+     * @return bool True if deletion successful. Otherwise, false.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */

@@ -5,16 +5,34 @@ namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 use Logeecom\Bookstore\business\logic\AuthorLogic;
 use Logeecom\Bookstore\presentation\interfaces\BaseAuthorController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
-use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
 class MultiPageAuthorController extends BaseAuthorController
 {
-
+    /**
+     * Regex for create request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_CREATE = '/^\/authors\/create\/?$/';
+    /**
+     * Regex for edit request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_EDIT = '/^\/authors\/edit\/(\d+)\/?$/';
+    /**
+     * Regex for delete request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_DELETE = '/^\/authors\/delete\/(\d+)\/?$/';
+    /**
+     * Regex for list request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_LIST = '/^\/(?:authors\/?)?$/';
 
+    /**
+     * @var AuthorLogic - Author business logic.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private AuthorLogic $authorLogic;
 
     public function __construct(
@@ -24,12 +42,7 @@ class MultiPageAuthorController extends BaseAuthorController
     }
 
     /**
-     * Parses path and processes the request.
-     *
-     * @param string $path Path of the request.
-     * @return void
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
+     * @inheritDoc
      */
     public function process(string $path): void
     {
@@ -47,7 +60,7 @@ class MultiPageAuthorController extends BaseAuthorController
     }
 
     /**
-     * Implementation of the 'Author list' use case.
+     * Fetches list of authors and returns corresponding view.
      *
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
@@ -61,7 +74,8 @@ class MultiPageAuthorController extends BaseAuthorController
     }
 
     /**
-     * Implementation of the 'Author create' use case.
+     * On get returns author create form view. On post tries to create new author.
+     * On error returns form view with errors.
      *
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
@@ -84,13 +98,14 @@ class MultiPageAuthorController extends BaseAuthorController
 
                 include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
             }
-        } else {
+        } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
             include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
         }
     }
 
     /**
-     * Implementation of the 'Author edit' use case.
+     * On get returns author edit form view. On post tries to edit author.
+     * On error returns form view with errors.
      *
      * @param int $id Id of the author to be edited.
      * @return void
@@ -118,7 +133,7 @@ class MultiPageAuthorController extends BaseAuthorController
                 $author = $this->authorLogic->fetchAuthor($id);
                 include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
             }
-        } else {
+        } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
             $author = $this->authorLogic->fetchAuthor($id);
             if (!isset($author)) {
                 RequestUtil::render404();
@@ -129,7 +144,8 @@ class MultiPageAuthorController extends BaseAuthorController
     }
 
     /**
-     * Implementation of the 'Author delete' use case.
+     * On get returns author delete dialog view. On post tries to delete author.
+     * On error returns 404 view.
      *
      * @param int $id Id of the author to be deleted.
      * @return void
@@ -142,7 +158,7 @@ class MultiPageAuthorController extends BaseAuthorController
             $this->authorLogic->deleteAuthor($id);
 
             header('Location: http://bookstore.test');
-        } else {
+        } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
             $author = $this->authorLogic->fetchAuthor($id);
             if (!isset($author)) {
                 RequestUtil::render404();

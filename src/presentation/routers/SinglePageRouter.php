@@ -13,22 +13,39 @@ use PDO;
 
 class SinglePageRouter extends BaseRouter
 {
+    /**
+     * Regex for author request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_AUTHOR = '/^\/spa(?:\/(?:authors(?:\/.*)*)*)*$/';
+    /**
+     * Regex for book request path.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     private const REQUEST_BOOK = '/^\/spa\/authors\/(?:\d+)\/books(?:\/.*)*$/';
 
-    public function route(string $request_path): void {
+    /**
+     * Route execution to appropriate controller depending on whether the request is for author or book use case.
+     *
+     * @param string $request_path - Path of the request.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function route(string $request_path): void
+    {
         // TODO move PDO into database repository constructors?
         $PDO = new PDO('mysql:host=localhost;dbname=bookstore_db', "bookstore_user", "password");
 
         if (preg_match(SinglePageRouter::REQUEST_BOOK, $request_path)) {
-            // TODO dependency waterfall
+            // TODO dependency waterfall?
             (new SinglePageBookController(
                 new BookLogic(
                     new BookRepositoryDatabase($PDO)
                 )
             ))->process($request_path);
         } elseif (preg_match(SinglePageRouter::REQUEST_AUTHOR, $request_path)) {
-            // TODO dependency waterfall
+            // TODO dependency waterfall?
             (new SinglePageAuthorController(
                 new AuthorLogic(
                     new AuthorRepositoryDatabase($PDO)

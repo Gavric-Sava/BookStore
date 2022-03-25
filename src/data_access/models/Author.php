@@ -4,9 +4,23 @@ namespace Logeecom\Bookstore\data_access\models;
 
 class Author implements \JsonSerializable
 {
-
+    /**
+     * @var int|null - Id of the author. Null while object not persisted.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private ?int $id;
+    /**
+     * @var string - First name of the author.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private string $firstname;
+    /**
+     * @var string - Last name of the author.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     private string $lastname;
 
     /**
@@ -101,6 +115,10 @@ class Author implements \JsonSerializable
         $this->lastname = $lastname;
     }
 
+    /**
+     * Serializes Author object as JSON.
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         return [
