@@ -6,8 +6,13 @@ use Logeecom\Bookstore\data_access\models\Book;
 
 class BookRepositorySession implements BookRepositoryInterface
 {
-
+    /**
+     * Session key for list of books.
+     */
     private const SESSION_TAG = "books";
+    /**
+     * Session key for auto-generated book key.
+     */
     private const ID_TAG = "book_id";
 
     /**
@@ -47,7 +52,8 @@ class BookRepositorySession implements BookRepositoryInterface
         return $_SESSION[BookRepositorySession::SESSION_TAG];
     }
 
-    public function fetchAllFromAuthor(int $author_id): array {
+    public function fetchAllFromAuthor(int $author_id): array
+    {
         $books = [];
 
         foreach ($_SESSION[BookRepositorySession::SESSION_TAG] as $book) {
@@ -70,28 +76,28 @@ class BookRepositorySession implements BookRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function add(Book $book): bool
+    public function add(Book $book): ?Book
     {
         $book->setId(BookRepositorySession::generateId());
         $_SESSION[BookRepositorySession::SESSION_TAG][$book->getId()] = $book;
 
-        return false;
+        return $book;
     }
 
     /**
      * @inheritDoc
      */
-    public function edit(int $id, string $title, int $year, ?int $author_id): bool
+    public function edit(int $id, string $title, int $year, ?int $author_id): ?Book
     {
         if (isset($_SESSION[BookRepositorySession::SESSION_TAG][$id])) {
             $_SESSION[BookRepositorySession::SESSION_TAG][$id]->setTitle($title);
             $_SESSION[BookRepositorySession::SESSION_TAG][$id]->setYear($year);
             $_SESSION[BookRepositorySession::SESSION_TAG][$id]->setAuthorId($author_id);
 
-            return true;
+            return $_SESSION[BookRepositorySession::SESSION_TAG][$id];
         }
 
-        return false;
+        return null;
     }
 
     /**

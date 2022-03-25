@@ -7,8 +7,13 @@ use Logeecom\Bookstore\data_access\repositories\books\BookRepositorySession;
 
 class AuthorRepositorySession implements AuthorRepositoryInterface
 {
-
+    /**
+     * Session key for list of authors.
+     */
     private const SESSION_TAG = "authors";
+    /**
+     * Session key for auto-generated author key.
+     */
     private const ID_TAG = "author_id";
 
     /**
@@ -58,27 +63,27 @@ class AuthorRepositorySession implements AuthorRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function add(Author $author): bool
+    public function add(Author $author): ?Author
     {
         $author->setId(AuthorRepositorySession::generateId());
         $_SESSION[AuthorRepositorySession::SESSION_TAG][$author->getId()] = $author;
 
-        return false;
+        return $author;
     }
 
     /**
      * @inheritDoc
      */
-    public function edit(int $id, string $firstname, string $lastname): bool
+    public function edit(int $id, string $firstname, string $lastname): ?Author
     {
         if (isset($_SESSION[AuthorRepositorySession::SESSION_TAG][$id])) {
             $_SESSION[AuthorRepositorySession::SESSION_TAG][$id]->setFirstname($firstname);
             $_SESSION[AuthorRepositorySession::SESSION_TAG][$id]->setLastname($lastname);
 
-            return true;
+            return $_SESSION[AuthorRepositorySession::SESSION_TAG][$id];
         }
 
-        return false;
+        return null;
     }
 
     /**
