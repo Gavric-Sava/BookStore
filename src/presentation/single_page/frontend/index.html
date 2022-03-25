@@ -124,19 +124,19 @@ function generateHTMLAuthorList(author_list) {
 
                 // function images
                 let image_edit = document.createElement('img');
-                image_edit.src = '../../../../../assets/images/edit.jpg';
+                image_edit.src = '../../../../assets/images/edit.jpg';
                 image_edit.className = 'icon edit';
 
                 let image_delete = document.createElement('img');
-                image_delete.src = '../../../../../assets/images/delete.png';
+                image_delete.src = '../../../../assets/images/delete.png';
                 image_delete.className = 'icon';
 
                 let image_create = document.createElement('img');
-                image_create.src = '../../../../../assets/images/create.png';
+                image_create.src = '../../../../assets/images/create.png';
                 image_create.className = 'icon create';
 
                 let alert_img = document.createElement('img');
-                alert_img.src = '../../../../../assets/images/alert.png';
+                alert_img.src = '../../../../assets/images/alert.png';
 
                 // rows and columns of list table
                 for (let i = 0; i < author_list.length; i++) {
@@ -151,7 +151,7 @@ function generateHTMLAuthorList(author_list) {
                             book_list_link.href = `spa/authors/${author.id}/books`;
                             book_list_link.addEventListener('click', function(event) {
                                 event.preventDefault();
-                                pushState(author.id,`spa/authors/${author.id}/books`);
+                                pushState(author.id,`/spa/authors/${author.id}/books`);
                                 requestBookList(author.id);
                             });
                             book_list_link.appendChild(
@@ -171,7 +171,7 @@ function generateHTMLAuthorList(author_list) {
                             // a.href = '/authors/edit/' + author.id;
                             a.addEventListener('click', function() {
                                 clearContent();
-                                pushState(null, 'spa/authors/edit/' + author.id);
+                                pushState(null, '/spa/authors/edit/' + author.id);
                                 generateHTMLAuthorEdit(
                                     author.id,
                                     author.firstname,
@@ -184,7 +184,7 @@ function generateHTMLAuthorList(author_list) {
                             a = document.createElement('a');
                             a.addEventListener('click', function() {
                                 clearContent();
-                                pushState(null, 'spa/authors/delete/' + author.id);
+                                pushState(null, '/spa/authors/delete/' + author.id);
                                 generateHTMLAuthorDelete(
                                     author.id,
                                     author.firstname,
@@ -209,7 +209,7 @@ function generateHTMLAuthorList(author_list) {
             a.appendChild(image_create);
             a.addEventListener('click', function() {
                 clearContent();
-                pushState(null, 'spa/authors/create');
+                pushState(null, '/spa/authors/create');
                 generateHTMLAuthorCreate();
             });
             wrapper.appendChild(a);
@@ -310,9 +310,8 @@ function submitCreateAuthorInput(event) {
     httpRequest.onreadystatechange = function() {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
-                popState();
                 clearContent();
-                requestAuthorList();
+                popState();
             } else if (httpRequest.status === 400) {
                 updateAuthorCreate(JSON.parse(httpRequest.responseText));
             } else {

@@ -13,7 +13,7 @@ use PDO;
 
 class SinglePageRouter extends BaseRouter
 {
-    private const REQUEST_AUTHOR = '/^\/spa(?:\/authors(?:\/.*)*)?$/';
+    private const REQUEST_AUTHOR = '/^\/spa(?:\/(?:authors(?:\/.*)*)*)*$/';
     private const REQUEST_BOOK = '/^\/spa\/authors\/(?:\d+)\/books(?:\/.*)*$/';
 
     public function route(string $request_path): void {
