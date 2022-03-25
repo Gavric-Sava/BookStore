@@ -34,7 +34,7 @@ interface BookRepositoryInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function add(Book $book): bool;
+    public function add(Book $book): ?Book;
 
     /**
      * Edit a book.
@@ -47,7 +47,7 @@ interface BookRepositoryInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function edit(int $id, string $title, int $year, ?int $author_id): bool;
+    public function edit(int $id, string $title, int $year, ?int $author_id): ?Book;
 
     /**
      * Delete a book.

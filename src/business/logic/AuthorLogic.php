@@ -25,12 +25,12 @@ class AuthorLogic
         return $this->authorRepository->fetch($id);
     }
 
-    public function createAuthor(string $first_name, string $last_name): bool
+    public function createAuthor(string $first_name, string $last_name): ?Author
     {
         return $this->authorRepository->add(new Author($first_name, $last_name));
     }
 
-    public function editAuthor(int $id, string $first_name, string $last_name): bool
+    public function editAuthor(int $id, string $first_name, string $last_name): ?Author
     {
         return $this->authorRepository->edit($id, $first_name, $last_name);
     }

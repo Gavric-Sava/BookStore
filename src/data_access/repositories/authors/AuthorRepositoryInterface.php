@@ -33,7 +33,7 @@ interface AuthorRepositoryInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function add(Author $author): bool;
+    public function add(Author $author): ?Author;
 
     /**
      * Edit an author.
@@ -45,7 +45,7 @@ interface AuthorRepositoryInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function edit(int $id, string $firstname, string $lastname): bool;
+    public function edit(int $id, string $firstname, string $lastname): ?Author;
 
     /**
      * Delete an author.

@@ -62,15 +62,20 @@ class SinglePageAuthorController implements ControllerInterface
             $errors = SinglePageAuthorController::validateFormInput($first_name, $last_name);
 
             if (empty($errors)) {
-                $this->authorLogic->createAuthor($first_name, $last_name);
-                http_response_code(200);
-                // TODO echo $author;
+                $author = $this->authorLogic->createAuthor($first_name, $last_name);
+                if ($author === null) {
+                    http_response_code(500);
+                    echo json_encode(['error' => "Author insert failed!"]);
+                } else {
+                    http_response_code(200);
+                    echo json_encode($author);
+                }
+
             } else {
                 $response = $errors;
                 $response['first_name'] = $first_name;
                 $response['last_name'] = $last_name;
 
-                // TODO return 400 and errors;
                 http_response_code(400);
                 echo json_encode($response);
             }
@@ -86,9 +91,14 @@ class SinglePageAuthorController implements ControllerInterface
             $errors = SinglePageAuthorController::validateFormInput($first_name, $last_name);
 
             if (empty($errors)) {
-                $this->authorLogic->editAuthor($id, $first_name, $last_name);
-                http_response_code(200);
-                // TODO echo $author;
+                $author = $this->authorLogic->editAuthor($id, $first_name, $last_name);
+                if ($author === null) {
+                    http_response_code(500);
+                    echo json_encode(['error' => "Author edit failed!"]);
+                } else {
+                    http_response_code(200);
+                    echo json_encode($author);
+                }
             } else {
                 $response = $errors;
 
@@ -96,7 +106,6 @@ class SinglePageAuthorController implements ControllerInterface
                 $response['first_name'] = $author->getFirstname();
                 $response['last_name'] = $author->getLastname();
 
-                // TODO return 400 and errors;
                 http_response_code(400);
                 echo json_encode($response);
             }

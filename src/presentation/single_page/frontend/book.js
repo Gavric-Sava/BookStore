@@ -239,8 +239,7 @@ function submitEditBookInput(event, id, author_id) {
             if (httpRequest.status === 200) {
                 clearContent(); // TODO test
                 popState();
-            } else if (httpRequest.status === 400) {
-                alert(httpRequest.responseText);
+            } else if (httpRequest.status !== 404) {
                 updateBookEdit(JSON.parse(httpRequest.responseText));
             } else {
                 process404Response();
@@ -256,15 +255,19 @@ function submitEditBookInput(event, id, author_id) {
     httpRequest.send(title_param + '&' + year_param);
 }
 
-function updateBookEdit(response) {
-    document.getElementsByName('title')[0].value = response.title;
-    if ('title_error' in response) {
-        document.getElementsByClassName('title_error')[0].textContent = response.title_error;
-    }
+function updateBookEdit(status, response) {
+    if (status === 400) {
+        document.getElementsByName('title')[0].value = response.title;
+        if ('title_error' in response) {
+            document.getElementsByClassName('title_error')[0].textContent = response.title_error;
+        }
 
-    document.getElementsByName('year')[0].value = response.year;
-    if ('year_error' in response) {
-        document.getElementsByClassName('year_error')[0].textContent = response.year_error;
+        document.getElementsByName('year')[0].value = response.year;
+        if ('year_error' in response) {
+            document.getElementsByClassName('year_error')[0].textContent = response.year_error;
+        }
+    } else if (status === 500) {
+        alert(response.error);
     }
 }
 
@@ -443,8 +446,8 @@ function submitCreateBookInput(event) {
                 popState();
                 clearContent();
                 requestBookList();
-            } else if (httpRequest.status === 400) {
-                updateBookCreate(JSON.parse(httpRequest.responseText));
+            } else if (httpRequest.status !== 404) {
+                updateBookForm(JSON.parse(httpRequest.responseText));
             } else {
                 process404Response();
             }
@@ -457,16 +460,4 @@ function submitCreateBookInput(event) {
 
     httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     httpRequest.send(title_param + '&' + year_param);
-}
-
-function updateBookCreate(response) {
-    document.getElementsByName('title')[0].value = response.title;
-    if ('title_error' in response) {
-        document.getElementsByClassName('title_error')[0].textContent = response.title_error;
-    }
-
-    document.getElementsByName('year')[0].value = response.year;
-    if ('year_error' in response) {
-        document.getElementsByClassName('year_error')[0].textContent = response.year_error;
-    }
 }

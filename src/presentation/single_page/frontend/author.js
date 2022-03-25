@@ -259,8 +259,8 @@ function submitCreateAuthorInput(event) {
             if (httpRequest.status === 200) {
                 clearContent();
                 popState();
-            } else if (httpRequest.status === 400) {
-                updateAuthorCreate(JSON.parse(httpRequest.responseText));
+            } else if (httpRequest.status !== 404) {
+                updateAuthorForm(httpRequest.status, JSON.parse(httpRequest.responseText));
             } else {
                 process404Response();
             }
@@ -275,15 +275,19 @@ function submitCreateAuthorInput(event) {
     httpRequest.send(first_name_param + '&' + last_name_param);
 }
 
-function updateAuthorCreate(response) {
-    document.getElementsByName('first_name')[0].value = response.first_name;
-    if ('first_name_error' in response) {
-        document.getElementsByClassName('first_name_error')[0].textContent = response.first_name_error;
-    }
+function updateAuthorForm(status, response) {
+    if (status === 400) {
+        document.getElementsByName('first_name')[0].value = response.first_name;
+        if ('first_name_error' in response) {
+            document.getElementsByClassName('first_name_error')[0].textContent = response.first_name_error;
+        }
 
-    document.getElementsByName('last_name')[0].value = response.last_name;
-    if ('last_name_error' in response) {
-        document.getElementsByClassName('last_name_error')[0].textContent = response.last_name_error;
+        document.getElementsByName('last_name')[0].value = response.last_name;
+        if ('last_name_error' in response) {
+            document.getElementsByClassName('last_name_error')[0].textContent = response.last_name_error;
+        }
+    } else if (status === 500) {
+        alert(response.error);
     }
 }
 
@@ -386,9 +390,8 @@ function submitEditAuthorInput(event, id) {
             if (httpRequest.status === 200) {
                 clearContent();
                 popState();
-            } else if (httpRequest.status === 400) {
-                alert(httpRequest.responseText);
-                updateAuthorEdit(JSON.parse(httpRequest.responseText));
+            } else if (httpRequest.status !== 404) {
+                updateAuthorForm(JSON.parse(httpRequest.responseText));
             } else {
                 process404Response();
             }
@@ -401,18 +404,6 @@ function submitEditAuthorInput(event, id) {
 
     httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     httpRequest.send(first_name_param + '&' + last_name_param);
-}
-
-function updateAuthorEdit(response) {
-    document.getElementsByName('first_name')[0].value = response.first_name;
-    if ('first_name_error' in response) {
-        document.getElementsByClassName('first_name_error')[0].textContent = response.first_name_error;
-    }
-
-    document.getElementsByName('last_name')[0].value = response.last_name;
-    if ('last_name_error' in response) {
-        document.getElementsByClassName('last_name_error')[0].textContent = response.last_name_error;
-    }
 }
 
 function generateHTMLAuthorDelete(id, firstname, lastname) {

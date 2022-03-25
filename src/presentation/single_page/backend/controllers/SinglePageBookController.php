@@ -55,15 +55,19 @@ class SinglePageBookController implements ControllerInterface
             $errors = SinglePageBookController::validateFormInput($title, $year);
 
             if (empty($errors)) {
-                $this->bookLogic->createBook($title, $year, $author_id);
-                http_response_code(200);
-                // TODO echo $book;
+                $book = $this->bookLogic->createBook($title, $year, $author_id);
+                if ($book === null) {
+                    http_response_code(500);
+                    echo json_encode(['error' => "Book insert failed!"]);
+                } else {
+                    http_response_code(200);
+                    echo json_encode($book);
+                }
             } else {
                 $response = $errors;
                 $response['title'] = $title;
                 $response['year'] = $year;
 
-                // TODO return 400 and errors;
                 http_response_code(400);
                 echo json_encode($response);
             }
@@ -79,9 +83,14 @@ class SinglePageBookController implements ControllerInterface
             $errors = SinglePageBookController::validateFormInput($title, $year);
 
             if (empty($errors)) {
-                $this->bookLogic->editBook($id, $title, $year);
-                http_response_code(200);
-                // TODO echo $author;
+                $book = $this->bookLogic->editBook($id, $title, $year);
+                if ($book === null) {
+                    http_response_code(500);
+                    echo json_encode(['error' => "Book edit failed!"]);
+                } else {
+                    http_response_code(200);
+                    echo json_encode($book);
+                }
             } else {
                 $response = $errors;
                 $book = $this->bookLogic->fetchBook($id);
@@ -89,7 +98,6 @@ class SinglePageBookController implements ControllerInterface
                 $response['year'] = $book->getYear();
 
 
-                // TODO return 400 and errors;
                 http_response_code(400);
                 echo json_encode($response);
             }

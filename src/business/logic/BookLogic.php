@@ -30,16 +30,16 @@ class BookLogic
         return $this->bookRepository->fetch($id);
     }
 
-    public function createBook(string $title, int $year, int $author_id): bool
+    public function createBook(string $title, int $year, int $author_id): ?Book
     {
         return $this->bookRepository->add(new Book($title, $year, $author_id));
     }
 
-    public function editBook(int $id, string $title, int $year): bool
+    public function editBook(int $id, string $title, int $year): ?Book
     {
         $book = $this->bookRepository->fetch($id);
-        if ($book == false) {
-            return false;
+        if ($book === null) {
+            return null;
         }
         return $this->bookRepository->edit($id, $title, $year, $book->getAuthorId());
     }

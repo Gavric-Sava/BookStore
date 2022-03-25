@@ -61,7 +61,7 @@ class AuthorRepositoryDatabase implements AuthorRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function add(Author $author): bool
+    public function add(Author $author): ?Author
     {
         $pdo_statement = $this->PDO->prepare(
             "INSERT INTO " .
@@ -75,13 +75,18 @@ class AuthorRepositoryDatabase implements AuthorRepositoryInterface
         $pdo_statement->bindParam(':firstname', $firstname);
         $pdo_statement->bindParam(':lastname', $lastname);
 
-        return $pdo_statement->execute();
+        if ($pdo_statement->execute()) {
+            $lastInsertId = $this->PDO->lastInsertId();
+            return $this->fetch($lastInsertId);
+        }
+
+        return null;
     }
 
     /**
      * @inheritDoc
      */
-    public function edit(int $id, string $firstname, string $lastname): bool
+    public function edit(int $id, string $firstname, string $lastname): ?Author
     {
         $pdo_statement = $this->PDO->prepare(
             "UPDATE " .
@@ -94,7 +99,11 @@ class AuthorRepositoryDatabase implements AuthorRepositoryInterface
         $pdo_statement->bindParam(':firstname', $firstname);
         $pdo_statement->bindParam(':lastname', $lastname);
 
-        return $pdo_statement->execute();
+        if ($pdo_statement->execute()) {
+            return $this->fetch($id);
+        }
+
+        return null;
     }
 
     /**

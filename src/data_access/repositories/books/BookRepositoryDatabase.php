@@ -83,7 +83,7 @@ class BookRepositoryDatabase implements BookRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function add(Book $book): bool
+    public function add(Book $book): ?Book
     {
         $pdo_statement = $this->PDO->prepare(
             "INSERT INTO " .
@@ -99,13 +99,18 @@ class BookRepositoryDatabase implements BookRepositoryInterface
         $pdo_statement->bindParam(':year', $year);
         $pdo_statement->bindParam(':author_id', $author_id);
 
-        return $pdo_statement->execute();
+        if ($pdo_statement->execute()) {
+            $lastInsertId = $this->PDO->lastInsertId();
+            return $this->fetch($lastInsertId);
+        }
+
+        return null;
     }
 
     /**
      * @inheritDoc
      */
-    public function edit(int $id, string $title, int $year, ?int $author_id): bool
+    public function edit(int $id, string $title, int $year, ?int $author_id): ?Book
     {
         $pdo_statement = $this->PDO->prepare(
             "UPDATE " .
@@ -119,7 +124,11 @@ class BookRepositoryDatabase implements BookRepositoryInterface
         $pdo_statement->bindParam(':year', $year);
         $pdo_statement->bindParam(':author_id', $author_id);
 
-        return $pdo_statement->execute();
+        if ($pdo_statement->execute()) {
+            return $this->fetch($id);
+        }
+
+        return null;
     }
 
     /**
