@@ -1,8 +1,8 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\util;
+namespace Logeecom\Bookstore\presentation\util\validators;
 
-class Validator
+class GeneralValidator
 {
     /**
      * Trim excess white space and escape html elements to prevent HTML injection.

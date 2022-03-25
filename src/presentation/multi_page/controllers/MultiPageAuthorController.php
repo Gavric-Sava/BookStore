@@ -2,12 +2,12 @@
 
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
-use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
-use Logeecom\Bookstore\presentation\util\RequestUtil;
-use Logeecom\Bookstore\presentation\util\Validator;
 use Logeecom\Bookstore\business\logic\AuthorLogic;
+use Logeecom\Bookstore\presentation\interfaces\BaseAuthorController;
+use Logeecom\Bookstore\presentation\util\RequestUtil;
+use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
-class MultiPageAuthorController implements ControllerInterface
+class MultiPageAuthorController extends BaseAuthorController
 {
 
     private const REQUEST_CREATE = '/^\/authors\/create\/?$/';
@@ -53,7 +53,7 @@ class MultiPageAuthorController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processAuthorList(): void
+    protected function processAuthorList(): void
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 
@@ -67,13 +67,13 @@ class MultiPageAuthorController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processAuthorCreate(): void
+    protected function processAuthorCreate(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            $errors = MultiPageAuthorController::validateFormInput($first_name, $last_name);
+            $errors = $this->validateFormInput($first_name, $last_name);
 
             if (empty($errors)) {
                 $this->authorLogic->createAuthor($first_name, $last_name);
@@ -97,13 +97,13 @@ class MultiPageAuthorController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processAuthorEdit(int $id): void
+    protected function processAuthorEdit(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
-            $errors = MultiPageAuthorController::validateFormInput(
+            $errors = $this->validateFormInput(
                 $first_name,
                 $last_name
             );
@@ -136,7 +136,7 @@ class MultiPageAuthorController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processAuthorDelete(int $id)
+    protected function processAuthorDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->authorLogic->deleteAuthor($id);
@@ -152,37 +152,4 @@ class MultiPageAuthorController implements ControllerInterface
         }
     }
 
-    /**
-     * Validation of input form data_access for 'Author create' and 'Author edit' use cases.
-     *
-     * @param mixed $first_name First name of the author to be created/edited.
-     * @param mixed $last_name Last name of the author to be created/edited.
-     * @return string[]|null List of errors or null, if no errors occurred.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    private function validateFormInput($first_name, $last_name): array
-    {
-        $errors = [];
-
-        if (!Validator::validateNotEmpty($first_name)) {
-            $errors["first_name_error"] = 'First name is required.';
-        } else {
-            $first_name = Validator::sanitizeData($first_name);
-            if (!Validator::validateAlphabetical($first_name)) {
-                $errors["first_name_error"] = 'First name is not in a valid format.';
-            }
-        }
-
-        if (!Validator::validateNotEmpty($last_name)) {
-            $errors["last_name_error"] = 'Last name is required.';
-        } else {
-            $last_name = Validator::sanitizeData($last_name);
-            if (!Validator::validateAlphabetical($last_name)) {
-                $errors["last_name_error"] = 'Last name is not in a valid format.';
-            }
-        }
-
-        return $errors;
-    }
 }

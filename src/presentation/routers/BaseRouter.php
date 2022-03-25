@@ -1,6 +1,6 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\router;
+namespace Logeecom\Bookstore\presentation\routers;
 
 use Logeecom\Bookstore\presentation\interfaces\RouterInterface;
 

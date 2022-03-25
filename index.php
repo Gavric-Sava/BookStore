@@ -3,7 +3,7 @@
 require 'vendor/autoload.php';
 //require 'src/bootstrap.php';
 
-use Logeecom\Bookstore\presentation\router\BaseRouter;
+use Logeecom\Bookstore\presentation\routers\BaseRouter;
 
 // TODO comments;
 // TODO refactor links to assets

@@ -3,12 +3,10 @@
 namespace Logeecom\Bookstore\presentation\single_page\backend\controllers;
 
 use Logeecom\Bookstore\business\logic\BookLogic;
-use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
-use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageBookController;
+use Logeecom\Bookstore\presentation\interfaces\BaseBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
-use Logeecom\Bookstore\presentation\util\Validator;
 
-class SinglePageBookController implements ControllerInterface
+class SinglePageBookController extends BaseBookController
 {
 
     private const REQUEST_CREATE = '/^\/spa\/authors\/(\d*)\/books\/create\/?$/';
@@ -39,20 +37,20 @@ class SinglePageBookController implements ControllerInterface
         }
     }
 
-    private function processBookList(int $author_id): void
+    protected function processBookList(int $author_id): void
     {
         $books = $this->bookLogic->fetchAllBooksFromAuthor($author_id);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($books);
     }
 
-    private function processBookCreate(int $author_id): void
+    protected function processBookCreate(int $author_id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
             $year = $_POST["year"];
 
-            $errors = SinglePageBookController::validateFormInput($title, $year);
+            $errors = $this->validateFormInput($title, $year);
 
             if (empty($errors)) {
                 $book = $this->bookLogic->createBook($title, $year, $author_id);
@@ -74,13 +72,13 @@ class SinglePageBookController implements ControllerInterface
         }
     }
 
-    private function processBookEdit(int $id): void
+    protected function processBookEdit(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
             $year = $_POST["year"];
 
-            $errors = SinglePageBookController::validateFormInput($title, $year);
+            $errors = $this->validateFormInput($title, $year);
 
             if (empty($errors)) {
                 $book = $this->bookLogic->editBook($id, $title, $year);
@@ -104,7 +102,7 @@ class SinglePageBookController implements ControllerInterface
         }
     }
 
-    public function processBookDelete(int $id): void
+    protected function processBookDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($this->bookLogic->deleteBook($id)) {
@@ -115,31 +113,6 @@ class SinglePageBookController implements ControllerInterface
                 echo json_encode("Deletion failed!");
             }
         }
-    }
-
-    private static function validateFormInput($title, $year): array
-    {
-        $errors = [];
-
-        if (!Validator::validateNotEmpty($title)) {
-            $errors['title_error'] = 'Title is required.';
-        } else {
-            $title = Validator::sanitizeData($title);
-            if (!Validator::validateAlphanumeric($title)) {
-                $errors['title_error'] = 'Title is not in a valid format.';
-            }
-        }
-
-        if (!Validator::validateNotEmpty($year)) {
-            $errors['year_error'] = 'Year is required.';
-        } else {
-            $year = Validator::sanitizeData($year);
-            if (!Validator::validateNumber($year)) {
-                $errors['year_error'] = 'Year is not in a valid format.';
-            }
-        }
-
-        return $errors;
     }
 
 }

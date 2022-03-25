@@ -3,11 +3,11 @@
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
 use Logeecom\Bookstore\business\logic\BookLogic;
+use Logeecom\Bookstore\presentation\interfaces\BaseBookController;
 use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
-use Logeecom\Bookstore\presentation\util\Validator;
 
-class MultiPageBookController implements ControllerInterface
+class MultiPageBookController extends BaseBookController
 {
 
     private const REQUEST_CREATE = '/^\/authors\/(\d*)\/books\/create\/?$/';
@@ -45,7 +45,7 @@ class MultiPageBookController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processBookList(int $author_id): void
+    protected function processBookList(int $author_id): void
     {
         $books = $this->bookLogic->fetchAllBooksFromAuthor($author_id);
         include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_list.php");
@@ -58,13 +58,13 @@ class MultiPageBookController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processBookCreate(int $author_id): void
+    protected function processBookCreate(int $author_id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
             $year = $_POST["year"];
 
-            $errors = MultiPageBookController::validateFormInput($title, $year);
+            $errors = $this->validateFormInput($title, $year);
 
             if (empty($errors)) {
                 $this->bookLogic->createBook($title, $year, $author_id);
@@ -88,13 +88,13 @@ class MultiPageBookController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    private function processBookEdit(int $id): void
+    protected function processBookEdit(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $title = $_POST["title"];
             $year = $_POST["year"];
 
-            $errors = MultiPageBookController::validateFormInput($title, $year);
+            $errors = $this->validateFormInput($title, $year);
 
             if (empty($errors)) {
                 // TODO return book
@@ -127,7 +127,7 @@ class MultiPageBookController implements ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function processBookDelete(int $id): void
+    protected function processBookDelete(int $id): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // TODO check success...
@@ -145,37 +145,4 @@ class MultiPageBookController implements ControllerInterface
         }
     }
 
-    /**
-     * Validation of input form data_access for 'Book create' and 'Book edit' use cases.
-     *
-     * @param mixed $title Title of the book to be created/edited.
-     * @param mixed $year Year of the book to be created/edited.
-     * @return string[]|null List of errors or null, if no errors occurred.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     *
-     */
-    private static function validateFormInput($title, $year): array
-    {
-        $errors = [];
-
-        if (!Validator::validateNotEmpty($title)) {
-            $errors['title_error'] = 'Title is required.';
-        } else {
-            $title = Validator::sanitizeData($title);
-            if (!Validator::validateAlphanumeric($title)) {
-                $errors['title_error'] = 'Title is not in a valid format.';
-            }
-        }
-
-        if (!Validator::validateNotEmpty($year)) {
-            $errors['year_error'] = 'Year is required.';
-        } else {
-            $year = Validator::sanitizeData($year);
-            if (!Validator::validateNumber($year)) {
-                $errors['year_error'] = 'Year is not in a valid format.';
-            }
-        }
-
-        return $errors;
-    }
 }
