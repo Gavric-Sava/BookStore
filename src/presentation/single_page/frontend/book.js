@@ -1,18 +1,11 @@
 function requestBookList(author_id) {
+    clearContent();
     const response = fetch(`http://bookstore.test/spa/authors/${author_id}/books`);
-    response.then((response) => processBookListResponse(response, author_id));
-}
-
-function processBookListResponse(response, author_id) {
-    if (response.status === 200) {
+    response.then((response) => processResponse(response, (response) => {
         response.text().then((body) => {
-            body = JSON.parse(body);
-            clearContent();
-            generateHTMLBookList(body);
+            generateHTMLBookList(JSON.parse(body));
         });
-    }
-
-    return null;
+    }, null));
 }
 
 function generateHTMLBookList(book_list) {
@@ -140,7 +133,7 @@ function generateHTMLBookList(book_list) {
     container.appendChild(wrapper);
 }
 
-function generateHTMLBookEdit(id, title, year, author_id) {
+function generateHTMLBookForm() {
     const container = document.querySelector('.container');
 
     const wrapper = document.createElement('div');
@@ -150,19 +143,11 @@ function generateHTMLBookEdit(id, title, year, author_id) {
     const header = document.createElement("div");
     header.className = 'header';
 
-    // header span
-    const header_span = document.createElement('span');
-    header_span.appendChild(document.createTextNode('Book Edit ' + id));
-    header.appendChild(header_span);
-
     wrapper.appendChild(header);
 
     // form
     const form = document.createElement('form');
     form.method = 'post';
-    form.addEventListener("submit", function(event) {
-        submitEditBookInput(event, id, author_id);
-    }, true);
 
     // title div
     const title_div = document.createElement('div');
@@ -177,12 +162,11 @@ function generateHTMLBookEdit(id, title, year, author_id) {
     const title_input = document.createElement('input');
     title_input.type = 'text';
     title_input.name = 'title';
-    title_input.value = title;
     title_div.appendChild(title_input);
 
     // title error span
     const title_error = document.createElement('span');
-    title_error.className = 'error';
+    title_error.className = 'error title_error';
     title_div.appendChild(title_error);
 
     form.appendChild(title_div);
@@ -200,12 +184,11 @@ function generateHTMLBookEdit(id, title, year, author_id) {
     const year_input = document.createElement('input');
     year_input.type = 'text';
     year_input.name = 'year';
-    year_input.value = year;
     year_div.appendChild(year_input);
 
     // year error span
     const year_error = document.createElement('span');
-    year_error.className = 'error';
+    year_error.className = 'error year_error';
     year_div.appendChild(year_error);
 
     form.appendChild(year_div);
@@ -226,36 +209,81 @@ function generateHTMLBookEdit(id, title, year, author_id) {
     container.appendChild(wrapper);
 }
 
-function submitEditBookInput(event, id, author_id) {
-    event.preventDefault();
+function generateHTMLBookCreate() {
+    generateHTMLBookForm();
 
-    const httpRequest = new XMLHttpRequest();
-    if (!httpRequest) {
-        return false;
-    }
+    const header = document.getElementsByClassName("header")[0];
 
-    httpRequest.onreadystatechange = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                clearContent(); // TODO test
-                popState();
-            } else if (httpRequest.status !== 404) {
-                updateBookEdit(JSON.parse(httpRequest.responseText));
-            } else {
-                process404Response();
-            }
+    // header span
+    const header_span = document.createElement('span');
+    header_span.appendChild(document.createTextNode('Book Create'));
+    header.appendChild(header_span);
+
+    const form = document.getElementsByTagName('form')[0];
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return false;
         }
-    };
 
-    httpRequest.open('POST', `http://bookstore.test/spa/authors/${author_id}/books/edit/${id}`);
-    const title_param = 'title=' + document.getElementsByName('title')[0].value;
-    const year_param = 'year=' + document.getElementsByName('year')[0].value;
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                processResponse(httpRequest, null, updateBookForm);
+            }
+        };
 
-    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    httpRequest.send(title_param + '&' + year_param);
+        httpRequest.open('POST', `http://bookstore.test/spa/authors/${history.state.author_id}/books/create`);
+        const title_param = 'title=' + document.getElementsByName('title')[0].value;
+        const year_param = 'year=' + document.getElementsByName('year')[0].value;
+
+        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        httpRequest.send(title_param + '&' + year_param);
+    }, true);
 }
 
-function updateBookEdit(status, response) {
+function generateHTMLBookEdit(id, title, year, author_id) {
+    generateHTMLBookForm();
+
+    const header = document.getElementsByClassName("header")[0];
+
+    // header span
+    const header_span = document.createElement('span');
+    header_span.appendChild(document.createTextNode('Book Edit ' + id));
+    header.appendChild(header_span);
+
+    // old book attributes
+    const title_input = document.getElementsByName('title')[0];
+    title_input.value = title;
+    const year_input = document.getElementsByName('year')[0];;
+    year_input.value = year;
+
+    const form = document.getElementsByTagName('form')[0];
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return false;
+        }
+
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                processResponse(httpRequest, null, updateBookForm);
+            }
+        };
+
+        httpRequest.open('POST', `http://bookstore.test/spa/authors/${author_id}/books/edit/${id}`);
+        const title_param = 'title=' + document.getElementsByName('title')[0].value;
+        const year_param = 'year=' + document.getElementsByName('year')[0].value;
+
+        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        httpRequest.send(title_param + '&' + year_param);
+    }, true);
+}
+
+function updateBookForm(status, response) {
     if (status === 400) {
         document.getElementsByName('title')[0].value = response.title;
         if ('title_error' in response) {
@@ -298,8 +326,22 @@ function generateHTMLBookDelete(id, title, year, author_id) {
     wrapper.appendChild(text);
 
     const form = document.createElement('form');
-    form.addEventListener('submit', function(event) {
-        submitDeleteBook(event, id, author_id);
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return false;
+        }
+
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                processResponse(httpRequest, null, null);
+            }
+        };
+
+        httpRequest.open('POST', `http://bookstore.test/spa/authors/${author_id}/books/delete/${id}`);
+        httpRequest.send();
     });
     form.method = 'post';
     form.className = 'buttons';
@@ -324,140 +366,3 @@ function generateHTMLBookDelete(id, title, year, author_id) {
     container.appendChild(wrapper);
 }
 
-function submitDeleteBook(event, id, author_id) {
-    event.preventDefault();
-
-    const httpRequest = new XMLHttpRequest();
-    if (!httpRequest) {
-        return false;
-    }
-
-    httpRequest.onreadystatechange = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status !== 404) {
-                alert(httpRequest.responseText);
-                clearContent();
-                popState();
-                // requestAuthorList();
-            }
-            else {
-                process404Response();
-            }
-        }
-    };
-
-    httpRequest.open('POST', `http://bookstore.test/spa/authors/${author_id}/books/delete/${id}`);
-    httpRequest.send();
-}
-
-function generateHTMLBookCreate() {
-    const container = document.querySelector('.container');
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'wrapper wrapper-form';
-
-    // header div
-    const header = document.createElement("div");
-    header.className = 'header';
-
-    // header span
-    const header_span = document.createElement('span');
-    header_span.appendChild(document.createTextNode('Book Create'));
-    header.appendChild(header_span);
-
-    wrapper.appendChild(header);
-
-    // form
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.addEventListener("submit", submitCreateBookInput, true);
-
-    // title div
-    const title_div = document.createElement('div');
-    title_div.className = 'form-item';
-
-    // title label
-    const title_label = document.createElement('span');
-    title_label.appendChild(document.createTextNode('Title'));
-    title_div.appendChild(title_label);
-
-    // title input
-    const title_input = document.createElement('input');
-    title_input.type = 'text';
-    title_input.name = 'title';
-    title_div.appendChild(title_input);
-
-    // title error span
-    const title_error = document.createElement('span');
-    title_error.className = 'error';
-    title_div.appendChild(title_error);
-
-    form.appendChild(title_div);
-
-    // year div
-    const year_div = document.createElement('div');
-    year_div.className = 'form-item';
-
-    // year label
-    const year_label = document.createElement('span');
-    year_label.appendChild(document.createTextNode('Year'));
-    year_div.appendChild(year_label);
-
-    // year input
-    const year_input = document.createElement('input');
-    year_input.type = 'text';
-    year_input.name = 'year';
-    year_div.appendChild(year_input);
-
-    // year error span
-    const year_error = document.createElement('span');
-    year_error.className = 'error';
-    year_div.appendChild(year_error);
-
-    form.appendChild(year_div);
-
-    const button_div = document.createElement('div');
-    button_div.className = 'button';
-
-    const submit_button = document.createElement('input');
-    submit_button.type = 'submit';
-    submit_button.name = 'submit';
-    submit_button.value = 'Save';
-    button_div.appendChild(submit_button);
-
-    form.appendChild(button_div);
-
-    wrapper.appendChild(form);
-
-    container.appendChild(wrapper);
-}
-
-function submitCreateBookInput(event) {
-    event.preventDefault();
-
-    const httpRequest = new XMLHttpRequest();
-    if (!httpRequest) {
-        return false;
-    }
-
-    httpRequest.onreadystatechange = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                popState();
-                clearContent();
-                requestBookList();
-            } else if (httpRequest.status !== 404) {
-                updateBookForm(JSON.parse(httpRequest.responseText));
-            } else {
-                process404Response();
-            }
-        }
-    };
-
-    httpRequest.open('POST', `http://bookstore.test/spa/authors/${history.state.author_id}/books/create`);
-    const title_param = 'title=' + document.getElementsByName('title')[0].value;
-    const year_param = 'year=' + document.getElementsByName('year')[0].value;
-
-    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    httpRequest.send(title_param + '&' + year_param);
-}

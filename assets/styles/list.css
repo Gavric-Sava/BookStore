@@ -30,12 +30,12 @@
 }
 
 .wrapper-list .create{
+    margin-top: 0.5em;
     width: 35px;
     height: 35px;
 }
 
 .wrapper-list .create_link{
-    margin-top: 1em;
     width: 0;
     height: 0;
 }

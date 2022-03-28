@@ -2,11 +2,7 @@ window.onload = requestAuthorList;
 window.onpopstate = popstateCallback;
 
 function pushState(author_id, path) {
-    console.log("before pushState()");
-    console.log(history.state);
     window.history.pushState({'author_id' : author_id}, '', path);
-    console.log("after pushState()");
-    console.log(history.state);
 }
 
 function popState() {
@@ -14,8 +10,6 @@ function popState() {
 }
 
 function popstateCallback() {
-    console.log("after popState");
-    console.log(history.state);
     clearContent();
     if (history.state === null || history.state.author_id === null) {
         requestAuthorList();
@@ -31,7 +25,7 @@ function clearContent() {
     }
 }
 
-function process404Response(response) {
+function process404Response() {
     clearContent();
     generateHTML404();
 }
@@ -44,3 +38,18 @@ function generateHTML404() {
 
     container.appendChild(h1);
 }
+
+function processResponse(response, callback_200, callback_err) {
+    if (response.status === 404) {
+        process404Response();
+    } else if (response.status === 200) {
+        if (callback_200 == null) {
+            popState();
+        } else {
+            callback_200(response);
+        }
+    } else if (response.status === 400 || response.status === 500) {
+        callback_err(response.status, JSON.parse(response.responseText));
+    }
+}
+

@@ -1,19 +1,11 @@
 function requestAuthorList() {
     const response = fetch('http://bookstore.test/spa/authors');
-    response.then(processAuthorListResponse);
-}
-
-function processAuthorListResponse(response) {
-    if (response.status === 200) {
+    // response.then(processAuthorListResponse);
+    response.then((response) => processResponse(response, (response) => {
         response.text().then((body) => {
-            console.log(body);
-            body = JSON.parse(body);
-            console.log(body);
-            generateHTMLAuthorList(body);
+            generateHTMLAuthorList(JSON.parse(body));
         });
-    }
-
-    return null;
+    }, null)) // moze i anonimna fja
 }
 
 function generateHTMLAuthorList(author_list) {
@@ -164,7 +156,7 @@ function generateHTMLAuthorList(author_list) {
     container.appendChild(wrapper);
 }
 
-function generateHTMLAuthorCreate() {
+function generateHTMLAuthorForm() {
     const container = document.querySelector('.container');
 
     const wrapper = document.createElement('div');
@@ -174,17 +166,11 @@ function generateHTMLAuthorCreate() {
     const header = document.createElement("div");
     header.className = 'header';
 
-    // header span
-    const header_span = document.createElement('span');
-    header_span.appendChild(document.createTextNode('Author Create'));
-    header.appendChild(header_span);
-
     wrapper.appendChild(header);
 
     // form
     const form = document.createElement('form');
     form.method = 'post';
-    form.addEventListener("submit", submitCreateAuthorInput, true);
 
     // first name div
     const first_name_div = document.createElement('div');
@@ -246,33 +232,79 @@ function generateHTMLAuthorCreate() {
     container.appendChild(wrapper);
 }
 
-function submitCreateAuthorInput(event) {
-    event.preventDefault();
+function generateHTMLAuthorCreate() {
+    generateHTMLAuthorForm();
 
-    const httpRequest = new XMLHttpRequest();
-    if (!httpRequest) {
-        return false;
-    }
+    const header = document.getElementsByClassName('header')[0];
+    // header span
+    const header_span = document.createElement('span');
+    header_span.appendChild(document.createTextNode('Author Create'));
+    header.appendChild(header_span);
 
-    httpRequest.onreadystatechange = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                clearContent();
-                popState();
-            } else if (httpRequest.status !== 404) {
-                updateAuthorForm(httpRequest.status, JSON.parse(httpRequest.responseText));
-            } else {
-                process404Response();
-            }
+    const form = document.getElementsByTagName('form')[0];
+    // submit create event listener
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return false;
         }
-    };
 
-    httpRequest.open('POST', 'http://bookstore.test/spa/authors/create');
-    const first_name_param = 'first_name=' + document.getElementsByName('first_name')[0].value;
-    const last_name_param = 'last_name=' + document.getElementsByName('last_name')[0].value;
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                processResponse(httpRequest, null, updateAuthorForm);
+            }
+        };
 
-    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    httpRequest.send(first_name_param + '&' + last_name_param);
+        httpRequest.open('POST', 'http://bookstore.test/spa/authors/create');
+        const first_name_param = 'first_name=' + document.getElementsByName('first_name')[0].value;
+        const last_name_param = 'last_name=' + document.getElementsByName('last_name')[0].value;
+
+        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        httpRequest.send(first_name_param + '&' + last_name_param);
+    }, true);
+}
+
+function generateHTMLAuthorEdit(id, firstname, lastname) {
+    generateHTMLAuthorForm();
+
+    const header = document.getElementsByClassName('header')[0];
+    // header span
+    const header_span = document.createElement('span');
+    header_span.appendChild(document.createTextNode('Author Create ' + id));
+    header.appendChild(header_span);
+
+    // old author attributes
+    const first_name_input = document.getElementsByName('first_name')[0];
+    first_name_input.value = firstname;
+    const last_name_input = document.getElementsByName('last_name')[0];
+    last_name_input.value = lastname;
+
+    const form = document.getElementsByTagName('form')[0];
+    // submit create event listener
+    form.addEventListener("submit", (event) => {
+        // submitEditAuthorInput(event, id);
+        event.preventDefault();
+
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return false;
+        }
+
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                processResponse(httpRequest, null, updateAuthorForm);
+            }
+        };
+
+        httpRequest.open('POST', 'http://bookstore.test/spa/authors/edit/' + id);
+        const first_name_param = 'first_name=' + document.getElementsByName('first_name')[0].value;
+        const last_name_param = 'last_name=' + document.getElementsByName('last_name')[0].value;
+
+        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        httpRequest.send(first_name_param + '&' + last_name_param);
+    }, true);
 }
 
 function updateAuthorForm(status, response) {
@@ -289,121 +321,6 @@ function updateAuthorForm(status, response) {
     } else if (status === 500) {
         alert(response.error);
     }
-}
-
-function generateHTMLAuthorEdit(id, firstname, lastname) { // TODO DRY
-    const container = document.querySelector('.container');
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'wrapper wrapper-form';
-
-    // header div
-    const header = document.createElement("div");
-    header.className = 'header';
-
-    // header span
-    const header_span = document.createElement('span');
-    header_span.appendChild(document.createTextNode('Author Create ' + id));
-    header.appendChild(header_span);
-
-    wrapper.appendChild(header);
-
-    // form
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.addEventListener("submit", function(event) {
-        submitEditAuthorInput(event, id);
-    }, true);
-
-    // first name div
-    const first_name_div = document.createElement('div');
-    first_name_div.className = 'form-item';
-
-    // first name label
-    const first_name_label = document.createElement('span');
-    first_name_label.appendChild(document.createTextNode('First name'));
-    first_name_div.appendChild(first_name_label);
-
-    // first name input
-    const first_name_input = document.createElement('input');
-    first_name_input.type = 'text';
-    first_name_input.name = 'first_name';
-    first_name_input.value = firstname;
-    first_name_div.appendChild(first_name_input);
-
-    // first name error span
-    const first_name_error = document.createElement('span');
-    first_name_error.className = 'error first_name_error';
-    first_name_div.appendChild(first_name_error);
-
-    form.appendChild(first_name_div);
-
-    // last name div
-    const last_name_div = document.createElement('div');
-    last_name_div.className = 'form-item';
-
-    // last name label
-    const last_name_label = document.createElement('span');
-    last_name_label.appendChild(document.createTextNode('Last name'));
-    last_name_div.appendChild(last_name_label);
-
-    // last name input
-    const last_name_input = document.createElement('input');
-    last_name_input.type = 'text';
-    last_name_input.name = 'last_name';
-    last_name_input.value = lastname;
-    last_name_div.appendChild(last_name_input);
-
-    // last name error span
-    const last_name_error = document.createElement('span');
-    last_name_error.className = 'error last_name_error';
-    last_name_div.appendChild(last_name_error);
-
-    form.appendChild(last_name_div);
-
-    const button_div = document.createElement('div');
-    button_div.className = 'button';
-
-    const submit_button = document.createElement('input');
-    submit_button.type = 'submit';
-    submit_button.name = 'submit';
-    submit_button.value = 'Save';
-    button_div.appendChild(submit_button);
-
-    form.appendChild(button_div);
-
-    wrapper.appendChild(form);
-
-    container.appendChild(wrapper);
-}
-
-function submitEditAuthorInput(event, id) {
-    event.preventDefault();
-
-    const httpRequest = new XMLHttpRequest();
-    if (!httpRequest) {
-        return false;
-    }
-
-    httpRequest.onreadystatechange = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                clearContent();
-                popState();
-            } else if (httpRequest.status !== 404) {
-                updateAuthorForm(JSON.parse(httpRequest.responseText));
-            } else {
-                process404Response();
-            }
-        }
-    };
-
-    httpRequest.open('POST', 'http://bookstore.test/spa/authors/edit/' + id);
-    const first_name_param = 'first_name=' + document.getElementsByName('first_name')[0].value;
-    const last_name_param = 'last_name=' + document.getElementsByName('last_name')[0].value;
-
-    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    httpRequest.send(first_name_param + '&' + last_name_param);
 }
 
 function generateHTMLAuthorDelete(id, firstname, lastname) {
@@ -434,8 +351,23 @@ function generateHTMLAuthorDelete(id, firstname, lastname) {
     wrapper.appendChild(text);
 
     const form = document.createElement('form');
-    form.addEventListener('submit', function(event) {
-        submitDeleteAuthor(event, id);
+    form.addEventListener('submit', (event) =>  {
+        // submitDeleteAuthor(event, id);
+        event.preventDefault();
+
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return false;
+        }
+
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                processResponse(httpRequest, null, null);
+            }
+        };
+
+        httpRequest.open('POST', 'http://bookstore.test/spa/authors/delete/' + id);
+        httpRequest.send();
     });
     form.method = 'post';
     form.className = 'buttons';
@@ -460,27 +392,3 @@ function generateHTMLAuthorDelete(id, firstname, lastname) {
     container.appendChild(wrapper);
 }
 
-function submitDeleteAuthor(event, id) {
-    event.preventDefault();
-
-    const httpRequest = new XMLHttpRequest();
-    if (!httpRequest) {
-        return false;
-    }
-
-    httpRequest.onreadystatechange = function() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status !== 404) {
-                alert(httpRequest.responseText);
-                clearContent();
-                popState();
-            }
-            else {
-                process404Response();
-            }
-        }
-    };
-
-    httpRequest.open('POST', 'http://bookstore.test/spa/authors/delete/' + id);
-    httpRequest.send();
-}
