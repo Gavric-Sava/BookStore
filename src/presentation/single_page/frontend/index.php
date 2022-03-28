@@ -19,6 +19,7 @@
     </div>
 <script>
 <?php
+    //da php uopste ne pokrece se za dobijanje f
     echo file_get_contents(__DIR__ . '/common.js');
     echo file_get_contents(__DIR__ . '/author.js');
     echo file_get_contents(__DIR__ . '/book.js');

@@ -37,6 +37,7 @@ class SinglePageRouter extends BaseRouter
     public function route(string $request_path): void
     {
         // TODO move PDO into database repository constructors?
+        //zasto PDO u ruteru, ovo mora biti singlenton, parametri
         $PDO = new PDO('mysql:host=localhost;dbname=bookstore_db', "bookstore_user", "password");
 
         if (preg_match(SinglePageRouter::REQUEST_BOOK, $request_path)) {

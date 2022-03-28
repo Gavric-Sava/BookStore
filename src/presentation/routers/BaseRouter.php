@@ -8,6 +8,7 @@ class BaseRouter implements RouterInterface
 {
 
     /**
+     * // izdvojiti rute van rutera
      * Regex for SPA request path.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      */
@@ -24,9 +25,9 @@ class BaseRouter implements RouterInterface
     public function route(string $request_path): void
     {
         if (preg_match(BaseRouter::REQUEST_SINGLE, $request_path)) {
-            (new SinglePageRouter())->route($request_path);
+            (new SinglePageRouter())->route($request_path); //sta je single page router
         } else {
-            (new MultiPageRouter())->route($request_path);
+            (new MultiPageRouter())->route($request_path); //sta je multipage router ?
         }
     }
 }

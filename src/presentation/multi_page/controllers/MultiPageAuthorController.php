@@ -91,7 +91,7 @@ class MultiPageAuthorController extends BaseAuthorController
 
             if (empty($errors)) {
                 $this->authorLogic->createAuthor($first_name, $last_name);
-                header('Location: http://bookstore.test');
+                header('Location: http://bookstore.test'); //zasto zakucano ovo stoji ?
             } else {
                 $first_name_error = $errors["first_name_error"];
                 $last_name_error = $errors["last_name_error"];

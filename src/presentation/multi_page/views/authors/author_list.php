@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<!--zameniti da imamo celine -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"

@@ -30,6 +30,7 @@ class SinglePageBookController extends BaseBookController
     private const REQUEST_LIST = '/^\/spa\/authors\/(\d*)\/(?:books)?\/?$/';
 
     /**
+     * Zasto nemamo interfejse. ???
      * @var BookLogic - Author business logic.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      */

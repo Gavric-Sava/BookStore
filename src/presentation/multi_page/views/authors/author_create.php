@@ -11,6 +11,7 @@
 </head>
 <body>
     <div class="container">
+<!--        da budu ista forma, samo da ih sa razlicitim parametrima includujes-->
         <div class="wrapper wrapper-form">
             <div class="header">
                 <span>Author Create</span>
@@ -18,6 +19,7 @@
             <form method="post">
                 <div class="form-item">
                     <span>First name</span>
+<!--                    ovde je odlicno primetio-->
                     <input type="text" name="first_name" value="<?php echo $first_name; ?>">
                     <span class="error"><?php echo $first_name_error; ?></span>
                 </div>
