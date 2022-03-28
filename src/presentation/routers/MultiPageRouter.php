@@ -2,8 +2,8 @@
 
 namespace Logeecom\Bookstore\presentation\routers;
 
-use Logeecom\Bookstore\business\logic\AuthorLogic;
-use Logeecom\Bookstore\business\logic\BookLogic;
+use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
+use Logeecom\Bookstore\business\logic\books\BookLogic;
 use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
 use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
 use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageAuthorController;

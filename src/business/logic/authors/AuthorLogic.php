@@ -1,11 +1,12 @@
 <?php
 
-namespace Logeecom\Bookstore\business\logic;
+namespace Logeecom\Bookstore\business\logic\authors;
 
+use Logeecom\Bookstore\business\logic\interfaces\AuthorLogicInterface;
 use Logeecom\Bookstore\data_access\models\Author;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryInterface;
+use Logeecom\Bookstore\data_access\repositories\interfaces\AuthorRepositoryInterface;
 
-class AuthorLogic
+class AuthorLogic implements AuthorLogicInterface
 {
     /**
      * @var AuthorRepositoryInterface - Repository of author data.

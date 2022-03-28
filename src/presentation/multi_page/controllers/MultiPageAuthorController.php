@@ -2,7 +2,7 @@
 
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
-use Logeecom\Bookstore\business\logic\AuthorLogic;
+use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
 use Logeecom\Bookstore\presentation\interfaces\BaseAuthorController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 

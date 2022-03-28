@@ -2,9 +2,8 @@
 
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
-use Logeecom\Bookstore\business\logic\BookLogic;
+use Logeecom\Bookstore\business\logic\books\BookLogic;
 use Logeecom\Bookstore\presentation\interfaces\BaseBookController;
-use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 
 class MultiPageBookController extends BaseBookController

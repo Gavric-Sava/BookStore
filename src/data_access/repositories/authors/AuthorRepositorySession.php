@@ -4,6 +4,7 @@ namespace Logeecom\Bookstore\data_access\repositories\authors;
 
 use Logeecom\Bookstore\data_access\models\Author;
 use Logeecom\Bookstore\data_access\repositories\books\BookRepositorySession;
+use Logeecom\Bookstore\data_access\repositories\interfaces\AuthorRepositoryInterface;
 
 class AuthorRepositorySession implements AuthorRepositoryInterface
 {

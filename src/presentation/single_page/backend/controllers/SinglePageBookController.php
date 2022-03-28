@@ -2,7 +2,7 @@
 
 namespace Logeecom\Bookstore\presentation\single_page\backend\controllers;
 
-use Logeecom\Bookstore\business\logic\BookLogic;
+use Logeecom\Bookstore\business\logic\books\BookLogic;
 use Logeecom\Bookstore\presentation\interfaces\BaseBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 

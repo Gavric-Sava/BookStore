@@ -1,6 +1,6 @@
 <?php
 
-namespace Logeecom\Bookstore\data_access\repositories\books;
+namespace Logeecom\Bookstore\data_access\repositories\interfaces;
 
 use Logeecom\Bookstore\data_access\models\Book;
 

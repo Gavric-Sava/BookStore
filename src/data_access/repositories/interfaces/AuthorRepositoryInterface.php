@@ -1,6 +1,6 @@
 <?php
 
-namespace Logeecom\Bookstore\data_access\repositories\authors;
+namespace Logeecom\Bookstore\data_access\repositories\interfaces;
 
 use Logeecom\Bookstore\data_access\models\Author;
 

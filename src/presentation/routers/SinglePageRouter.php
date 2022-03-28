@@ -2,12 +2,10 @@
 
 namespace Logeecom\Bookstore\presentation\routers;
 
-use Logeecom\Bookstore\business\logic\AuthorLogic;
-use Logeecom\Bookstore\business\logic\BookLogic;
+use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
+use Logeecom\Bookstore\business\logic\books\BookLogic;
 use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositorySession;
 use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositorySession;
 use Logeecom\Bookstore\presentation\single_page\backend\controllers\SinglePageAuthorController;
 use Logeecom\Bookstore\presentation\single_page\backend\controllers\SinglePageBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;

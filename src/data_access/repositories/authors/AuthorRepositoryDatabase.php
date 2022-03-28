@@ -3,6 +3,7 @@
 namespace Logeecom\Bookstore\data_access\repositories\authors;
 
 use Logeecom\Bookstore\data_access\models\Author;
+use Logeecom\Bookstore\data_access\repositories\interfaces\AuthorRepositoryInterface;
 use PDO;
 
 class AuthorRepositoryDatabase implements AuthorRepositoryInterface

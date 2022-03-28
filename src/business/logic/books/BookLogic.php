@@ -1,11 +1,12 @@
 <?php
 
-namespace Logeecom\Bookstore\business\logic;
+namespace Logeecom\Bookstore\business\logic\books;
 
+use Logeecom\Bookstore\business\logic\interfaces\BookLogicInterface;
 use Logeecom\Bookstore\data_access\models\Book;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryInterface;
+use Logeecom\Bookstore\data_access\repositories\interfaces\BookRepositoryInterface;
 
-class BookLogic
+class BookLogic implements BookLogicInterface
 {
     /**
      * @var BookRepositoryInterface - Repository of book data.

@@ -3,6 +3,7 @@
 namespace Logeecom\Bookstore\data_access\repositories\books;
 
 use Logeecom\Bookstore\data_access\models\Book;
+use Logeecom\Bookstore\data_access\repositories\interfaces\BookRepositoryInterface;
 use PDO;
 
 class BookRepositoryDatabase implements BookRepositoryInterface
