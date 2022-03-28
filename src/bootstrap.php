@@ -1,15 +1,10 @@
 <?php
 
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositorySession;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositorySession;
+require __DIR__ . '/../vendor/autoload.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+//require 'session.php';
 
-//    if (!AuthorRepositorySession::dataInitialized()) {
-//        AuthorRepositorySession::initializeData();
-//    }
-//    if (!BookRepositorySession::dataInitialized()) {
-//        BookRepositorySession::initializeData();
-//    }
-}
+use Logeecom\Bookstore\presentation\routers\BaseRouter;
+
+$request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+(new BaseRouter())->route($request_path);
