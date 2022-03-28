@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../../../assets/styles/common.css">
+    <link rel="stylesheet" href="../../../../assets/styles/common.css"> <!-- TODO ovako ili sa php __DIR__? -->
     <link rel="stylesheet" href="../../../../assets/styles/dialog.css">
     <link rel="stylesheet" href="../../../../assets/styles/form.css">
     <link rel="stylesheet" href="../../../../assets/styles/list.css">
