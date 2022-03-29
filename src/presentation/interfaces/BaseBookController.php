@@ -6,10 +6,6 @@ use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
 abstract class BaseBookController implements ControllerInterface
 {
-    /**
-     * @inheritDoc
-     */
-    abstract public function process(string $path): void;
 
     /**
      * Processes book list request.
@@ -72,4 +68,5 @@ abstract class BaseBookController implements ControllerInterface
 
         return $errors;
     }
+
 }

@@ -3,32 +3,14 @@
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
 use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
+use Logeecom\Bookstore\data_access\DatabaseConnection;
+use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
 use Logeecom\Bookstore\presentation\interfaces\BaseAuthorController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
+use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
 class MultiPageAuthorController extends BaseAuthorController
 {
-    /**
-     * Regex for create request path.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     */
-    private const REQUEST_CREATE = '/^\/authors\/create\/?$/';
-    /**
-     * Regex for edit request path.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     */
-    private const REQUEST_EDIT = '/^\/authors\/edit\/(\d+)\/?$/';
-    /**
-     * Regex for delete request path.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     */
-    private const REQUEST_DELETE = '/^\/authors\/delete\/(\d+)\/?$/';
-    /**
-     * Regex for list request path.
-     * @author Sava Gavric <sava.gavric@logeecom.com>
-     */
-    private const REQUEST_LIST = '/^\/(?:authors\/?)?$/';
-
     /**
      * @var AuthorLogic - Author business logic.
      * @author Sava Gavric <sava.gavric@logeecom.com>
@@ -36,27 +18,13 @@ class MultiPageAuthorController extends BaseAuthorController
     private AuthorLogic $authorLogic;
 
     public function __construct(
-        AuthorLogic $authorLogic
+//        AuthorLogic $authorLogic
     ) {
-        $this->authorLogic = $authorLogic;
-    }
+//        $this->authorLogic = $authorLogic;
 
-    /**
-     * @inheritDoc
-     */
-    public function process(string $path): void
-    {
-        if (preg_match(MultiPageAuthorController::REQUEST_CREATE, $path)) {
-            $this->processAuthorCreate();
-        } elseif (preg_match(MultiPageAuthorController::REQUEST_EDIT, $path, $matches)) {
-            $this->processAuthorEdit($matches[1]);
-        } elseif (preg_match(MultiPageAuthorController::REQUEST_DELETE, $path, $matches)) {
-            $this->processAuthorDelete($matches[1]);
-        } elseif (preg_match(MultiPageAuthorController::REQUEST_LIST, $path)) {
-            $this->processAuthorList();
-        } else {
-            RequestUtil::render404();
-        }
+        $this->authorLogic = new AuthorLogic(new AuthorRepositoryDatabase(
+            DatabaseConnection::getInstance()->getPDOConnection()
+        ));
     }
 
     /**
@@ -66,11 +34,19 @@ class MultiPageAuthorController extends BaseAuthorController
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    protected function processAuthorList(): void
+    public function renderAuthorList(): void
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 
         include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processAuthorList(): void
+    {
+        $this->renderAuthorList();
     }
 
     /**
@@ -81,25 +57,39 @@ class MultiPageAuthorController extends BaseAuthorController
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    protected function processAuthorCreate(): void
+    public function renderAuthorCreate(): void
     {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $first_name = $_POST["first_name"];
-            $last_name = $_POST["last_name"];
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
+    }
 
-            $errors = $this->validateFormInput($first_name, $last_name);
+    /**
+     * @inheritDoc
+     */
+    public function processAuthorCreate(): void
+    {
+        $first_name = $_POST["first_name"];
+        $last_name = $_POST["last_name"];
 
-            if (empty($errors)) {
-                $this->authorLogic->createAuthor($first_name, $last_name);
-                header('Location: http://bookstore.test');
-            } else {
-                $first_name_error = $errors["first_name_error"];
-                $last_name_error = $errors["last_name_error"];
+        $errors = $this->validateFormInput($first_name, $last_name);
 
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
-            }
-        } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
+        if (empty($errors)) {
+            $this->authorLogic->createAuthor($first_name, $last_name);
+            header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+        } else {
+            $first_name_error = $errors["first_name_error"];
+            $last_name_error = $errors["last_name_error"];
+
             include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
+        }
+    }
+
+    public function renderAuthorEdit(int $id): void
+    {
+        $author = $this->authorLogic->fetchAuthor($id);
+        if (!isset($author)) {
+            RequestUtil::render404();
+        } else {
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
         }
     }
 
@@ -112,34 +102,34 @@ class MultiPageAuthorController extends BaseAuthorController
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    protected function processAuthorEdit(int $id): void
+    public function processAuthorEdit(int $id): void
     {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $first_name = $_POST["first_name"];
-            $last_name = $_POST["last_name"];
+        $first_name = $_POST["first_name"];
+        $last_name = $_POST["last_name"];
 
-            $errors = $this->validateFormInput(
-                $first_name,
-                $last_name
-            );
+        $errors = $this->validateFormInput(
+            $first_name,
+            $last_name
+        );
 
-            if (empty($errors)) {
-                $this->authorLogic->editAuthor($id, $first_name, $last_name);
-                header('Location: http://bookstore.test');
-            } else {
-                $first_name_error = $errors["first_name_error"];
-                $last_name_error = $errors["last_name_error"];
+        if (empty($errors)) {
+            $this->authorLogic->editAuthor($id, $first_name, $last_name);
+            header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+        } else {
+            $first_name_error = $errors["first_name_error"];
+            $last_name_error = $errors["last_name_error"];
 
-                $author = $this->authorLogic->fetchAuthor($id);
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
-            }
-        } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $author = $this->authorLogic->fetchAuthor($id);
-            if (!isset($author)) {
-                RequestUtil::render404();
-            } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
-            }
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
+        }
+    }
+
+    public function renderAuthorDelete(int $id): void
+    {
+        $author = $this->authorLogic->fetchAuthor($id);
+        if (!isset($author)) {
+            RequestUtil::render404();
+        } else {
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_delete.php");
         }
     }
 
@@ -152,20 +142,11 @@ class MultiPageAuthorController extends BaseAuthorController
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    protected function processAuthorDelete(int $id): void
+    public function processAuthorDelete(int $id): void
     {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->authorLogic->deleteAuthor($id);
 
-            header('Location: http://bookstore.test');
-        } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $author = $this->authorLogic->fetchAuthor($id);
-            if (!isset($author)) {
-                RequestUtil::render404();
-            } else {
-                include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_delete.php");
-            }
-        }
+            header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
     }
 
 }

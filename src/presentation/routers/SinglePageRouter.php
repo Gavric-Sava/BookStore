@@ -6,8 +6,8 @@ use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
 use Logeecom\Bookstore\business\logic\books\BookLogic;
 use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
 use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
-use Logeecom\Bookstore\presentation\single_page\backend\controllers\SinglePageAuthorController;
-use Logeecom\Bookstore\presentation\single_page\backend\controllers\SinglePageBookController;
+use Logeecom\Bookstore\presentation\single_page\API\APIAuthorController;
+use Logeecom\Bookstore\presentation\single_page\API\APIBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 use PDO;
 
@@ -39,14 +39,14 @@ class SinglePageRouter extends BaseRouter
 
         if (preg_match(SinglePageRouter::REQUEST_BOOK, $request_path)) {
             // TODO dependency waterfall?
-            (new SinglePageBookController(
+            (new APIBookController(
                 new BookLogic(
                     new BookRepositoryDatabase($PDO)
                 )
             ))->process($request_path);
         } elseif (preg_match(SinglePageRouter::REQUEST_AUTHOR, $request_path)) {
             // TODO dependency waterfall?
-            (new SinglePageAuthorController(
+            (new APIAuthorController(
                 new AuthorLogic(
                     new AuthorRepositoryDatabase($PDO)
                 )

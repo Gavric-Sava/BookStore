@@ -12,5 +12,5 @@ interface ControllerInterface
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
-    public function process(string $path): void;
+//    public function process(string $path): void;
 }

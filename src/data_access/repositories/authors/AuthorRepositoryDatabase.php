@@ -2,6 +2,7 @@
 
 namespace Logeecom\Bookstore\data_access\repositories\authors;
 
+use Logeecom\Bookstore\data_access\DatabaseConnection;
 use Logeecom\Bookstore\data_access\models\Author;
 use Logeecom\Bookstore\data_access\repositories\interfaces\AuthorRepositoryInterface;
 use PDO;
@@ -22,9 +23,9 @@ class AuthorRepositoryDatabase implements AuthorRepositoryInterface
      */
     private PDO $PDO;
 
-    public function __construct(PDO $PDO)
+    public function __construct()
     {
-        $this->PDO = $PDO;
+        $this->PDO = DatabaseConnection::getInstance()->getPDOConnection();
     }
 
     /**

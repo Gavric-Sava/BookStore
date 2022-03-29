@@ -2,6 +2,7 @@
 
 namespace Logeecom\Bookstore\data_access\repositories\books;
 
+use Logeecom\Bookstore\data_access\DatabaseConnection;
 use Logeecom\Bookstore\data_access\models\Book;
 use Logeecom\Bookstore\data_access\repositories\interfaces\BookRepositoryInterface;
 use PDO;
@@ -22,9 +23,9 @@ class BookRepositoryDatabase implements BookRepositoryInterface
      */
     private PDO $PDO;
 
-    public function __construct(PDO $PDO)
+    public function __construct()
     {
-        $this->PDO = $PDO;
+        $this->PDO = DatabaseConnection::getInstance()->getPDOConnection();
     }
 
     /**
