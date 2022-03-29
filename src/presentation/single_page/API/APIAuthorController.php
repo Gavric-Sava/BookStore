@@ -3,18 +3,16 @@
 namespace Logeecom\Bookstore\presentation\single_page\API;
 
 use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
-use Logeecom\Bookstore\data_access\DatabaseConnection;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
-use Logeecom\Bookstore\presentation\interfaces\BaseAuthorController;
+use Logeecom\Bookstore\presentation\base_controllers\BaseAuthorController;
 
 class APIAuthorController extends BaseAuthorController
 {
 
     private AuthorLogic $authorLogic;
 
-    public function __construct()
+    public function __construct($authorLogic)
     {
-        $this->authorLogic = new AuthorLogic(new AuthorRepositoryDatabase(DatabaseConnection::getInstance()->getPDOConnection()));
+        $this->authorLogic = $authorLogic;
     }
 
     public function renderSPAIndex()

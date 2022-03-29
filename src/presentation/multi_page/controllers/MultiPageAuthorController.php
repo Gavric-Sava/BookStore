@@ -3,11 +3,8 @@
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
 use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
-use Logeecom\Bookstore\data_access\DatabaseConnection;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
-use Logeecom\Bookstore\presentation\interfaces\BaseAuthorController;
+use Logeecom\Bookstore\presentation\base_controllers\BaseAuthorController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
-use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
 class MultiPageAuthorController extends BaseAuthorController
 {
@@ -18,13 +15,9 @@ class MultiPageAuthorController extends BaseAuthorController
     private AuthorLogic $authorLogic;
 
     public function __construct(
-//        AuthorLogic $authorLogic
+        AuthorLogic $authorLogic
     ) {
-//        $this->authorLogic = $authorLogic;
-
-        $this->authorLogic = new AuthorLogic(new AuthorRepositoryDatabase(
-            DatabaseConnection::getInstance()->getPDOConnection()
-        ));
+        $this->authorLogic = $authorLogic;
     }
 
     /**
@@ -38,7 +31,7 @@ class MultiPageAuthorController extends BaseAuthorController
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_list.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_list.php");
     }
 
     /**
@@ -59,7 +52,7 @@ class MultiPageAuthorController extends BaseAuthorController
      */
     public function renderAuthorCreate(): void
     {
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_create.php");
     }
 
     /**
@@ -79,7 +72,7 @@ class MultiPageAuthorController extends BaseAuthorController
             $first_name_error = $errors["first_name_error"];
             $last_name_error = $errors["last_name_error"];
 
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_create.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_create.php");
         }
     }
 
@@ -89,7 +82,7 @@ class MultiPageAuthorController extends BaseAuthorController
         if (!isset($author)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_edit.php");
         }
     }
 
@@ -119,7 +112,7 @@ class MultiPageAuthorController extends BaseAuthorController
             $first_name_error = $errors["first_name_error"];
             $last_name_error = $errors["last_name_error"];
 
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_edit.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_edit.php");
         }
     }
 
@@ -129,7 +122,7 @@ class MultiPageAuthorController extends BaseAuthorController
         if (!isset($author)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/authors/author_delete.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_delete.php");
         }
     }
 

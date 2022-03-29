@@ -3,21 +3,17 @@
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
 use Logeecom\Bookstore\business\logic\books\BookLogic;
-use Logeecom\Bookstore\data_access\DatabaseConnection;
-use Logeecom\Bookstore\data_access\models\Book;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
-use Logeecom\Bookstore\presentation\interfaces\BaseBookController;
+use Logeecom\Bookstore\presentation\base_controllers\BaseBookController;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
-use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
 
 class MultiPageBookController extends BaseBookController
 {
     private BookLogic $bookLogic;
 
     public function __construct(
-//        BookLogic $bookLogic
+        BookLogic $bookLogic
     ) {
-        $this->bookLogic = new BookLogic(new BookRepositoryDatabase(DatabaseConnection::getInstance()->getPDOConnection()));
+        $this->bookLogic = $bookLogic;
     }
 
     /**
@@ -30,7 +26,7 @@ class MultiPageBookController extends BaseBookController
     public function renderBookList(int $author_id): void
     {
         $books = $this->bookLogic->fetchAllBooksFromAuthor($author_id);
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_list.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_list.php");
     }
 
     public function processBookList(int $author_id): void
@@ -40,7 +36,7 @@ class MultiPageBookController extends BaseBookController
 
     public function renderBookCreate(int $author_id): void
     {
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_create.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_create.php");
     }
 
     /**
@@ -69,7 +65,7 @@ class MultiPageBookController extends BaseBookController
             $title_error = $errors["title_error"];
             $year_error = $errors["year_error"];
 
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_create.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_create.php");
         }
     }
 
@@ -79,7 +75,7 @@ class MultiPageBookController extends BaseBookController
         if (!isset($book)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_edit.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_edit.php");
         }
     }
 
@@ -113,7 +109,7 @@ class MultiPageBookController extends BaseBookController
             $title_error = $errors["title_error"];
             $year_error = $errors["year_error"];
 
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_edit.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_edit.php");
         }
     }
 
@@ -123,7 +119,7 @@ class MultiPageBookController extends BaseBookController
         if (!isset($book)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/books/book_delete.php");
+            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_delete.php");
         }
     }
 

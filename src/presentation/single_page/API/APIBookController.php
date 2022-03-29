@@ -3,9 +3,7 @@
 namespace Logeecom\Bookstore\presentation\single_page\API;
 
 use Logeecom\Bookstore\business\logic\books\BookLogic;
-use Logeecom\Bookstore\data_access\DatabaseConnection;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
-use Logeecom\Bookstore\presentation\interfaces\BaseBookController;
+use Logeecom\Bookstore\presentation\base_controllers\BaseBookController;
 
 class APIBookController extends BaseBookController
 {
@@ -17,10 +15,9 @@ class APIBookController extends BaseBookController
     private BookLogic $bookLogic;
 
     public function __construct(
-//        BookLogic $bookLogic
+        BookLogic $bookLogic
     ) {
-//        $this->bookLogic = $bookLogic;
-        $this->bookLogic = new BookLogic(new BookRepositoryDatabase(DatabaseConnection::getInstance()->getPDOConnection()));
+        $this->bookLogic = $bookLogic;
     }
 
     /**

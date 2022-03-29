@@ -1,6 +1,6 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\util\validators;
+namespace Logeecom\Bookstore\presentation\util;
 
 class GeneralValidator
 {

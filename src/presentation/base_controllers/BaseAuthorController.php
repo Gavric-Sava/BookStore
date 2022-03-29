@@ -1,8 +1,9 @@
 <?php
 
-namespace Logeecom\Bookstore\presentation\interfaces;
+namespace Logeecom\Bookstore\presentation\base_controllers;
 
-use Logeecom\Bookstore\presentation\util\validators\GeneralValidator;
+use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
+use Logeecom\Bookstore\presentation\util\GeneralValidator;
 
 abstract class BaseAuthorController implements ControllerInterface
 {
