@@ -45,7 +45,7 @@ class Mapping
 
     public function process(): void
     {
-        call_user_func_array(array(new $this->controller($this->dependency), $this->method), $this->parameters);
+        call_user_func_array(array(new $this->controller(($this->dependency)()), $this->method), $this->parameters);
     }
 
 }
