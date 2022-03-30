@@ -2,40 +2,39 @@
 
 namespace Logeecom\Bookstore\presentation\base_controllers;
 
-use Logeecom\Bookstore\presentation\interfaces\ControllerInterface;
 use Logeecom\Bookstore\presentation\util\GeneralValidator;
 
-abstract class BaseAuthorController implements ControllerInterface
+abstract class BaseAuthorController
 {
 
     /**
-     * Processes author list request.
+     * Process author list request.
      * @return void
      */
     abstract protected function processAuthorList(): void;
 
     /**
-     * Processes author create request.
+     * Process author create request.
      * @return void
      */
     abstract protected function processAuthorCreate(): void;
 
     /**
-     * Processes author edit request.
+     * Process author edit request.
      * @param int $id - Id of author.
      * @return void
      */
     abstract protected function processAuthorEdit(int $id): void;
 
     /**
-     * Processes author delete request.
+     * Process author delete request.
      * @param int $id - Id of author.
      * @return void
      */
     abstract protected function processAuthorDelete(int $id): void;
 
     /**
-     * Validation of input form data_access for 'Author create' and 'Author edit' use cases.
+     * Validate input form data_access for 'Author create' and 'Author edit' use cases.
      *
      * @param mixed $first_name First name of the author to be created/edited.
      * @param mixed $last_name Last name of the author to be created/edited.

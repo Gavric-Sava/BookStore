@@ -2,24 +2,41 @@
 
 namespace Logeecom\Bookstore\presentation\single_page\API;
 
-use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
+use Logeecom\Bookstore\business\logic\interfaces\AuthorLogicInterface;
 use Logeecom\Bookstore\presentation\base_controllers\BaseAuthorController;
 
 class APIAuthorController extends BaseAuthorController
 {
+    /**
+     * @var AuthorLogicInterface - Author business logic.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
+    private AuthorLogicInterface $authorLogic;
 
-    private AuthorLogic $authorLogic;
-
-    public function __construct($authorLogic)
+    public function __construct(AuthorLogicInterface $authorLogic)
     {
         $this->authorLogic = $authorLogic;
     }
 
+    /**
+     * Renders SPA index file.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function renderSPAIndex()
     {
         include $_SERVER['DOCUMENT_ROOT'] . "/src/presentation/single_page/frontend/index.php";
     }
 
+    /**
+     * Returns author list view.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function processAuthorList(): void
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
@@ -27,6 +44,13 @@ class APIAuthorController extends BaseAuthorController
         echo json_encode($authors_with_book_count);
     }
 
+    /**
+     * Returns author create form view. On error returns form view with errors.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function processAuthorCreate(): void
     {
         $first_name = $_POST["first_name"];
@@ -53,6 +77,14 @@ class APIAuthorController extends BaseAuthorController
         }
     }
 
+    /**
+     * Returns author edit form view. On error returns form view with errors.
+     *
+     * @param int $id - Id of the author to be edited.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function processAuthorEdit(int $id): void
     {
         $first_name = $_POST["first_name"];
@@ -81,6 +113,13 @@ class APIAuthorController extends BaseAuthorController
         }
     }
 
+    /**
+     * Renders author delete dialog.
+     *
+     * @param int $id - Id of author.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     public function processAuthorDelete(int $id): void
     {
         if ($this->authorLogic->deleteAuthor($id)) {

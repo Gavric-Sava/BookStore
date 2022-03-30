@@ -25,6 +25,6 @@ class Router
             }
         }
 
-        RequestUtil::render404();
+//        RequestUtil::render404();
     }
 }

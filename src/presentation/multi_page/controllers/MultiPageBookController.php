@@ -136,7 +136,8 @@ class MultiPageBookController extends BaseBookController
                         array_merge(
                             [
                                 'function_label' => 'Edit',
-                                'book' => $book
+                                'title' => $book->getTitle(),
+                                'year' => $book->getYear()
                             ],
                             $errors
                         )

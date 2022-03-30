@@ -6,10 +6,16 @@ use PDO;
 class DatabaseConnection
 {
 
+    /**
+     * @var DatabaseConnection|null - Singleton DatabaseConnection instance.
+     */
     private static ?DatabaseConnection $connection = null;
 
     private PDO $PDOConnection;
 
+    /**
+     * Construct DatabaseConnection singleton.
+     */
     private function __construct()
     {
         $config = include $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
@@ -21,16 +27,20 @@ class DatabaseConnection
         );
     }
 
+    /**
+     * @return DatabaseConnection - Singleton instance of DatabaseConnection.
+     */
     public static function getInstance(): DatabaseConnection
     {
         if (DatabaseConnection::$connection == null) {
             DatabaseConnection::$connection = new DatabaseConnection();
         }
+
         return DatabaseConnection::$connection;
     }
 
     /**
-     * @return PDO
+     * @return PDO - PDO connection.
      */
     public function getPDOConnection(): PDO
     {

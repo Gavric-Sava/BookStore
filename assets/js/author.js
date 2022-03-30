@@ -1,11 +1,10 @@
 function requestAuthorList() {
     const response = fetch('http://bookstore.test/spa/authors');
-    // response.then(processAuthorListResponse);
     response.then((response) => processResponse(response, (response) => {
         response.text().then((body) => {
             generateHTMLAuthorList(JSON.parse(body));
         });
-    }, null)) // moze i anonimna fja
+    }, null))
 }
 
 function generateHTMLAuthorList(author_list) {
@@ -107,7 +106,6 @@ function generateHTMLAuthorList(author_list) {
                 td.className = 'books';
             } else {
                 let a = document.createElement('a');
-                // a.href = '/authors/edit/' + author.id;
                 a.addEventListener('click', function() {
                     clearContent();
                     pushState(null, '/spa/authors/edit/' + author.id);
@@ -284,7 +282,6 @@ function generateHTMLAuthorEdit(id, firstname, lastname) {
     const form = document.getElementsByTagName('form')[0];
     // submit create event listener
     form.addEventListener("submit", (event) => {
-        // submitEditAuthorInput(event, id);
         event.preventDefault();
 
         const httpRequest = new XMLHttpRequest();
@@ -352,7 +349,6 @@ function generateHTMLAuthorDelete(id, firstname, lastname) {
 
     const form = document.createElement('form');
     form.addEventListener('submit', (event) =>  {
-        // submitDeleteAuthor(event, id);
         event.preventDefault();
 
         const httpRequest = new XMLHttpRequest();

@@ -129,7 +129,8 @@ class MultiPageAuthorController extends BaseAuthorController
                         array_merge(
                             [
                                 'function_label' => 'Edit',
-                                'author' => $author
+                                'first_name' => $author->getFirstname(),
+                                'last_name' => $author->getLastname()
                             ],
                             $errors
                         )

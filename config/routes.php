@@ -4,6 +4,7 @@ use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
 use Logeecom\Bookstore\business\logic\books\BookLogic;
 use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
 use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
+use Logeecom\Bookstore\presentation\base_controllers\NotFoundController;
 use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageAuthorController;
 use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageBookController;
 use Logeecom\Bookstore\presentation\multi_page\views\ViewTemplate;
@@ -138,7 +139,9 @@ return [
         'processAuthorEdit',
         'POST',
         function() {
-            return new AuthorLogic(new AuthorRepositoryDatabase());
+            return [
+                new AuthorLogic(new AuthorRepositoryDatabase())
+            ];
         }
     ),
     new RouteMapping(
@@ -147,7 +150,9 @@ return [
         'processAuthorDelete',
         'POST',
         function() {
-            return new AuthorLogic(new AuthorRepositoryDatabase());
+            return [
+                new AuthorLogic(new AuthorRepositoryDatabase())
+            ];
         }
     ),
     new RouteMapping(
@@ -240,7 +245,9 @@ return [
         'processBookList',
         'GET',
         function() {
-            return new BookLogic(new BookRepositoryDatabase());
+            return [
+                new BookLogic(new BookRepositoryDatabase())
+            ];
         }
     ),
     new RouteMapping(
@@ -249,7 +256,9 @@ return [
         'processBookCreate',
         'POST',
         function() {
-            return new BookLogic(new BookRepositoryDatabase());
+            return [
+                new BookLogic(new BookRepositoryDatabase())
+            ];
         }
     ),
     new RouteMapping(
@@ -258,7 +267,9 @@ return [
         'processBookEdit',
         'POST',
         function() {
-            return new BookLogic(new BookRepositoryDatabase());
+            return [
+                new BookLogic(new BookRepositoryDatabase())
+            ];
         }
     ),
     new RouteMapping(
@@ -267,7 +278,31 @@ return [
         'processBookDelete',
         'POST',
         function() {
-            return new BookLogic(new BookRepositoryDatabase());
+            return [
+                new BookLogic(new BookRepositoryDatabase())
+            ];
         }
     ),
+    new RouteMapping(
+        '/.*/',
+        NotFoundController::class,
+        'render404',
+        'GET',
+        function() use ($view_root_path) {
+            return [
+                new ViewTemplate($view_root_path)
+            ];
+        }
+    ),
+    new RouteMapping(
+        '/.*/',
+        NotFoundController::class,
+        'render404',
+        'POST',
+        function() use ($view_root_path) {
+            return [
+                new ViewTemplate($view_root_path)
+            ];
+        }
+    )
 ];

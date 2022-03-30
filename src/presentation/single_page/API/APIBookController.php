@@ -2,20 +2,20 @@
 
 namespace Logeecom\Bookstore\presentation\single_page\API;
 
-use Logeecom\Bookstore\business\logic\books\BookLogic;
+use Logeecom\Bookstore\business\logic\interfaces\BookLogicInterface;
 use Logeecom\Bookstore\presentation\base_controllers\BaseBookController;
 
 class APIBookController extends BaseBookController
 {
 
     /**
-     * @var BookLogic - Author business logic.
+     * @var BookLogicInterface - Book business logic.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      */
-    private BookLogic $bookLogic;
+    private BookLogicInterface $bookLogic;
 
     public function __construct(
-        BookLogic $bookLogic
+        BookLogicInterface $bookLogic
     ) {
         $this->bookLogic = $bookLogic;
     }

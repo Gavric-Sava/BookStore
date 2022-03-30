@@ -313,7 +313,7 @@ function generateHTMLBookDelete(id, title, year, author_id) {
     header.appendChild(alert_img);
 
     const header_h2 = document.createElement('h2');
-    header_h2.appendChild(document.createTextNode('Delete Author'));
+    header_h2.appendChild(document.createTextNode('Delete Book'));
     header.appendChild(header_h2);
 
     wrapper.appendChild(header_h2);
