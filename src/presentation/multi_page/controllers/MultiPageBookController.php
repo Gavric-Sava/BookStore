@@ -2,48 +2,94 @@
 
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
-use Logeecom\Bookstore\business\logic\books\BookLogic;
+use Logeecom\Bookstore\business\logic\interfaces\BookLogicInterface;
 use Logeecom\Bookstore\presentation\base_controllers\BaseBookController;
+use Logeecom\Bookstore\presentation\multi_page\views\ViewTemplate;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 
 class MultiPageBookController extends BaseBookController
 {
-    private BookLogic $bookLogic;
+    /**
+     * @var BookLogicInterface - Book business logic.
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
+    private BookLogicInterface $bookLogic;
+    private ViewTemplate $viewTemplate;
 
     public function __construct(
-        BookLogic $bookLogic
+        BookLogicInterface $bookLogic,
+        ViewTemplate $viewTemplate
     ) {
         $this->bookLogic = $bookLogic;
+        $this->viewTemplate = $viewTemplate;
     }
 
     /**
-     * Fetches list of books and returns corresponding view.
+     * Renders list of books.
      *
-     * @param int $author_id - Author id.
+     * @param int $author_id - Id of author.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      */
     public function renderBookList(int $author_id): void
     {
         $books = $this->bookLogic->fetchAllBooksFromAuthor($author_id);
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_list.php");
+
+        echo $this->viewTemplate->render(
+            'template.php',
+            [
+                'head' => ($this->viewTemplate->render('books/partials/book_list_head.html')),
+                'content' => ($this->viewTemplate->render(
+                    'books/templates/book_list.php',
+                    [
+                        'books' => $books,
+                        'author_id' => $author_id
+                    ]
+                ))
+            ]
+        );
     }
 
+    /**
+     * Returns book list view.
+     *
+     * @param int $author_id - Id of author.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
     public function processBookList(int $author_id): void
     {
         $this->renderBookList($author_id);
     }
 
-    public function renderBookCreate(int $author_id): void
+    /**
+     * Renders book create form.
+     *
+     * @param int $author_id - Id of author.
+     * @param array $errors - Form input errors.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
+     */
+    public function renderBookCreate(int $author_id, array $errors = []): void
     {
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_create.php");
+        echo $this->viewTemplate->render(
+            'template.php',
+            [
+                'head' => ($this->viewTemplate->render('books/partials/book_create_head.html')),
+                'content' => ($this->viewTemplate->render(
+                    'books/templates/book_form.php',
+                    array_merge(['function_label' => 'Create'], $errors)
+                ))
+            ]
+        );
     }
 
     /**
-     * On get returns book create form view. On post tries to create new book.
-     * On error returns form view with errors.
+     * Returns book create form view. On error returns form view with errors.
      *
-     * @param int $author_id Author id.
+     * @param int $author_id - Id of author.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      */
@@ -60,30 +106,50 @@ class MultiPageBookController extends BaseBookController
                 'Location: ' .
                 $_SERVER['REQUEST_SCHEME'] .
                 '://' . $_SERVER['HTTP_HOST'] .
-                "/authors/{$author_id}/books");
+                "/authors/{$author_id}/books"
+            );
         } else {
-            $title_error = $errors["title_error"];
-            $year_error = $errors["year_error"];
-
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_create.php");
+            $this->renderBookCreate($author_id, $errors);
         }
     }
 
-    public function renderBookEdit(int $id): void
+    /**
+     * Renders book edit form.
+     *
+     * @param int $id - Id of book.
+     * @param array $errors - Form input errors.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
+    public function renderBookEdit(int $id, array $errors = []): void
     {
         $book = $this->bookLogic->fetchBook($id);
         if (!isset($book)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_edit.php");
+            echo $this->viewTemplate->render(
+                'template.php',
+                [
+                    'head' => ($this->viewTemplate->render('books/partials/book_edit_head.html')),
+                    'content' => ($this->viewTemplate->render(
+                        'books/templates/book_form.php',
+                        array_merge(
+                            [
+                                'function_label' => 'Edit',
+                                'book' => $book
+                            ],
+                            $errors
+                        )
+                    ))
+                ]
+            );
         }
     }
 
     /**
-     * On get returns book edit form view. On post tries to edit book.
-     * On error returns form view with errors.
+     * Returns book edit form view. On error returns form view with errors.
      *
-     * @param int $id Id of the book to be edited.
+     * @param int $id - Id of the book to be edited.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
@@ -103,31 +169,43 @@ class MultiPageBookController extends BaseBookController
                 'Location: ' . $_SERVER['REQUEST_SCHEME'] .
                 '://' .
                 $_SERVER['HTTP_HOST'] .
-                "/authors/{$book->getAuthorId()}/books");
+                "/authors/{$book->getAuthorId()}/books"
+            );
         } else {
-            $book = $this->bookLogic->fetchBook($id);
-            $title_error = $errors["title_error"];
-            $year_error = $errors["year_error"];
-
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_edit.php");
+            $this->renderBookEdit($id, $errors);
         }
     }
 
+    /**
+     * Renders book delete dialog.
+     *
+     * @param int $id - Id of book.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     public function renderBookDelete(int $id): void
     {
         $book = $this->bookLogic->fetchBook($id);
         if (!isset($book)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/books/book_delete.php");
+            echo $this->viewTemplate->render(
+                'template.php',
+                [
+                    'head' => ($this->viewTemplate->render('books/partials/book_delete_head.html')),
+                    'content' => ($this->viewTemplate->render(
+                        'books/templates/book_delete.php',
+                        ['book' => $book]
+                    ))
+                ]
+            );
         }
     }
 
     /**
-     * On get returns book delete dialog view. On post tries to delete book.
-     * On error returns 404 view.
+     * Returns book delete dialog view. On error returns 404 view.
      *
-     * @param int $id Id of the book to be deleted.
+     * @param int $id Id of book.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
@@ -142,7 +220,8 @@ class MultiPageBookController extends BaseBookController
             $_SERVER['REQUEST_SCHEME'] .
             '://' .
             $_SERVER['HTTP_HOST'] .
-            "/authors/{$book->getAuthorId()}/books");
+            "/authors/{$book->getAuthorId()}/books"
+        );
     }
 
 }

@@ -2,26 +2,34 @@
 
 namespace Logeecom\Bookstore\presentation\multi_page\controllers;
 
-use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
+use Logeecom\Bookstore\business\logic\interfaces\AuthorLogicInterface;
 use Logeecom\Bookstore\presentation\base_controllers\BaseAuthorController;
+use Logeecom\Bookstore\presentation\multi_page\views\ViewTemplate;
 use Logeecom\Bookstore\presentation\util\RequestUtil;
 
 class MultiPageAuthorController extends BaseAuthorController
 {
     /**
-     * @var AuthorLogic - Author business logic.
+     * @var AuthorLogicInterface - Author business logic.
      * @author Sava Gavric <sava.gavric@logeecom.com>
      */
-    private AuthorLogic $authorLogic;
+    private AuthorLogicInterface $authorLogic;
+
+    /**
+     * @var ViewTemplate - View template engine
+     */
+    private ViewTemplate $viewTemplate;
 
     public function __construct(
-        AuthorLogic $authorLogic
+        AuthorLogicInterface $authorLogic,
+        ViewTemplate $viewTemplate
     ) {
         $this->authorLogic = $authorLogic;
+        $this->viewTemplate = $viewTemplate;
     }
 
     /**
-     * Fetches list of authors and returns corresponding view.
+     * Renders list of authors.
      *
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
@@ -31,11 +39,24 @@ class MultiPageAuthorController extends BaseAuthorController
     {
         $authors_with_book_count = $this->authorLogic->fetchAllAuthorsWithBookCount();
 
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_list.php");
+        echo $this->viewTemplate->render(
+            'template.php',
+            [
+                'head' => ($this->viewTemplate->render('authors/partials/author_list_head.html')),
+                'content' => ($this->viewTemplate->render(
+                    'authors/templates/author_list.php',
+                    ['authors_with_book_count' => $authors_with_book_count]
+                ))
+            ]
+        );
     }
 
     /**
-     * @inheritDoc
+     * Returns author list view.
+     *
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     *
      */
     public function processAuthorList(): void
     {
@@ -43,20 +64,32 @@ class MultiPageAuthorController extends BaseAuthorController
     }
 
     /**
-     * On get returns author create form view. On post tries to create new author.
-     * On error returns form view with errors.
+     * Renders author create form.
+     *
+     * @param array $errors - Form input errors.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
+    public function renderAuthorCreate(array $errors = []): void
+    {
+        echo $this->viewTemplate->render(
+            'template.php',
+            [
+                'head' => ($this->viewTemplate->render('authors/partials/author_create_head.html')),
+                'content' => ($this->viewTemplate->render(
+                    'authors/templates/author_form.php',
+                    array_merge(['function_label' => 'Create'], $errors)
+                ))
+            ]
+        );
+    }
+
+    /**
+     * Returns author create form view. On error returns form view with errors.
      *
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
-     */
-    public function renderAuthorCreate(): void
-    {
-        include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_create.php");
-    }
-
-    /**
-     * @inheritDoc
      */
     public function processAuthorCreate(): void
     {
@@ -69,28 +102,47 @@ class MultiPageAuthorController extends BaseAuthorController
             $this->authorLogic->createAuthor($first_name, $last_name);
             header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
         } else {
-            $first_name_error = $errors["first_name_error"];
-            $last_name_error = $errors["last_name_error"];
-
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_create.php");
+            $this->renderAuthorCreate($errors);
         }
     }
 
-    public function renderAuthorEdit(int $id): void
+    /**
+     * Renders author edit form.
+     *
+     * @param int $id - Id of author.
+     * @param array $errors - Form input errors.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
+    public function renderAuthorEdit(int $id, array $errors = []): void
     {
         $author = $this->authorLogic->fetchAuthor($id);
         if (!isset($author)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_edit.php");
+            echo $this->viewTemplate->render(
+                'template.php',
+                [
+                    'head' => ($this->viewTemplate->render('authors/partials/author_edit_head.html')),
+                    'content' => ($this->viewTemplate->render(
+                        'authors/templates/author_form.php',
+                        array_merge(
+                            [
+                                'function_label' => 'Edit',
+                                'author' => $author
+                            ],
+                            $errors
+                        )
+                    ))
+                ]
+            );
         }
     }
 
     /**
-     * On get returns author edit form view. On post tries to edit author.
-     * On error returns form view with errors.
+     * Returns author edit form view. On error returns form view with errors.
      *
-     * @param int $id Id of the author to be edited.
+     * @param int $id - Id of the author to be edited.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
@@ -109,37 +161,49 @@ class MultiPageAuthorController extends BaseAuthorController
             $this->authorLogic->editAuthor($id, $first_name, $last_name);
             header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
         } else {
-            $first_name_error = $errors["first_name_error"];
-            $last_name_error = $errors["last_name_error"];
-
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_edit.php");
+            $this->renderAuthorEdit($id, $errors);
         }
     }
 
+    /**
+     * Renders author delete dialog.
+     *
+     * @param int $id - Id of author.
+     * @return void
+     * @author Sava Gavric <sava.gavric@logeecom.com>
+     */
     public function renderAuthorDelete(int $id): void
     {
         $author = $this->authorLogic->fetchAuthor($id);
         if (!isset($author)) {
             RequestUtil::render404();
         } else {
-            include($_SERVER['DOCUMENT_ROOT'] . "/src/presentation/multi_page/views/templates/authors/author_delete.php");
+            echo $this->viewTemplate->render(
+                'template.php',
+                [
+                    'head' => ($this->viewTemplate->render('authors/partials/author_delete_head.html')),
+                    'content' => ($this->viewTemplate->render(
+                        'authors/templates/author_delete.php',
+                        ['author' => $author]
+                    ))
+                ]
+            );
         }
     }
 
     /**
-     * On get returns author delete dialog view. On post tries to delete author.
-     * On error returns 404 view.
+     * Returns author delete dialog view. On error returns 404 view.
      *
-     * @param int $id Id of the author to be deleted.
+     * @param int $id - Id of the author to be deleted.
      * @return void
      * @author Sava Gavric <sava.gavric@logeecom.com>
      *
      */
     public function processAuthorDelete(int $id): void
     {
-            $this->authorLogic->deleteAuthor($id);
+        $this->authorLogic->deleteAuthor($id);
 
-            header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+        header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
     }
 
 }

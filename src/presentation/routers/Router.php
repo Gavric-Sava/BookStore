@@ -7,6 +7,10 @@ use Logeecom\Bookstore\presentation\util\RequestUtil;
 class Router
 {
 
+    /**
+     * Route the request to the appropriate controller.
+     * @return void
+     */
     public function route(): void
     {
         $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
