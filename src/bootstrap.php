@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-//require 'session.php';
+require 'session.php';
 
 use Logeecom\Bookstore\presentation\routers\Router;
 
