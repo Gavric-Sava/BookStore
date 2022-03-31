@@ -330,14 +330,14 @@ function generateHTMLAuthorDelete(id, firstname, lastname) {
     header.className = 'header';
 
     const alert_img = document.createElement('img');
-    alert_img.src = '../../../../../assets/images/alert.png';
+    alert_img.src = '../../../../assets/images/alert.png';
     header.appendChild(alert_img);
 
     const header_h2 = document.createElement('h2');
     header_h2.appendChild(document.createTextNode('Delete Author'));
     header.appendChild(header_h2);
 
-    wrapper.appendChild(header_h2);
+    wrapper.appendChild(header);
 
     const text = document.createElement('div');
     text.className = 'text';

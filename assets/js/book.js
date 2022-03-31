@@ -309,14 +309,14 @@ function generateHTMLBookDelete(id, title, year, author_id) {
     header.className = 'header';
 
     const alert_img = document.createElement('img');
-    alert_img.src = '../../../../../assets/images/alert.png';
+    alert_img.src = '../../../../assets/images/alert.png';
     header.appendChild(alert_img);
 
     const header_h2 = document.createElement('h2');
     header_h2.appendChild(document.createTextNode('Delete Book'));
     header.appendChild(header_h2);
 
-    wrapper.appendChild(header_h2);
+    wrapper.appendChild(header);
 
     const text = document.createElement('div');
     text.className = 'text';
