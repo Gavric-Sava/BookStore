@@ -2,8 +2,8 @@
 
 use Logeecom\Bookstore\business\logic\authors\AuthorLogic;
 use Logeecom\Bookstore\business\logic\books\BookLogic;
-use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositorySession;
-use Logeecom\Bookstore\data_access\repositories\books\BookRepositorySession;
+use Logeecom\Bookstore\data_access\repositories\authors\AuthorRepositoryDatabase;
+use Logeecom\Bookstore\data_access\repositories\books\BookRepositoryDatabase;
 use Logeecom\Bookstore\presentation\base_controllers\NotFoundController;
 use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageAuthorController;
 use Logeecom\Bookstore\presentation\multi_page\controllers\MultiPageBookController;
@@ -22,7 +22,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -34,7 +34,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -46,7 +46,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -58,7 +58,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -70,7 +70,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -82,7 +82,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -94,7 +94,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -106,7 +106,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -118,7 +118,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
             ];
         }
     ),
@@ -129,7 +129,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new AuthorLogic(new AuthorRepositorySession()),
+                new AuthorLogic(new AuthorRepositoryDatabase()),
             ];
         }
     ),
@@ -140,7 +140,7 @@ return [
         'POST',
         function() {
             return [
-                new AuthorLogic(new AuthorRepositorySession())
+                new AuthorLogic(new AuthorRepositoryDatabase())
             ];
         }
     ),
@@ -151,7 +151,7 @@ return [
         'POST',
         function() {
             return [
-                new AuthorLogic(new AuthorRepositorySession())
+                new AuthorLogic(new AuthorRepositoryDatabase())
             ];
         }
     ),
@@ -162,7 +162,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -174,7 +174,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -186,7 +186,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -198,7 +198,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -210,7 +210,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -222,7 +222,7 @@ return [
         'GET',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -234,7 +234,7 @@ return [
         'POST',
         function() use ($view_root_path) {
             return [
-                new BookLogic(new BookRepositorySession()),
+                new BookLogic(new BookRepositoryDatabase()),
                 new ViewTemplate($view_root_path)
             ];
         }
@@ -246,7 +246,7 @@ return [
         'GET',
         function() {
             return [
-                new BookLogic(new BookRepositorySession())
+                new BookLogic(new BookRepositoryDatabase())
             ];
         }
     ),
@@ -257,7 +257,7 @@ return [
         'POST',
         function() {
             return [
-                new BookLogic(new BookRepositorySession())
+                new BookLogic(new BookRepositoryDatabase())
             ];
         }
     ),
@@ -268,7 +268,7 @@ return [
         'POST',
         function() {
             return [
-                new BookLogic(new BookRepositorySession())
+                new BookLogic(new BookRepositoryDatabase())
             ];
         }
     ),
@@ -279,7 +279,7 @@ return [
         'POST',
         function() {
             return [
-                new BookLogic(new BookRepositorySession())
+                new BookLogic(new BookRepositoryDatabase())
             ];
         }
     ),
