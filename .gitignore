@@ -2,5 +2,5 @@
 assets/images
 
 /vendor/
-bookstore_initial.sql
+volumes/database/scripts/initialize_db.sql
 /volumes/

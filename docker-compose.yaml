@@ -1,0 +1,24 @@
+version: "3.3"
+
+services:
+  bookstore:
+    image: bookstore
+    ports:
+      - "80:80"
+    volumes:
+      - ~/Documents/Projects/BookStore/volumes/logs:/var/log/apache2
+    depends_on:
+      - database
+  database:
+    image: mysql:8.0.28-debian
+    ports:
+      - "3306:3306"
+    hostname: database
+    volumes:
+      - ~/Documents/Projects/BookStore/volumes/database/scripts:/docker-entrypoint-initdb.d
+      - ~/Documents/data/mysql/bookstore:/var/lib/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=bookstore_db
+      - MYSQL_USER=bookstore_user
+      - MYSQL_PASSWORD=password
