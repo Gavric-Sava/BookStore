@@ -2,5 +2,6 @@
 assets/images
 
 /vendor/
-volumes/database/scripts/initialize_db.sql
+config/initialize_db.sql
 /volumes/
+database.env

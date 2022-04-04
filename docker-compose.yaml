@@ -5,8 +5,6 @@ services:
     image: bookstore
     ports:
       - "80:80"
-    volumes:
-      - ~/Documents/Projects/BookStore/volumes/logs:/var/log/apache2
     depends_on:
       - database
   database:
@@ -15,10 +13,7 @@ services:
       - "3306:3306"
     hostname: database
     volumes:
-      - ~/Documents/Projects/BookStore/volumes/database/scripts:/docker-entrypoint-initdb.d
+      - ./config/initialize_db.sql:/docker-entrypoint-initdb.d/initialize_db.sql
       - ~/Documents/data/mysql/bookstore:/var/lib/mysql
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=bookstore_db
-      - MYSQL_USER=bookstore_user
-      - MYSQL_PASSWORD=password
+    env_file:
+      - database.env

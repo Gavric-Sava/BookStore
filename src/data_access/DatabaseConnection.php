@@ -21,15 +21,15 @@ class DatabaseConnection
      */
     private function __construct()
     {
-        $config = include $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
-
         while (true) {
             try {
+                $dsn = $_ENV['SQL_DRIVER'] . ':host=' . $_ENV['MYSQL_HOST'] . ';dbname=' . $_ENV['MYSQL_DATABASE'];
                 $this->PDOConnection = new PDO(
-                    $config['driver'] . ':host=' . $config['host'] . ';dbname=' . $config['db_name'],
-                    $config['username'],
-                    $config['password']
+                    $dsn,
+                    $_ENV['MYSQL_USER'],
+                    $_ENV['MYSQL_PASSWORD']
                 );
+
                 error_log("Connection success!");
                 return;
             } catch (PDOException $e) {
