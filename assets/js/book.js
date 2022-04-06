@@ -1,6 +1,6 @@
 function requestBookList(author_id) {
     clearContent();
-    const response = fetch(`http://bookstore.test/spa/authors/${author_id}/books`);
+    const response = fetch(location.protocol + '//' + location.host + `/spa/authors/${author_id}/books`);
     response.then((response) => processResponse(response, (response) => {
         response.text().then((body) => {
             generateHTMLBookList(JSON.parse(body));
@@ -234,7 +234,7 @@ function generateHTMLBookCreate() {
             }
         };
 
-        httpRequest.open('POST', `http://bookstore.test/spa/authors/${history.state.author_id}/books/create`);
+        httpRequest.open('POST', location.protocol + '//' + location.host + `/spa/authors/${history.state.author_id}/books/create`);
         const title_param = 'title=' + document.getElementsByName('title')[0].value;
         const year_param = 'year=' + document.getElementsByName('year')[0].value;
 
@@ -274,7 +274,7 @@ function generateHTMLBookEdit(id, title, year, author_id) {
             }
         };
 
-        httpRequest.open('POST', `http://bookstore.test/spa/authors/${author_id}/books/edit/${id}`);
+        httpRequest.open('POST', location.protocol + '//' + location.host + `/spa/authors/${author_id}/books/edit/${id}`);
         const title_param = 'title=' + document.getElementsByName('title')[0].value;
         const year_param = 'year=' + document.getElementsByName('year')[0].value;
 
@@ -340,7 +340,7 @@ function generateHTMLBookDelete(id, title, year, author_id) {
             }
         };
 
-        httpRequest.open('POST', `http://bookstore.test/spa/authors/${author_id}/books/delete/${id}`);
+        httpRequest.open('POST', location.protocol + '//' + location.host + `/spa/authors/${author_id}/books/delete/${id}`);
         httpRequest.send();
     });
     form.method = 'post';

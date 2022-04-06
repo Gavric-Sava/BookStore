@@ -1,5 +1,6 @@
 function requestAuthorList() {
-    const response = fetch('http://bookstore.test/spa/authors');
+    console.log(location.protocol);
+    const response = fetch(location.protocol + '//' + location.host + '/spa/authors');
     response.then((response) => processResponse(response, (response) => {
         response.text().then((body) => {
             generateHTMLAuthorList(JSON.parse(body));
@@ -255,7 +256,7 @@ function generateHTMLAuthorCreate() {
             }
         };
 
-        httpRequest.open('POST', 'http://bookstore.test/spa/authors/create');
+        httpRequest.open('POST', location.protocol + '//' + location.host + '/spa/authors/create');
         const first_name_param = 'first_name=' + document.getElementsByName('first_name')[0].value;
         const last_name_param = 'last_name=' + document.getElementsByName('last_name')[0].value;
 
@@ -295,7 +296,7 @@ function generateHTMLAuthorEdit(id, firstname, lastname) {
             }
         };
 
-        httpRequest.open('POST', 'http://bookstore.test/spa/authors/edit/' + id);
+        httpRequest.open('POST', location.protocol + '//' + location.host + '/spa/authors/edit/' + id);
         const first_name_param = 'first_name=' + document.getElementsByName('first_name')[0].value;
         const last_name_param = 'last_name=' + document.getElementsByName('last_name')[0].value;
 
@@ -362,7 +363,7 @@ function generateHTMLAuthorDelete(id, firstname, lastname) {
             }
         };
 
-        httpRequest.open('POST', 'http://bookstore.test/spa/authors/delete/' + id);
+        httpRequest.open('POST', location.protocol + '//' + location.host + '/spa/authors/delete/' + id);
         httpRequest.send();
     });
     form.method = 'post';
